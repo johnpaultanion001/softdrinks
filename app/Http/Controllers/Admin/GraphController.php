@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
+use App\Models\Sales;
+
+class GraphController extends Controller
+{
+    public function index()
+    {
+       
+        $settings1 = [
+            'chart_title'           => 'Sales by Date',
+            'chart_type'            => 'line',
+            'report_type'           => 'group_by_date',
+            'model'                 => 'App\Models\Sales',
+            'conditions'            => [
+                ['name' => 'Sales', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
+               
+            ],
+            'group_by_field'        => 'created_at',
+            'group_by_period'       => 'day',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'total',
+            'filter_field'          => 'created_at',
+            'group_by_field_format' => 'Y-m-d',
+            'entries_number'        => '5',
+        ];
+
+        $chart1 = new LaravelChart($settings1);
+
+        return view('admin.graph.graph', compact('chart1'));
+    }
+
+    public function daily()
+    {
+        $settings1 = [
+            'chart_title'           => 'Sales by Date',
+            'chart_type'            => 'line',
+            'report_type'           => 'group_by_date',
+            'model'                 => 'App\Models\Sales',
+            'conditions'            => [
+                ['name' => 'Sales', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
+               
+            ],
+            'group_by_field'        => 'created_at',
+            'group_by_period'       => 'day',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'total',
+            'filter_field'          => 'created_at',
+            'group_by_field_format' => 'Y-m-d',
+            'entries_number'        => '5',
+        ];
+
+        $chart1 = new LaravelChart($settings1);
+
+        return view('admin.graph.loadgraph', compact('chart1'));
+    }
+
+    public function monthly()
+    {
+        $settings1 = [
+            'chart_title'           => 'Sales by Date',
+            'chart_type'            => 'line',
+            'report_type'           => 'group_by_date',
+            'model'                 => 'App\Models\Sales',
+            'conditions'            => [
+                ['name' => 'Sales', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
+               
+            ],
+            'group_by_field'        => 'created_at',
+            'group_by_period'       => 'month',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'total',
+            'filter_field'          => 'created_at',
+            'group_by_field_format' => 'Y-m-d',
+            'entries_number'        => '5',
+        ];
+
+        $chart1 = new LaravelChart($settings1);
+
+        return view('admin.graph.loadgraph', compact('chart1'));
+    }
+
+    public function yearly()
+    {
+        $settings1 = [
+            'chart_title'           => 'Sales by Date',
+            'chart_type'            => 'line',
+            'report_type'           => 'group_by_date',
+            'model'                 => 'App\Models\Sales',
+            'conditions'            => [
+                ['name' => 'Sales', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
+               
+            ],
+            'group_by_field'        => 'created_at',
+            'group_by_period'       => 'year',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'total',
+            'filter_field'          => 'created_at',
+            'group_by_field_format' => 'Y-m-d',
+            'entries_number'        => '5',
+        ];
+
+        $chart1 = new LaravelChart($settings1);
+
+        return view('admin.graph.loadgraph', compact('chart1'));
+    }
+}
