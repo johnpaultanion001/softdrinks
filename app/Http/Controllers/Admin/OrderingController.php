@@ -9,6 +9,8 @@ use App\Models\Category;
 use Validator;
 use App\Models\Order;
 use App\Models\Sales;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 
 
@@ -16,6 +18,7 @@ class OrderingController extends Controller
 {
     public function getproducts()
     {
+        abort_if(Gate::denies('ordering_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $inventories = Inventory::latest()->get();
         $categories = Category::all();
         $orders = Order::where('status', '0')->get();

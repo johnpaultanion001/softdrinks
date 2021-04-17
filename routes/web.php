@@ -49,4 +49,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('graph-daily', 'GraphController@daily')->name('graph.daily');
     route::get('graph-monthly', 'GraphController@monthly')->name('graph.monthly');
     route::get('graph-yearly', 'GraphController@yearly')->name('graph.yearly');
+
+    //permission
+    route::get('permissions', 'PermissionsController@index')->name('permissions');
+    route::get('loadpermissions', 'PermissionsController@load')->name('permissions.load');
+
+    //roles
+    Route::resource('roles', 'RolesController');
+    route::get('loadroles', 'RolesController@load')->name('roles.load');
+
+    //users
+    Route::resource('users', 'UsersController');
+    route::get('loadusers', 'UsersController@load')->name('users.load');
+
+
 });

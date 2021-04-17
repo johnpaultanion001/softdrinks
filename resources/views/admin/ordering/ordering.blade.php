@@ -504,46 +504,46 @@ $('#myCheckoutForm').on('submit', function(event){
 
 //delete cart
 $(document).on('click', '.delete', function(){
-var id = $(this).attr('delete');
-$.confirm({
-    title: 'Confirmation',
-    content: 'You really want to remove this cart?',
-    autoClose: 'cancel|10000',
-    type: 'red',
-    buttons: {
-        confirm: {
-            text: 'confirm',
-            btnClass: 'btn-blue',
-            keys: ['enter', 'shift'],
-            action: function(){
-                return $.ajax({
-                    url:"/admin/orders/"+id,
-                    method:'DELETE',
-                    data: {
-                        _token: '{!! csrf_token() !!}',
-                    },
-                    dataType:"json",
-                    beforeSend:function(){
-                        $("#checkoutaction_button").attr("disabled", true);
-                        $("#checkoutaction_button").attr("value", "Loading..");
-                    },
-                    success:function(data){
-                        if(data.success){
-                            $("#checkoutaction_button").attr("disabled", false);
-                            $("#checkoutaction_button").attr("value", "Check Out");
-                            return loadProduct(), loadCart() , cartsButton();;
+    var id = $(this).attr('delete');
+    $.confirm({
+        title: 'Confirmation',
+        content: 'You really want to remove this cart?',
+        autoClose: 'cancel|10000',
+        type: 'red',
+        buttons: {
+            confirm: {
+                text: 'confirm',
+                btnClass: 'btn-blue',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    return $.ajax({
+                        url:"/admin/orders/"+id,
+                        method:'DELETE',
+                        data: {
+                            _token: '{!! csrf_token() !!}',
+                        },
+                        dataType:"json",
+                        beforeSend:function(){
+                            $("#checkoutaction_button").attr("disabled", true);
+                            $("#checkoutaction_button").attr("value", "Loading..");
+                        },
+                        success:function(data){
+                            if(data.success){
+                                $("#checkoutaction_button").attr("disabled", false);
+                                $("#checkoutaction_button").attr("value", "Check Out");
+                                return loadProduct(), loadCart() , cartsButton();;
+                            }
                         }
-                    }
-                })
+                    })
+                }
+            },
+            cancel:  {
+                text: 'cancel',
+                btnClass: 'btn-red',
+                keys: ['enter', 'shift'],
             }
-        },
-        cancel:  {
-            text: 'cancel',
-            btnClass: 'btn-red',
-            keys: ['enter', 'shift'],
         }
-    }
-});
+    });
 });
 
 //print cart

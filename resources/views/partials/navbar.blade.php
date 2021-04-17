@@ -30,7 +30,13 @@
                     Sales
                 @elseif(request()->is('admin/graph'))
                     Graph
-                 @endif
+                @elseif(request()->is('admin/permissions'))
+                    Permissions
+                @elseif(request()->is('admin/roles') || request()->is('admin/roles/*'))
+                    Roles 
+                @elseif(request()->is('admin/users') || request()->is('admin/users/*'))
+                    Users                 
+                @endif
                  
                  </li>
               </ol>
@@ -60,13 +66,15 @@
                 
                     <!-- <img alt="Image placeholder" src="../assets/img/theme/team-4.jpg"> -->
                     
-                    <span class="mb-0 text-sm  font-weight-bold">John Paul Tanion</span>
+                    <span class="mb-0 text-sm  font-weight-bold text-uppercase">{{ Auth::user()->name }} / {{ Auth::user()->roles()->pluck('title')->implode(', ') }}</span>
                     <i class="fas fa-chevron-down pl-2"></i>
                 </div>
               </a>
               <div class="dropdown-menu  dropdown-menu-right ">
-                <div class="dropdown-header noti-title">
-                  <h6 class="text-overflow m-0">ROLE: MANAGER</h6>
+                <div class="dropdown-header noti-title text-uppercase">
+                  <h6 class="text-overflow m-0">NAME: {{ Auth::user()->name }} </h6> <hr class="my-1">
+                  <h6 class="text-overflow m-0">ROLE: {{ Auth::user()->roles()->pluck('title')->implode(', ') }} </h6>
+                 
                 </div>
                 <a href="#" class="dropdown-item">
                   <i class="ni ni-single-02"></i>
@@ -83,3 +91,5 @@
         </div>
       </div>
     </nav>
+
+   

@@ -22,6 +22,13 @@ class UserSeeder extends Seeder
                 'password'       => '$2y$10$zPiaTbYwkxYcejFmEimhWedeAogTJvEb/yGmBVx390ihhPFy8r896',
                 'remember_token' => null,
             ],
+            [
+                'id'             => 2,
+                'name'           => 'Test User',
+                'email'          => 'user@user.com',
+                'password'       => '$2y$10$zPiaTbYwkxYcejFmEimhWedeAogTJvEb/yGmBVx390ihhPFy8r896',
+                'remember_token' => null,
+            ],
         ];
 
         User::insert($users);

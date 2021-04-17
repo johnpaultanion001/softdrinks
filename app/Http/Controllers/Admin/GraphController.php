@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use App\Models\Sales;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class GraphController extends Controller
 {
     public function index()
     {
-       
+        abort_if(Gate::denies('graph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $settings1 = [
             'chart_title'           => 'Sales by Date',
             'chart_type'            => 'line',

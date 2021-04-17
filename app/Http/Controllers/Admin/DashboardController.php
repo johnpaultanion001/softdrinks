@@ -9,11 +9,16 @@ use App\Models\Category;
 use Validator;
 use App\Models\Order;
 use App\Models\Sales;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class DashboardController extends Controller
 {
     public function dashboard(){
+
+      abort_if(Gate::denies('dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
       return view('admin.dashboard');
+
     }
     public function loaddashboard(){
       date_default_timezone_set('Asia/Manila');

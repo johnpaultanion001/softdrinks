@@ -7,6 +7,8 @@ use App\Models\Inventory;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Validator;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class InventoryController extends Controller
@@ -14,6 +16,7 @@ class InventoryController extends Controller
 
     public function index()
     {
+        abort_if(Gate::denies('inventories_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $categories = Category::all();
         return view('admin.inventories.inventories',compact('categories'));
     }
