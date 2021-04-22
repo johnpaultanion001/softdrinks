@@ -9,6 +9,8 @@
 
 @section('content')
 
+
+
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
       
@@ -27,12 +29,9 @@
                 <button id="yearly" name="yearly" class="text-uppercase btn btn-sm btn-primary mt-2 ">Yearly</button>
                 
                
-                <div class="loading col-sm-12 text-align-center">
-                    <div class="row">
-                        <div class="col-sm-6 mx-auto">
-                            <img src="https://www.gamudacove.com.my/media/img/loader.gif" alt="">
-                        </div>
-                    </div>
+                <div id="loading-container" class="loading-container">
+                    <div class="loading"></div>
+                    <div id="loading-text">loading</div>
                 </div>
 
                 <div id="loadgraph">
@@ -75,11 +74,11 @@ function loadgraph(){
         dataType: "HTMl",
         beforeSend: function() {
             $('#title-sales').html('Loading...');
-            $('.loading').show();
+            $('#loading-container').show();
             $("#loadgraph").hide();
         },
         success: function(response){
-            $('.loading').hide();
+            $('#loading-container').hide();
             $("#loadgraph").show();
             $("#loadgraph").html(response);
             $('#title-sales').html('Graph By Daily');

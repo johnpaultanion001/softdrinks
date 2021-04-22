@@ -11,14 +11,14 @@
 
 @section('content')
 <div id="loadinventories">
-     <div class="loading col-sm-12 text-align-center">
-     <div class="row">
-        <div class="col-sm-6 mx-auto">
-            <img src="https://www.gamudacove.com.my/media/img/loader.gif" alt="">
-        </div>
-     </div>
+     
+    <div id="loading-container" class="loading-container">
+        <div class="loading"></div>
+        <div id="loading-text">loading</div>
     </div>
 </div>
+
+
 
 <form method="post" id="myForm" class="form-horizontal ">
             @csrf
@@ -29,6 +29,7 @@
                         <!-- Modal Header -->
                         <div class="modal-header bg-primary">
                             <p class="modal-title text-white text-uppercase font-weight-bold">Modal Heading</p>
+                            <i class="ml-2 fa fa-spinner fa-spin text-white button-loading"></i>
                             <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
                         </div>
                 
@@ -118,7 +119,8 @@
                 
                         <!-- Modal footer -->
                         <div class="modal-footer bg-white">
-                            <input type="submit" name="action_button" id="action_button" class="btn btn-default" value="Save" />
+                            <i class="fa fa-spinner fa-spin text-primary button-loading"></i>
+                            <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Save" />
                         </div>
                 
                     </div>
@@ -143,10 +145,10 @@ function loadInventories(){
         type: "get",
         dataType: "HTMl",
         beforeSend: function() {
-            $('.loading').show();
+            $('#loading-container').show();
         },
         success: function(response){
-            $('.loading').hide();
+            $('#loading-container').hide();
             $("#loadinventories").html(response);
         }	
     })
@@ -207,9 +209,11 @@ $(document).on('click', '.edit', function(){
         dataType:"json",
         beforeSend:function(){
             $("#action_button").attr("disabled", true);
-            $("#action_button").attr("value", "Loading..");
+            $("#action_button").attr("value", "Loading...");
+            $('.button-loading').show();
         },
         success:function(data){
+            $('.button-loading').hide();
             if($('#action').val() == 'Edit'){
                 $("#action_button").attr("disabled", false);
                 $("#action_button").attr("value", "Update");
@@ -245,6 +249,7 @@ $(document).on('click', '#create_record', function(){
     $('#action_button').val('Submit');
     $('#action').val('Add');
     $('#form_result').html('');
+    $('.button-loading').hide();
     
 });
 
@@ -268,9 +273,11 @@ $('#myForm').on('submit', function(event){
         beforeSend:function(){
             $("#action_button").attr("disabled", true);
             $("#action_button").attr("value", "Loading..");
+            $('.button-loading').show();
         },
         success:function(data){
             var html = '';
+            $('.button-loading').hide();
             if(data.errors){
                 $.each(data.errors, function(key,value){
                     if($('#action').val() == 'Edit'){

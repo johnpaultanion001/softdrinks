@@ -19,24 +19,24 @@
                                         <h5 class="card-title text-uppercase text-muted mb-0">exp:{{$receipt->inventory->expiration}} </h5>
                                     </div>
                                     <div class="col text-right">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">₱ {{ number_format($receipt->total ?? '' , 0, ',', '.') }}</h5>
+                                        <h5 class="card-title text-uppercase text-muted mb-0">₱ {{ number_format($receipt->total ?? '' , 0, ',', ',') }}</h5>
                                     </div>
-                                
+                                    
                                 @empty
-                                    No Data
+                                    <input type="text" value="No Data" readonly  class="noreiept bg-white text-dark form-control border-0"/>
                                 @endforelse
                          </div>
                     <hr class="my-3">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">Total</h5>
                         <div class="col text-right">
-                            <h5 class="card-title text-uppercase text-muted mb-0">₱ {{ number_format($orders->sum->total ?? '' , 0, ',', '.') }}</h5>
+                            <h5 class="card-title text-uppercase text-muted mb-0">₱ {{ number_format($orders->sum->total ?? '' , 0, ',', ',') }}</h5>
                         </div>
                     </div>
             </div>
             <div class="col mb-2 mt-2">       
-                <button type="button" id="print" name="print" class="print btn text-white btn-default">Print Reciept</button>
-                <input type="submit" name="checkoutaction_button" id="checkoutaction_button" class="btn btn-white" value="Check Out"/>
+                <button type="button" id="print" name="print" class="text-uppercase print btn text-white btn-default">Print Reciept</button>
+                <input type="submit" name="checkoutaction_button" id="checkoutaction_button" class="text-uppercase btn btn-white" value="Check Out"/>
             </div>
            
           
@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0">{{$order->inventory->name}} </h5>
-                                    <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->total ?? '' , 0, ',', '.') }} </span>
+                                    <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->total ?? '' , 0, ',', ',') }} </span>
                                 </div>
                                 <div class="col-auto">
                                 
@@ -66,13 +66,7 @@
                         </div>
                     </div>  
                 @empty
-                    <div class="card card-stats mt-2 col-12 text-center" style="border-bottom: 1px solid #111">
-                    <!-- Card body -->
-                        <div class="card-body">
-                            
-                            <input type="text" name="nodata" id="nodata" value="No Data" readonly  style="border: 0;"/>
-                        </div>
-                    </div>
+                   <input type="text" name="nodata" id="nodata" value="No Data" readonly  class="bg-default text-white form-control border-0"/>        
                 @endforelse
 
         </div>

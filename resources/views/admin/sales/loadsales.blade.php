@@ -2,7 +2,9 @@
     <div class="card-header border-0">
         <div class="row align-items-center">
         <div class="col-md-12">
-            <h3 class="mb-0 text-uppercase" id="title-sales"></h3>
+        <small class="mb-0 text-uppercase font-weight-bold modal-title" id="title-sales"></small>
+        <i class="fa fa-spinner fa-spin text-primary button-loading ml-2"></i>
+            
         </div>
         
         <div class="col-12">
@@ -21,7 +23,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 pt-3">
-                   <h3 class="mb-0">Total : <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sales->sum->total , 0, ',', '.') }}</h3>
+                   <h3 class="mb-0">Total : <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sales->sum->total , 0, ',', ',') }}</h3>
                 </div>
             </div>
         </div>
@@ -57,7 +59,7 @@
                         {{  $sale->inventory->name ?? '' }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->inventory->price ?? '' , 0, ',', '.') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->inventory->price ?? '' , 0, ',', ',') }}
                     </td>
                     <td>
                         {{  $sale->inventory->size ?? '' }}
@@ -66,7 +68,7 @@
                         {{  $sale->purchase_qty ?? '' }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->total ?? '' ?? '' , 0, ',', '.') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->total ?? '' ?? '' , 0, ',', ',') }}
                     </td>    
                     <td>
                         {{ $sale->created_at->format('l, j \\/ F / Y h:i:s A') }}

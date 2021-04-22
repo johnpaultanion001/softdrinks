@@ -6,7 +6,7 @@
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6">
+<div class="container-fluid mt--6 table-load">
   <div class="row">
     <div class="col-xl-12">
       <div class="card">

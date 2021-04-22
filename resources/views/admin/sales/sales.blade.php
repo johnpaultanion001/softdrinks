@@ -14,18 +14,16 @@
     </div>
 </div>
 
+<div id="loading-container" class="loading-container">
+    <div class="loading"></div>
+    <div id="loading-text">loading</div>
+</div>
 <!-- Page content -->
 <div class="container-fluid mt--6">
       <div class="row">
         
         <div class="col-xl-12" id="loadsales">
-            <div class="loading col-sm-12 text-align-center">
-                <div class="row">
-                    <div class="col-sm-6 mx-auto">
-                        <img src="https://www.gamudacove.com.my/media/img/loader.gif" alt="">
-                    </div>
-                </div>
-            </div>
+          
         </div>
        
 
@@ -91,14 +89,18 @@ function loadSales(){
         type: "get",
         dataType: "HTMl",
         beforeSend: function() {
+            $('#loadsales').hide();
             $('#title-sales').html('Loading...');
-            $('.loading').show();
+            $('#loading-container').show();
+            $('.button-loading').show();
+            
         },
         success: function(response){
-          
+            $('#loadsales').show();
             $("#loadsales").html(response);
             $('#title-sales').html('All Sales');
-            $('.loading').hide();
+            $('#loading-container').hide();
+            $('.button-loading').hide();
         }
         	
     })
@@ -111,10 +113,12 @@ $(document).on('click', '#daily', function(){
         dataType: "HTMl",
         beforeSend: function() {
             $('#title-sales').html('Loading...');
+            $('.button-loading').show();
         },
         success: function(response){
             $("#loadsales").html(response);
             $('#title-sales').html('Daily Sales');
+            $('.button-loading').hide();
         }	
     })
 });
@@ -126,10 +130,12 @@ $(document).on('click', '#monthly', function(){
         dataType: "HTMl",
         beforeSend: function() {
             $('#title-sales').html('Loading...');
+            $('.button-loading').show();
         },
         success: function(response){
             $("#loadsales").html(response);
             $('#title-sales').html('Monthly Sales');
+            $('.button-loading').hide();
         }	
     })
 });
@@ -141,10 +147,12 @@ $(document).on('click', '#yearly', function(){
         dataType: "HTMl",
         beforeSend: function() {
             $('#title-sales').html('Loading...');
+            $('.button-loading').show();
         },
         success: function(response){
             $("#loadsales").html(response);
             $('#title-sales').html('Yearly Sales');
+            $('.button-loading').hide();
         }	
     })
 });
@@ -163,12 +171,14 @@ function fetch_data(from_date = '', to_date = '')
             dataType:"HTMl",
             beforeSend: function() {
                  $('#title-sales').html('Loading...');
+                 $('.button-loading').show();
             },
             success:function(data)
             {
                 $('#modalfilter').modal('hide');
                 $("#loadsales").html(data);
                 $('#title-sales').html('Filter By Date');
+                $('.button-loading').hide();
             }
         });
     }
@@ -182,7 +192,11 @@ function fetch_data(from_date = '', to_date = '')
         }
         else
         {
-            alert('Both Date is required');
+            $.alert({
+                    title: 'Error Message',
+                    content: 'Both Date is required',
+                    type: 'red',
+                })  
         }
     });
 

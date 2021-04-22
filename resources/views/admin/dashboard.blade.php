@@ -9,12 +9,9 @@
 
 @section('content')
   <div id="loaddashboard">
-     <div class="loading col-sm-12 text-align-center">
-     <div class="row">
-        <div class="col-sm-6 mx-auto">
-            <img src="https://www.gamudacove.com.my/media/img/loader.gif" alt="">
-        </div>
-     </div>
+    <div id="loading-container" class="loading-container">
+        <div class="loading"></div>
+            <div id="loading-text">loading</div>
     </div>
   </div>
 @endsection
@@ -34,10 +31,10 @@ function loadDashboard(){
         type: "get",
         dataType: "HTMl",
         beforeSend: function() {
-            $('.loading').show();
+            $('#loading-container').show();
         },
         success: function(response){
-            $('.loading').hide();
+            $('#loading-container').hide();
             $("#loaddashboard").html(response);
         }	
     })

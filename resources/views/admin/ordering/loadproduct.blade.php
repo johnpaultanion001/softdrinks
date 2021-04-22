@@ -7,7 +7,7 @@
                         <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">{{\Illuminate\Support\Str::limit($inventory->name,12)}}</h5>
-                            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 0, ',', '.') }}</span>
+                            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 0, ',', ',') }}</span>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -35,13 +35,14 @@
         </div>
     @empty
     <div class="col text-center">
-        <div class="card">
-             <h1 class="text-muted">Not Found</h1>
-        </div>
+      
+             <h1 class="text-dark">Not Found</h1>
+      
     </div>
     
     @endforelse
 
+    
 
 
 </div>

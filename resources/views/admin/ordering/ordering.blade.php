@@ -38,26 +38,29 @@
         </div>
 
     </div>
+    
+</div>
+
+<div id="loading-container" class="loading-container">
+    <div class="loading"></div>
+    <div id="loading-text">loading</div>
 </div>
 
 <div class="container-fluid mt--6">
-
-            <div class="loading col-sm-12 text-align-center">
-                <div class="row">
-                <div class="col-sm-6 mx-auto">
-                    <img src="https://www.gamudacove.com.my/media/img/loader.gif" width=400 alt="">
-                </div>
-            </div>
-        </div>
-        <div id="loadproduct">
             
-        </div>
-       
-        <!-- Footer -->
-        @section('footer')
-            @include('../partials.footer')
-        @endsection
- 
+    
+    <div id="loadproduct">
+        
+    </div>
+
+    
+    
+    
+    <!-- Footer -->
+    @section('footer')
+        @include('../partials.footer')
+    @endsection
+
       
 </div>
 
@@ -73,6 +76,7 @@
                 <!-- Modal Header -->
                 <div class="modal-header bg-primary">
                     <p class="modal-title font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                    <i class="fa fa-spinner fa-spin text-white button-loading pl-2"></i>
                     <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
                 </div>
         
@@ -124,7 +128,8 @@
         
                 <!-- Modal footer -->
                 <div class="modal-footer bg-white">
-                    <input type="submit" name="action_button" id="action_button" class="btn btn-default" value="Submit" />
+                    <i class="fa fa-spinner fa-spin text-primary button-loading"></i>
+                    <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Submit" />
                 </div>
         
             </div>
@@ -144,6 +149,7 @@
                 <!-- Modal Header -->
                 <div class="modal-header bg-primary">
                     <p class="modal-title font-weight-bold text-uppercase text-white">Modal Heading</p>
+                    <i class="fa fa-spinner fa-spin text-white button-loading pl-2"></i>
                     <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
                 </div>
         
@@ -177,18 +183,16 @@ $(function () {
 });
 
 function loadProduct(){
-    var percent = $('.progress-bar');
     $.ajax({
         url: "loadproduct", 
         type: "get",
         dataType: "HTMl",
         beforeSend: function() {
-            $('.loading').show();
+            $('#loading-container').show();
             $("#loadproduct").hide();
         },
         success: function(response){
-            $('.loading').hide();
-            percent.css("width", "0%");
+            $('#loading-container').hide();
             $("#loadproduct").html(response);
             $("#loadproduct").show();
         }	
@@ -204,10 +208,16 @@ function loadCart(){
         beforeSend: function() {
             $("#checkoutaction_button").attr("disabled", true);
             $("#checkoutaction_button").attr("value", "Loading..");
+            $(".print").attr("disabled", true);
+            $(".print").text("Loading..");
+            $('.button-loading').show();
         },
         success: function(response){
             $("#checkoutaction_button").attr("disabled", false);
             $("#checkoutaction_button").attr("value", "Check Out");
+            $(".print").attr("disabled", false);
+            $(".print").text("Print Reciept");
+            $('.button-loading').hide();
             $("#checkoutview").html(response);
         }	
     })
@@ -231,12 +241,12 @@ $('#search').on('keyup',function(){
             type : 'get',
             url : '{{URL::to('/admin/search')}}',
             beforeSend: function() {
-                $('.loading').show();
+                $('#loading-container').show();
                 $("#loadproduct").hide();
             },
             data:{'search':$value},
             success:function(data){
-                $('.loading').hide();
+                $('#loading-container').hide();
                 $('#loadproduct').html(data);
                 $("#loadproduct").show();
             }
@@ -255,7 +265,7 @@ $(document).on('click', '#view', function(){
     $('#form_result').html('');
     var id = $(this).attr('view');
     var locale = 'de';
-    var options = { minimumFractionDigits: 2, maximumFractionDigits: 2};
+    var options = { minimumFractionDigits: 0, maximumFractionDigits: 2};
     var formatter = new Intl.NumberFormat(locale, options);
     $.ajax({
     url :"/admin/inventories/"+id,
@@ -263,8 +273,10 @@ $(document).on('click', '#view', function(){
     beforeSend: function() {
         $("#action_button").attr("disabled", true);
         $("#action_button").attr("value", "Loading..");
+        $('.button-loading').show();
     },
     success:function(data){
+        $('.button-loading').hide();
         $.each(data.result, function(key,value){
             if(key == $('#'+key).attr('id')){
                 $('#'+key).val(value)
@@ -290,7 +302,6 @@ $(document).on('click', '#view', function(){
         $("#action_button").attr("disabled", false);
         $("#action_button").attr("value", "Add To Cart");
         $('#action').val('Add');
-            
         }
     })
   
@@ -353,9 +364,11 @@ $('#myForm').on('submit', function(event){
         beforeSend: function() {
               $("#action_button").attr("disabled", true);
               $("#action_button").attr("value", "Loading..");
+              $('.button-loading').show();
         },
         success:function(data){
             var html = '';
+            $('.button-loading').hide();
             if(data.errors){
                $("#action_button").attr("disabled", false);
                $("#action_button").attr("value", "Add To Cart");
@@ -548,34 +561,36 @@ $(document).on('click', '.delete', function(){
 
 //print cart
 $(document).on('click', '.print', function(){
-   
-var contents = $("#receiptreport").html();
- var frame1 = $('<iframe />');
- frame1[0].name = "frame1";
- frame1.css({ "position": "absolute", "top": "-1000000px" });
- $("body").append(frame1);
- var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
- frameDoc.document.open();
- //Create a new HTML document.
- frameDoc.document.write('<html><head><title>Title</title>');
- frameDoc.document.write('</head><body>');
- //Append the external CSS file.
- frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+
   
- var source = 'bootstrap.min.js';
- var script = document.createElement('script');
- script.setAttribute('type', 'text/javascript');
- script.setAttribute('src', source);
- //Append the DIV contents.
- frameDoc.document.write(contents);
- frameDoc.document.write('</body></html>');
- frameDoc.document.close();
- setTimeout(function () {
- window.frames["frame1"].focus();
- window.frames["frame1"].print();
- frame1.remove();
- }, 500);
-});
+            var contents = $("#receiptreport").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>Title</title>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+
+            var source = 'bootstrap.min.js';
+            var script = document.createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('src', source);
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+            window.frames["frame1"].focus();
+            window.frames["frame1"].print();
+            frame1.remove();
+            }, 500);
+       
+    });
 
 
 </script>
