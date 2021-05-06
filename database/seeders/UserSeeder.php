@@ -18,14 +18,14 @@ class UserSeeder extends Seeder
             [
                 'id'             => 1,
                 'name'           => 'Johnpaul Tanion',
-                'email'          => 'admin@admin.com',
+                'email'          => 'manager@manager.com',
                 'password'       => '$2y$10$zPiaTbYwkxYcejFmEimhWedeAogTJvEb/yGmBVx390ihhPFy8r896',
                 'remember_token' => null,
             ],
             [
                 'id'             => 2,
-                'name'           => 'Test User',
-                'email'          => 'user@user.com',
+                'name'           => 'Test Cashier',
+                'email'          => 'cashier@cashier.com',
                 'password'       => '$2y$10$zPiaTbYwkxYcejFmEimhWedeAogTJvEb/yGmBVx390ihhPFy8r896',
                 'remember_token' => null,
             ],

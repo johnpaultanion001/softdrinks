@@ -13,7 +13,7 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-returnproducts">
+          <table class="table align-items-center table-flush datatable-returnproducts display" cellspacing="0" width="100%"">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Actions</th>

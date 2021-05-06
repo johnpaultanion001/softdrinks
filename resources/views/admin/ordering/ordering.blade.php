@@ -156,7 +156,7 @@
 <!-- checkout form modal -->
 <form method="post" id="myCheckoutForm" class="form-horizontal ">
     @csrf
-    <div class="modal " id="formCheckoutModal">
+    <div class="modal " id="formCheckoutModal" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
         
@@ -443,37 +443,22 @@ $('#myForm').on('submit', function(event){
                 $('.form-control').removeClass('is-invalid');
                 
                 if($('#action').val() == 'Edit'){
-                    $.alert({
-                        title: 'Success Message',
-                        content: data.success,
-                        type: 'green',
-                    })  
+
+                    $('#success-alert').addClass('bg-primary');
+                    $('#success-alert').html('<strong>' + data.success + '</strong>');
+                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                        $("#success-alert").slideUp(500);
+                    });
                     return loadProduct(), loadCart() , cartsButton();
                 }
-                $.confirm({
-                    title: data.success,
-                    content: 'Do you want to view your cart?',
-                    autoClose: 'cancel|10000',
-                    type: 'green',
-                    buttons: {
-                        confirm: {
-                            text: 'Yes',
-                            btnClass: 'btn-blue',
-                            keys: ['enter', 'shift'],
-                            action: function(){
-                                return loadProduct(), loadCart() , cartsButton();
-                            }
-                        },
-                        cancel:  {
-                            text: 'Later',
-                            btnClass: 'btn-red',
-                            keys: ['enter', 'shift'],
-                            action: function(){
-                                return loadProduct() , cartsButton();;
-                            }
-                        }
-                    }
+
+                $('#success-order').addClass('bg-primary');
+                $('#success-order').html('<strong>' + data.success + '</strong> <br>' + 'Click <button id="vieworders" class="btn-white btn btn-sm">HERE</button> To view your orders' );
+                $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
+                    $("#success-order").slideUp(500);
                 });
+                return loadProduct() , cartsButton();
+
             }
             
         }
@@ -482,6 +467,9 @@ $('#myForm').on('submit', function(event){
 
 //checkoutform modal show
 $(document).on('click', '#checkout', function(){
+    loadCart();
+});
+$(document).on('click', '#vieworders', function(){
     loadCart();
 });
 //checkout to sales
@@ -505,7 +493,7 @@ $('#myCheckoutForm').on('submit', function(event){
             if(data.success){
                $.confirm({
                     title: data.success,
-                    content: 'Do you want to view your sales?',
+                    content: 'Do you want to view your reports?',
                     autoClose: 'cancel|10000',
                     type: 'green',
                     buttons: {
@@ -570,6 +558,13 @@ $(document).on('click', '.delete', function(){
                             if(data.success){
                                 $("#checkoutaction_button").attr("disabled", false);
                                 $("#checkoutaction_button").attr("value", "Check Out");
+
+                                $('#success-alert').addClass('bg-primary');
+                                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                    $("#success-alert").slideUp(500);
+                                });
+
                                 return loadProduct(), loadCart() , cartsButton();;
                             }
                         }

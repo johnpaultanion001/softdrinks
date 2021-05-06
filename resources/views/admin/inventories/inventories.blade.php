@@ -46,7 +46,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Name: </label>
-                                        <input type="text" name="name" id="name" class="form-control" />
+                                        <input type="text" name="name" id="name" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-name"></strong>
                                         </span>
@@ -72,15 +72,14 @@
                                         </div>
                                         <div class="form-group" id="puchase-order-number-view">
                                             <div class="row">
-                                                <div class="col"><label class="control-label text-uppercase" >Purchase Order Number: </label></div>
+                                                <div class="col"><label class="control-label text-uppercase" >Supplier: </label></div>
                                             </div>
                                             <select name="purchase_order_number_id_view"  id="purchase_order_number_id_view" class="form-control select2">
                                                 <option value="" disabled selected>Select Purchase Order Number</option>
                                                 @foreach ($allpurchaseorder as $purchase)
-                                                    <option value="{{$purchase->id}}">Purchase Order Number: {{$purchase->purchase_order_number}} - Supplier: {{$purchase->supplier->name}} - Date:{{$purchase->created_at->format('l, j \\/ F / Y h:i:s A') }}</option>
+                                                    <option value="{{$purchase->id}}">{{$purchase->supplier->name}} </option>
                                                 @endforeach
                                             </select>
-                                           
                                         </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -100,7 +99,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Size: </label>
-                                        <input type="text" name="size" id="size" class="form-control" />
+                                        <input type="text" name="size" id="size" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-size"></strong>
                                         </span>
@@ -109,7 +108,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Expiration: </label>
-                                        <input type="date" name="expiration" id="expiration" class="form-control" />
+                                        <input type="date" name="expiration" id="expiration" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-expiration"></strong>
                                         </span>
@@ -118,7 +117,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Stock / Per Case: </label>
-                                        <input type="number" name="stock" id="stock" class="form-control" />
+                                        <input type="number" name="stock" id="stock" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-stock"></strong>
                                         </span>
@@ -127,7 +126,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Stock / Per PCS: </label>
-                                        <input type="number" name="pcs" id="pcs" class="form-control" />
+                                        <input type="number" name="pcs" id="pcs" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-pcs"></strong>
                                         </span>
@@ -136,7 +135,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Purchase Amount / Per Case: </label>
-                                        <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
+                                        <input type="number" name="purchase_amount" id="purchase_amount" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-purchase_amount"></strong>
                                         </span>
@@ -145,7 +144,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Profit Amount / Per Case: </label>
-                                        <input type="number" name="profit" id="profit" class="form-control" />
+                                        <input type="number" name="profit" id="profit" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-profit"></strong>
                                         </span>
@@ -154,7 +153,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Note / Optional: </label>
-                                        <textarea name="note" id="note" class="form-control"></textarea>
+                                        <textarea name="note" id="note" class="form-control form_disable"></textarea>
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-note"></strong>
                                         </span>
@@ -182,6 +181,7 @@
 $(function () {
     $('#puchase-order-number-edit').show();
     $('#puchase-order-number-view').hide();
+    $('#success-alert').hide();
     return loadInventories();
 });
 
@@ -227,6 +227,11 @@ $(document).on('click', '.remove', function(){
                       },
                       success:function(data){
                           if(data.success){
+                            $('#success-alert').addClass('bg-primary')
+                            $('#success-alert').html('<strong>' + data.success + '</strong> ');
+                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                            });
                             return loadInventories();
                             $('#titletable').text('Inventories');
                           }
@@ -253,6 +258,8 @@ $(document).on('click', '.edit', function(){
     $('#purhase-number').hide();
     $('#puchase-order-number-edit').show();
     $('#puchase-order-number-view').hide();
+    $('.form_disable').attr('readonly' , false)
+    $('.select2').prop("disabled", false);
     $('#product_button').show();
     var id = $(this).attr('edit');
 
@@ -303,13 +310,13 @@ $(document).on('click', '.view', function(){
     $('.modal-title').text('View Product');
     $('#myForm')[0].reset();
     $('.form-control').removeClass('is-invalid');
-    
+    $('.form_disable').attr('readonly' , true)
+    $('.select2').prop("disabled", true);
     $('#form_result').html('');
     $('#puchase-order-number-view').show();
     $('#puchase-order-number-edit').hide();
     $('#purhase-number').show();
     var id = $(this).attr('view');
-
     $.ajax({
         url :"/admin/inventories/"+id+"/edit",
         dataType:"json",
@@ -333,6 +340,7 @@ $(document).on('click', '.view', function(){
                         $("#purchase_order_number_id_view").select2("trigger", "select", {
                             data: { id: value }
                         });
+                        
                     }
                 }
             })
@@ -360,6 +368,8 @@ $(document).on('click', '#create_record', function(){
     $('#puchase-order-number-edit').show();
     $('#product_button').show();
     $('#purhase-number').show();
+    $('.form_disable').attr('readonly' , false)
+    $('.select2').prop("disabled", false);
     
 });
 
@@ -414,11 +424,13 @@ $('#myForm').on('submit', function(event){
                     $("#product_button").attr("disabled", false);
                     $("#product_button").attr("value", "Submit");
                 }
-                $.alert({
-                    title: 'Success Message',
-                    content: data.success,
-                    type: 'green',
+               
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
                 });
+
                 $('.form-control').removeClass('is-invalid')
                 $('#myForm')[0].reset();
                 $('#category_id').select2({

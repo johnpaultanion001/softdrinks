@@ -159,6 +159,6 @@ class PendingProductController extends Controller
 
     public function destroy(PendingProduct $pending_product)
     {
-        return response()->json(['success' => $pending_product->delete()]);
+        return response()->json(['success' => 'Product Removed Successfully.' , $pending_product->delete()]);
     }
 }

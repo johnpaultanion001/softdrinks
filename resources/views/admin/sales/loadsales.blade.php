@@ -22,8 +22,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 pt-3 text-nowrap">
+                <div class="col-md-3">
                    <span class="mb-0 text-uppercase font-weight-bold">Profit: <large class="text-success font-weight-bold mr-1">₱ {{ number_format($sales->sum->profit , 0, ',', ',') }}</large> </span>
+                   <br>
                    <span class="mb-0 text-uppercase font-weight-bold">Sales: <large class="text-success font-weight-bold mr-1">₱ {{ number_format($sales->sum->total , 0, ',', ',') }}</large> </span>
 
                 </div>
@@ -34,7 +35,7 @@
     <div class="table-responsive">
        
         <!-- Projects table -->
-        <table class="table align-items-center table-flush datatable-sales">
+        <table class="table align-items-center table-flush datatable-sales display" cellspacing="0" width="100%"">
         <thead class="thead-light">
             <tr>
            

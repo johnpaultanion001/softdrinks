@@ -134,6 +134,12 @@ $(document).on('click', '.remove', function(){
                       },
                       success:function(data){
                           if(data.success){
+                            $('#success-alert').addClass('bg-primary');
+                            $('#success-alert').html('<strong>' + data.success + '</strong>');
+                            $("#success-alert").alert().fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                            });
+
                             return loadStatus();
                           }
                       }
@@ -253,11 +259,14 @@ $('#myForm').on('submit', function(event){
                     $("#action_button").attr("disabled", false);
                     $("#action_button").attr("value", "Submit");
                 }
-                $.alert({
-                    title: 'Success Message',
-                    content: data.success,
-                    type: 'green',
+
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
                 });
+
+
                 $('.form-control').removeClass('is-invalid')
                 $('#myForm')[0].reset();
                 $('#formModal').modal('hide');

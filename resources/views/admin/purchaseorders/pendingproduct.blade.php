@@ -20,7 +20,7 @@
             <th scope="col">Date</th>
         </tr>
         </thead>
-        <tbody class="text-uppercase font-weight-bold">
+        <tbody class="text-uppercase font-weight-bold display" cellspacing="0" width="100%"">
         @foreach($pendingproducts as $key => $product)
                 <tr data-entry-id="{{ $product->id ?? '' }}">
                     <td>

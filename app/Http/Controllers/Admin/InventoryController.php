@@ -207,6 +207,6 @@ class InventoryController extends Controller
             'total_price' => $totalprice,
         ]);
 
-        return response()->json(['success' => 'Inventory Removed Successfully.']);
+        return response()->json(['success' => 'Product Removed Successfully.']);
     }
 }

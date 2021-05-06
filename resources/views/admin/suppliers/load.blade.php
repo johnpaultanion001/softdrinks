@@ -22,7 +22,7 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-suppliers">
+          <table class="table align-items-center table-flush datatable-suppliers display" cellspacing="0" width="100%"">
             <thead class="thead-light">
               <tr>
                 <th>Actions</th>
@@ -37,7 +37,6 @@
             <tbody class="text-uppercase font-weight-bold">
               @foreach($suppliers as $key => $supplier)
                     <tr data-entry-id="{{ $supplier->id ?? '' }}">
-                       
                         <td>
                             <button type="button" name="edit" edit="{{  $supplier->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm">Edit</button>
                             <button type="button" name="remove" remove="{{  $supplier->id ?? '' }}" id="{{  $supplier->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
@@ -57,9 +56,6 @@
                         <td>
                             {{  $supplier->note ?? '' }}
                         </td>
-                       
-                      
-                        
                     </tr>
                 @endforeach
             </tbody>
@@ -83,6 +79,7 @@ $(function () {
   $.extend(true, $.fn.dataTable.defaults, {
     sale: [[ 1, 'desc' ]],
     pageLength: 100,
+    'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
   $('.datatable-suppliers:not(.ajaxTable)').DataTable({ buttons: dtButtons })
@@ -90,9 +87,9 @@ $(function () {
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
-
     
 });
+
 
 
 </script>

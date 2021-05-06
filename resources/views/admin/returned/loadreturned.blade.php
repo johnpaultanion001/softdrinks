@@ -19,7 +19,7 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-returned">
+          <table class="table align-items-center table-flush datatable-returned display" cellspacing="0" width="100%"">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Actions</th>
@@ -90,6 +90,7 @@ $(function () {
   $.extend(true, $.fn.dataTable.defaults, {
     sale: [[ 1, 'desc' ]],
     pageLength: 100,
+    'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
   $('.datatable-returned:not(.ajaxTable)').DataTable({ buttons: dtButtons })

@@ -110,6 +110,10 @@
     </div>
 </div>
 
+@section('footer')
+    @include('../partials.footer')
+@endsection
+
 <form method="post" id="myForm" class="form-horizontal ">
     @csrf
     <div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
@@ -332,8 +336,15 @@ $(document).on('click', '.remove', function(){
                       },
                       success:function(data){
                           if(data.success){
-                            location.reload();
                             $('#titletable').text('Products');
+                            $('#success-alert').html('<strong>' + data.success + '</strong>');
+                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                                
+                            });
+                            location.reload();
+                           
+                            
                           }
                       }
                   })
@@ -416,10 +427,9 @@ $('#myForm').on('submit', function(event){
                     $("#product_button").attr("disabled", false);
                     $("#product_button").attr("value", "Submit");
                 }
-                $.alert({
-                    title: 'Success Message',
-                    content: data.success,
-                    type: 'green',
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
                 });
                 $('.form-control').removeClass('is-invalid')
                 $('#myForm')[0].reset();
@@ -435,7 +445,7 @@ $('#myForm').on('submit', function(event){
     });
 });
 
-//edit puchase form
+//sbmit puchase form
 $('#myPurchaseForm').on('submit', function(event){
     event.preventDefault();
     $('.form-control').removeClass('is-invalid')
@@ -468,23 +478,7 @@ $('#myPurchaseForm').on('submit', function(event){
                 })
             }
             if(data.success){
-                $.confirm({
-                    title: 'Success Message',
-                    content: data.success,
-                    type: 'green',
-                    buttons: {
-                        confirm: {
-                            text: 'Ok',
-                            btnClass: 'btn-blue',
-                            keys: ['enter', 'shift'],
-                            action: function(){
-                                window.location.href = "/admin/purchase-order";
-                            }
-                        },
-                        
-                    }
-                });
-
+                window.location.href = "/admin/purchase-order";
             }
            
         }

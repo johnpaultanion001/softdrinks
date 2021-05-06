@@ -50,7 +50,7 @@
     </div>
     <div class="pending-product col mt-4">
         <div class="table-responsive">
-            <table class="table align-items-center table-flush datatable-editreturnproducts">
+            <table class="table align-items-center table-flush datatable-editreturnproducts display" cellspacing="0" width="100%"">
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">Actions</th>

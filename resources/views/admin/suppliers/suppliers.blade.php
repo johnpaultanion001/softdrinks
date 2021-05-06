@@ -54,16 +54,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Address: </label>
-                                        <input type="text" name="address" id="address" class="form-control" />
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-address"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                               
+                                
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Contact: </label>
@@ -73,8 +64,17 @@
                                         </span>
                                     </div>
                                 </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Address: </label>
+                                        <input type="text" name="address" id="address" class="form-control" />
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong id="error-address"></strong>
+                                        </span>
+                                    </div>
+                                </div>
                                
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Note/Optional:</label>
                                         <textarea name="note" id="note" class="form-control "></textarea>
@@ -155,6 +155,11 @@ $(document).on('click', '.remove', function(){
                       },
                       success:function(data){
                           if(data.success){
+                            $('#success-alert').addClass('bg-primary');
+                            $('#success-alert').html('<strong>' + data.success + '</strong>');
+                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                            });
                             return loadSupplier();
                           }
                       }
@@ -173,7 +178,7 @@ $(document).on('click', '.remove', function(){
 
 $(document).on('click', '.edit', function(){
     $('#formModal').modal('show');
-    $('.modal-title').text('Edit Product');
+    $('.modal-title').text('Edit Supplier');
     $('#myForm')[0].reset();
     $('.form-control').removeClass('is-invalid')
     $('#form_result').html('');
@@ -274,10 +279,10 @@ $('#myForm').on('submit', function(event){
                     $("#action_button").attr("disabled", false);
                     $("#action_button").attr("value", "Submit");
                 }
-                $.alert({
-                    title: 'Success Message',
-                    content: data.success,
-                    type: 'green',
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
                 });
                 $('.form-control').removeClass('is-invalid')
                 $('#myForm')[0].reset();

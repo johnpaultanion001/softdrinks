@@ -133,6 +133,6 @@ class OrderController extends Controller
     {
        Inventory::where('id', $order->inventory->id)->increment('stock', $order->purchase_qty);
        Inventory::where('id', $order->inventory->id)->decrement('sales', $order->purchase_qty); 
-       return response()->json(['success' => $order->delete()]);
+       return response()->json(['success' => 'Order Removed Successfully.' , $order->delete()]);
     }
 }

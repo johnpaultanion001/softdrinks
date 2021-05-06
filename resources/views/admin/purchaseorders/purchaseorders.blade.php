@@ -421,10 +421,10 @@ $('#purchaseorderForm').on('submit', function(event){
                     $("#purchase_button").attr("disabled", false);
                     $("#purchase_button").attr("value", "Submit");
                 }
-                $.alert({
-                    title: 'Success Message',
-                    content: data.success,
-                    type: 'green',
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
                 });
                 $('.form-control').removeClass('is-invalid')
                 $('#purchaseorderForm')[0].reset();
@@ -554,10 +554,10 @@ $('#productForm').on('submit', function(event){
                     $("#product_button").attr("disabled", false);
                     $("#product_button").attr("value", "Submit");
                 }
-                $.alert({
-                    title: 'Success Message',
-                    content: data.success,
-                    type: 'green',
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
                 });
                 $('.form-control').removeClass('is-invalid')
                 $('#productForm')[0].reset();
@@ -601,6 +601,11 @@ $(document).on('click', '.remove', function(){
                       },
                       success:function(data){
                           if(data.success){
+                            $('#success-alert').addClass('bg-primary');
+                            $('#success-alert').html('<strong>' + data.success + '</strong>');
+                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                            });
                             purchaseModal();
                             alltotal();
                             $('#loading-productmodal').hide();

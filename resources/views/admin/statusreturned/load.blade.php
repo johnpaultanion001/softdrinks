@@ -22,7 +22,7 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-status">
+          <table class="table align-items-center table-flush datatable-status display" cellspacing="0" width="100%"">
             <thead class="thead-light">
               <tr>
                 <th>Actions</th>
@@ -78,6 +78,7 @@ $(function () {
   $.extend(true, $.fn.dataTable.defaults, {
     sale: [[ 1, 'desc' ]],
     pageLength: 100,
+    'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
   $('.datatable-status:not(.ajaxTable)').DataTable({ buttons: dtButtons })
