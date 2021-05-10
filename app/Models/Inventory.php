@@ -17,9 +17,9 @@ class Inventory extends Model
         'name',
 
         'stock',
-        'pcs',
+        'qty',
 
-        'size',
+        'size_id',
 
         'purchase_amount',
         'profit',
@@ -32,7 +32,8 @@ class Inventory extends Model
         'expiration',
         'note',
 
-        'isRemove'
+        'isRemove',
+        'product_number',
     ];
     public function category()
     {
@@ -40,7 +41,11 @@ class Inventory extends Model
     }
     public function purchase_order()
     {
-        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id');
+       return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id', 'purchase_order_number');
+    }
+    public function size()
+    {
+        return $this->belongsTo(Size::class, 'size_id');
     }
     
 }

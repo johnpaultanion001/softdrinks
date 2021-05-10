@@ -6,8 +6,8 @@
                     <div class="card-body">
                         <div class="row">
                         <div class="col">
-                            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{\Illuminate\Support\Str::limit($inventory->name,12)}}</h5>
-                            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 0, ',', ',') }}</span> <small>/ PER CASE</small>
+                            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{\Illuminate\Support\Str::limit($inventory->name,12)}}</h3>
+                            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 0, ',', ',') }}</span> <small>/ {{$inventory->category->name}}</small>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -20,11 +20,11 @@
                             <div class="row text-dark text-justify font-weight-light">
                                 <div class="col-6">
                                     <span class=" text-uppercase">Size: 
-                                        <span class="text-success font-weight-bold">{{$inventory->size}}</span>
+                                        <span class="text-success font-weight-bold">{{$inventory->size->title}} {{$inventory->size->size}}</span>
                                     </span> 
                                 </div>
                                 <div class="col-6">
-                                     <span class= "text-uppercase">Stock/Per Case:
+                                     <span class= "text-uppercase">Stock/{{$inventory->category->name}}:
                                         @if($inventory->stock < 1)
                                             <span class="text-warning text-uppercase">0</span>
                                             @else
@@ -42,8 +42,6 @@
                                     <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$inventory->purchase_order->supplier->name}}</span></span>
                                 </div>
                             </div>
-                           
-                            
                         </p>
                     </div>
                 </div>

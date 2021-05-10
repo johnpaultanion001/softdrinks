@@ -55,7 +55,8 @@ class OrderingController extends Controller
                 $newPost->setTable('sales');
                 $newPost->save();
         });
-       if($request->nodata == "No Data"){
+        $orders = Order::all()->count();
+       if($orders < 1){
         return response()->json(['nodata' => 'No data available']);
        }
         if($passdata){

@@ -17,7 +17,22 @@ class CategorySeeder extends Seeder
         $categories = [
             [
                 'id'    => '1',
-                'name' => 'Soft Drinks',
+                'name' => 'Case',
+                'note' => 'Test',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ],
+            [
+                'id'    => '2',
+                'name' => 'PCS',
+                'note' => 'Test',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ],
+            [
+                'id'    => '3',
+                'name' => 'Can',
+                'note' => 'Test',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],

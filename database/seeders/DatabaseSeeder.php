@@ -21,11 +21,11 @@ class DatabaseSeeder extends Seeder
             RoleUserTableSeeder::class,
             InventorySeeder::class,
             CategorySeeder::class,
-            
             PurchaseOrderSeeder::class,
             PendingProductSeeder::class,
             SupplierSeeder::class,
             StatusReturnSeeder::class,
+            SizeSeeder::class,
            
         ]);
     }

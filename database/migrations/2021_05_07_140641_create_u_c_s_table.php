@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreateUCSTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('u_c_s', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('note')->nullable();
+            $table->string('purchase_order_number_id');
+            $table->string('inventory_id');
+            $table->float('ucs', 8, 2);
+            $table->float('case', 8, 2);
             $table->integer('isRemove')->default(0);
+            $table->integer('isPurchase')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('u_c_s');
     }
 }

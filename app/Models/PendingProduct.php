@@ -16,9 +16,9 @@ class PendingProduct extends Model
         'purchase_order_number_id',
         'name',
         'stock',
-        'pcs',
+        'qty',
 
-        'size',
+        'size_id',
 
         'purchase_amount',
         'profit',
@@ -29,7 +29,8 @@ class PendingProduct extends Model
         'total_price',
 
         'expiration',
-        'note'
+        'note',
+        'product_number',
     ];
     public function category()
     {
@@ -37,6 +38,10 @@ class PendingProduct extends Model
     }
     public function purchase_order()
     {
-        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id');
+        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id', 'purchase_order_number');
+    }
+    public function size()
+    {
+        return $this->belongsTo(Size::class, 'size_id');
     }
 }

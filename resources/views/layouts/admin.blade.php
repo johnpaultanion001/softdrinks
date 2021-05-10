@@ -174,7 +174,7 @@
         buttons: [
             {
             extend: 'copy',
-            className: 'btn-default btn-sm mt-1',
+            className: 'btn-default btn-sm mt-1 mb-1',
             text: copyButtonTrans,
             exportOptions: {
                 columns: ':visible'
@@ -182,7 +182,7 @@
             },
             {
             extend: 'csv',
-            className: 'btn-default btn-sm mt-1',
+            className: 'btn-default btn-sm mt-1 mb-1',
             text: csvButtonTrans,
             exportOptions: {
                 columns: ':visible'
@@ -190,7 +190,7 @@
             },
             {
             extend: 'excel',
-            className: 'btn-default btn-sm mt-1',
+            className: 'btn-default btn-sm mt-1 mb-1',
             text: excelButtonTrans,
             exportOptions: {
                 columns: ':visible'
@@ -198,7 +198,7 @@
             },
             {
             extend: 'pdf',
-            className: 'btn-default btn-sm mt-1',
+            className: 'btn-default btn-sm mt-1 mb-1',
             text: pdfButtonTrans,
             exportOptions: {
                 columns: ':visible'
@@ -206,7 +206,7 @@
             },
             {
                 extend: 'print',
-                className: 'btn-default btn-sm mt-1',
+                className: 'btn-default btn-sm mt-1 mb-1',
                 titleAttr: 'Click this print',
                 text: printButtonTrans,
                 exportOptions: {
@@ -215,7 +215,7 @@
             },
             {
             extend: 'colvis',
-            className: 'btn-default btn-sm mt-1',
+            className: 'btn-default btn-sm mt-1 mb-1',
             text: colvisButtonTrans,
             exportOptions: {
                 columns: ':visible'

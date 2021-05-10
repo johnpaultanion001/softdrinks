@@ -67,6 +67,22 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => '14',
                 'title' => 'status-return_access',
             ],
+            [
+                'id'    => '15',
+                'title' => 'sizes_access',
+            ],
+            [
+                'id'    => '16',
+                'title' => 'ucs_access',
+            ],
+            [
+                'id'    => '17',
+                'title' => 'category_access',
+            ],
+            [
+                'id'    => '18',
+                'title' => 'setting_access',
+            ],
 
             
 

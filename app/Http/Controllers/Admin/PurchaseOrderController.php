@@ -8,6 +8,8 @@ use App\Models\PurchaseOrder;
 use App\Models\Inventory;
 use App\Models\Supplier;
 use App\Models\Category;
+use App\Models\Size;
+use App\Models\UCS;
 use App\Models\PendingProduct;
 use Validator;
 use Gate;
@@ -20,8 +22,9 @@ class PurchaseOrderController extends Controller
         abort_if(Gate::denies('purchase_order_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
         $products = PendingProduct::latest()->get();
-        $categories = Category::latest()->get();
-        return view('admin.purchaseorders.purchaseorders', compact('suppliers','products','categories'));
+        $categories = Category::where('isRemove', 0)->latest()->get();
+        $sizes = Size::where('isRemove', 0)->latest()->get();
+        return view('admin.purchaseorders.purchaseorders', compact('suppliers','products','categories','sizes'));
     }
     public function total()
     {
@@ -45,15 +48,16 @@ class PurchaseOrderController extends Controller
     {
         $orders = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
-        $categories = Category::latest()->get();
+        $categories = Category::where('isRemove', 0)->latest()->get();
         $purchaseorder = PurchaseOrder::latest()->get();
-        return view('admin.purchaseorders.editpurchase.edit', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber'));
+        $sizes = Size::where('isRemove', 0)->latest()->get();
+        return view('admin.purchaseorders.editpurchase.edit', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber' , 'sizes'));
     }
     public function loadedit(PurchaseOrder $purchasenumber)
     {
         $orders = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
-        $categories = Category::latest()->get();
+        $categories = Category::where('isRemove', 0)->latest()->get();
         $purchaseorder = PurchaseOrder::latest()->get();
         return view('admin.purchaseorders.editpurchase.load', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber'));
     }
@@ -81,7 +85,9 @@ class PurchaseOrderController extends Controller
         $totalpurchasedorder = PendingProduct::sum('total_amount_purchase');
         $totalprofit = PendingProduct::sum('total_profit');
         $totalprice = PendingProduct::sum('total_price');
-
+        UCS::where('purchase_order_number_id', $id)->update([
+            'isPurchase' => '1',
+        ]);
         PurchaseOrder::create([
             'user_id' => $userid,
             'supplier_id' => $request->input('supplier_id'),
@@ -100,6 +106,9 @@ class PurchaseOrderController extends Controller
             $newPost->save();
         });
         PendingProduct::latest()->delete();
+
+
+
         return response()->json(['success' => 'Added Purchased Order Successfully.']);
     }
     public function update(Request $request,PurchaseOrder $purchasenumber)

@@ -27,7 +27,7 @@
 <form method="post" id="myForm" class="form-horizontal ">
             @csrf
             <div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
-                <div class="modal-dialog modal-lg modal-dialog-centered ">
+                <div class="modal-dialog modal-xl modal-dialog-centered ">
                     <div class="modal-content">
                 
                         <!-- Modal Header -->
@@ -45,7 +45,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Name: </label>
+                                        <label class="control-label text-uppercase" >Product Name: </label>
                                         <input type="text" name="name" id="name" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-name"></strong>
@@ -84,7 +84,12 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Category: </label>
+                                        <div class="row">
+                                            <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
+                                            <div class="col text-right">
+                                                <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
+                                            </div>
+                                        </div>
                                         <select name="category_id" id="category_id" class="form-control select2">
                                             <option value="" disabled selected>Select Category</option>
                                             @foreach ($categories as $category)
@@ -98,10 +103,20 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Size: </label>
-                                        <input type="text" name="size" id="size" class="form-control form_disable" />
+                                         <div class="row">
+                                            <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
+                                            <div class="col text-right">
+                                                <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
+                                            </div>
+                                        </div>
+                                        <select name="size_id" id="size_id" class="form-control select2">
+                                            <option value="" disabled selected>Select Size</option>
+                                            @foreach ($sizes as $size)
+                                                <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} - {{$size->category->name}} - UCS:{{$size->ucs}} </option>
+                                            @endforeach
+                                        </select>
                                         <span class="invalid-feedback" role="alert">
-                                            <strong id="error-size"></strong>
+                                            <strong id="error-size_id"></strong>
                                         </span>
                                     </div>
                                 </div>
@@ -116,7 +131,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Stock / Per Case: </label>
+                                        <label class="control-label text-uppercase" >Purchase QTY:</label>
                                         <input type="number" name="stock" id="stock" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-stock"></strong>
@@ -125,16 +140,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Stock / Per PCS: </label>
-                                        <input type="number" name="pcs" id="pcs" class="form-control form_disable" />
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-pcs"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Purchase Amount / Per Case: </label>
+                                        <label class="control-label text-uppercase" >Purchase Amount: </label>
                                         <input type="number" name="purchase_amount" id="purchase_amount" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-purchase_amount"></strong>
@@ -143,14 +149,14 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Profit Amount / Per Case: </label>
+                                        <label class="control-label text-uppercase" >Profit Amount: </label>
                                         <input type="number" name="profit" id="profit" class="form-control form_disable" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-profit"></strong>
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Note / Optional: </label>
                                         <textarea name="note" id="note" class="form-control form_disable"></textarea>
@@ -295,6 +301,11 @@ $(document).on('click', '.edit', function(){
                             data: { id: value }
                         });
                     }
+                    if(key == 'size_id'){
+                        $("#size_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
                 }
             })
             $('#product_hidden_id').val(id);
@@ -340,7 +351,11 @@ $(document).on('click', '.view', function(){
                         $("#purchase_order_number_id_view").select2("trigger", "select", {
                             data: { id: value }
                         });
-                        
+                    }
+                    if(key == 'size_id'){
+                        $("#size_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
                     }
                 }
             })
@@ -359,6 +374,9 @@ $(document).on('click', '#create_record', function(){
     })
     $('#purchase_order_number_id').select2({
         placeholder: 'Select Purchase Order Number'
+    })
+    $('#size_id').select2({
+        placeholder: 'Select Size'
     })
     $('#product_button').val('Submit');
     $('#product_action').val('Add');
@@ -434,7 +452,10 @@ $('#myForm').on('submit', function(event){
                 $('.form-control').removeClass('is-invalid')
                 $('#myForm')[0].reset();
                 $('#category_id').select2({
-                    placeholder: 'Select category'
+                    placeholder: 'Select Category'
+                });
+                $('#size_id').select2({
+                    placeholder: 'Select Size'
                 });
                 $('#formModal').modal('hide');
                 return loadInventories();

@@ -11,6 +11,7 @@
     <div id="success-alert" class="col-4 alert text-white fade show fixed-bottom" data-dismiss="alert" style="margin-left: 65%; z-index: 9999;" role="alert">
     </div>
     <div id="success-order" class="success-order col-4 alert text-white fade show fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
-        
+    </div>
+    <div id="success-checkout" class="success-order col-4 alert text-white fade show fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
     </div>
 </div>

@@ -32,7 +32,7 @@
                 <th scope="col">Total Purchased Order</th>
                 <th scope="col">Total Profit</th>
                 <th scope="col">Total Price</th>
-                <th scope="col">Created By</th>
+                <th scope="col">User</th>
                 <th scope="col">Note</th>
                 <th scope="col">Date</th>
               </tr>

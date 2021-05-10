@@ -39,21 +39,23 @@
         <thead class="thead-light">
             <tr>
            
-           
+            <th scope="col">Product Number</th>
             <th scope="col">Product Name</th>
             <th scope="col">Product Price</th>
             <th scope="col">Product Size</th>
             <th scope="col">Qty</th>
             <th scope="col">Sales</th>
             <th scope="col">Profit</th>
-            <th scope="col">Created By</th>
+            <th scope="col">User</th>
             <th scope="col">Date</th>
             </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold">
             @foreach($sales as $key => $sale)
                 <tr data-entry-id="{{ $sale->id ?? '' }}">
-                  
+                    <td>
+                        {{  $sale->inventory->product_number ?? '' }}
+                    </td>
                     <td>
                         {{  $sale->inventory->name ?? '' }}
                     </td>
@@ -61,7 +63,7 @@
                         <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->inventory->price ?? '' , 0, ',', ',') }}
                     </td>
                     <td>
-                        {{  $sale->inventory->size ?? '' }}
+                        {{  $sale->inventory->size->title ?? '' }} {{  $sale->inventory->size->size ?? '' }}
                     </td>
                     <td>
                         {{  $sale->purchase_qty ?? '' }}

@@ -3,16 +3,16 @@
         <thead class="thead-light">
         <tr>
             <th scope="col">Actions</th>
+            <th scope="col">Product Number</th>
             <th scope="col">Purchase Order Number</th>
-            <th scope="col">Category</th>
-            <th scope="col">Name</th>
-            <th scope="col">Stock / Per Case</th>
-            <th scope="col">Stock / Per PCS</th>
+            <th scope="col">Product Name</th>
             <th scope="col">Size</th>
+            <th scope="col">Category</th>
             <th scope="col">Expiration</th>
-            <th scope="col">Purchase Amount / Per Case</th>
-            <th scope="col">Profit / Per Case</th>
-            <th scope="col">Price / Per Case</th>
+            <th scope="col">Purchase QTY</th>
+            <th scope="col">Purchase Amount</th>
+            <th scope="col">Profit</th>
+            <th scope="col">Price</th>
             <th scope="col">Total Amount Purchase</th>
             <th scope="col">Total Amount Profit</th>
             <th scope="col">Total Amount Price</th>
@@ -28,25 +28,25 @@
                         <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
                     </td>
                     <td>
-                        {{  $product->purchase_order_number_id ?? '' }}
+                        {{  $product->product_number ?? '' }}
                     </td>
                     <td>
-                        {{  $product->category->name ?? '' }}
+                        {{  $product->purchase_order_number_id ?? '' }}
                     </td>
                     <td>
                         {{  $product->name ?? '' }}
                     </td>
                     <td>
-                        {{  $product->stock ?? '' }}
+                        {{  $product->size->title ?? '' }} {{  $product->size->size ?? '' }}
                     </td>
                     <td>
-                        {{  $product->pcs ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->size ?? '' }}
+                        {{  $product->category->name ?? '' }}
                     </td>
                     <td>
                         {{  $product->expiration ?? '' }}
+                    </td>                    
+                    <td>
+                        {{  $product->qty ?? '' }}
                     </td>
                     <td>
                         <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->purchase_amount , 0, ',', ',') }}

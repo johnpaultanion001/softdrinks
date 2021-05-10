@@ -100,4 +100,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //suppliers
     Route::resource('suppliers', 'SupplierController');
     route::get('loadsuppliers', 'SupplierController@load')->name('supplier.load');
+
+    
+    //sizes
+    Route::resource('sizes', 'SizeController');
+    route::get('loadsizes', 'SizeController@load')->name('size.load');
+
+     //UCS
+     Route::resource('ucs', 'UCSController');
+     route::get('loaducs', 'UCSController@load')->name('ucs.load');
+
+    //Categories
+    Route::resource('categories', 'CategoryController');
+    route::get('loadcategories', 'CategoryController@load')->name('categorie.load');
 });

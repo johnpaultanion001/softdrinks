@@ -28,7 +28,11 @@
                 @elseif(request()->is('admin/returned') || request()->is('admin/returned/*'))
                     Returned Products
                 @elseif(request()->is('admin/status-rerturn') || request()->is('admin/status-rerturn/*'))
-                    Status of Return                 
+                    Status of Return   
+                @elseif(request()->is('admin/sizes') || request()->is('admin/sizes/*'))
+                    Sizes 
+                @elseif(request()->is('admin/ucs') || request()->is('admin/ucs/*'))
+                    UCS
                 @endif
                 
                  

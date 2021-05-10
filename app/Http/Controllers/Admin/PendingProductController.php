@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PendingProduct;
 use App\Models\PurchaseOrder;
+use App\Models\UCS;
+use App\Models\Size;
 use Validator;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
+use datetime;
+
 
 class PendingProductController extends Controller
 {
@@ -34,19 +38,12 @@ class PendingProductController extends Controller
         $validated =  Validator::make($request->all(), [
             'category_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
-
             'stock' => ['required' ,'integer','min:1'],
-            'pcs' => ['required' ,'integer','min:1'],
-
-            'size' => ['required', 'string', 'max:255'],
+            'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
-            
-            
             'purchase_amount' => ['required' ,'integer','min:1'],
             'profit' => ['required' ,'integer','min:1'],
-            
-            'note' => ['nullable'],
-           
+            'note' => ['nullable'],  
         ]);
 
         if ($validated->fails()) {
@@ -60,28 +57,33 @@ class PendingProductController extends Controller
 
         $purchaseorderid = PurchaseOrder::orderby('id', 'desc')->firstorfail();
         $id = $purchaseorderid->purchase_order_number + 1;
+        $userid = auth()->user()->id;
 
-        PendingProduct::create([
+       $product = PendingProduct::create([
             'category_id' => $request->input('category_id'),
             'purchase_order_number_id' => $id,
             'name' => $request->input('name'),
-
             'stock' => $request->input('stock'),
-            'pcs' => $request->input('pcs'),
-
-            'size' => $request->input('size'),
+            'qty' => $request->input('stock'),
+            'size_id' => $request->input('size_id'),
             'expiration' => $request->input('expiration'),
-            
-            
             'purchase_amount' => $request->input('purchase_amount'),
             'profit' => $request->input('profit'),
             'price' => $price,
-
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-
             'note' => $request->input('note'),
+            'product_number' =>  time().'-'.$userid,
+        ]);
+        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+        $ucs_percase = $ucs->ucs * $request->input('stock');
+
+        UCS::create([
+            'purchase_order_number_id' => $id,
+            'inventory_id' => $product->product_number,
+            'ucs' => $ucs_percase,
+            'case' => $product->stock,
         ]);
         return response()->json(['success' => 'Product Added Successfully.']);
 
@@ -107,9 +109,9 @@ class PendingProductController extends Controller
             'name' => ['required', 'string', 'max:255'],
 
             'stock' => ['required' ,'integer','min:1'],
-            'pcs' => ['required' ,'integer','min:1'],
+            
 
-            'size' => ['required', 'string', 'max:255'],
+            'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
             
             'purchase_amount' => ['required' ,'integer','min:1'],
@@ -135,23 +137,24 @@ class PendingProductController extends Controller
             'category_id' => $request->input('category_id'),
             'purchase_order_number_id' => $id,
             'name' => $request->input('name'),
-
             'stock' => $request->input('stock'),
-            'pcs' => $request->input('pcs'),
-
-            'size' => $request->input('size'),
+            'qty' => $request->input('stock'),
+            'size_id' => $request->input('size_id'),
             'expiration' => $request->input('expiration'),
-            
-            
             'purchase_amount' => $request->input('purchase_amount'),
             'profit' => $request->input('profit'),
             'price' => $price,
-
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-
             'note' => $request->input('note'),
+        ]);
+        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+        $ucs_percase = $ucs->ucs * $request->input('stock');
+      
+        UCS::where('inventory_id',$pending_product->product_number)->update([
+            'ucs' => $ucs_percase,
+            'case' =>  $request->input('stock'),
         ]);
 
         return response()->json(['success' => 'Product Updated Successfully.']);

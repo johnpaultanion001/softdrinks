@@ -26,22 +26,22 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col">Actions</th>
-                <th scope="col">Name</th>
-                <th scope="col">Stock / Per Case</th>
-                <th scope="col">Stock / Per PCS</th>
+                <th scope="col">Product Number</th>
+                <th scope="col">Purchase Order Number & Supplier</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Stock</th>
                 <th scope="col">Size</th>
-                <th scope="col">Expiration</th>
-                <th scope="col">Purchase Order Number</th>
                 <th scope="col">Category</th>
-                <th scope="col">Supplier</th>
-                <th scope="col">Purchase Amount / Per Case</th>
-                <th scope="col">Profit / Per Case</th>
-                <th scope="col">Price / Per Case</th>
+                <th scope="col">Expiration</th>
+                <th scope="col">Purchase QTY</th>
+                <th scope="col">Purchase Amount</th>
+                <th scope="col">Profit</th>
+                <th scope="col">Price</th>
                 <th scope="col">Total Amount Purchase</th>
                 <th scope="col">Total Amount Profit</th>
                 <th scope="col">Total Amount Price</th>
                 <th scope="col">Note</th>
-                <th scope="col">Created By</th>
+                <th scope="col">User</th>
                 <th scope="col">Date</th>
               </tr>
             </thead>
@@ -59,28 +59,30 @@
                           <button type="button" name="remove" remove="{{  $inventory->id ?? '' }}" id="{{  $inventory->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
                       </td>
                       <td>
+                          {{  $inventory->product_number ?? '' }}
+                      </td>
+                      <td>
+                          {{  $inventory->purchase_order_number_id ?? '' }} - {{  $inventory->purchase_order->supplier->name ?? '' }}
+                      </td>
+
+                      <td>
                           {{  $inventory->name ?? '' }}
                       </td>
                       <td>
                           {{  $inventory->stock ?? '' }}
                       </td>
+                      
                       <td>
-                          {{  $inventory->pcs ?? '' }}
-                      </td>
-                      <td>
-                          {{  $inventory->size ?? '' }}
-                      </td>
-                      <td>
-                          {{  $inventory->expiration ?? '' }}
-                      </td>
-                      <td>
-                          {{  $inventory->purchase_order_number_id ?? '' }}
+                          {{  $inventory->size->title ?? '' }}  {{  $inventory->size->size ?? '' }}
                       </td>
                       <td>
                           {{  $inventory->category->name ?? '' }}
                       </td>
                       <td>
-                          {{  $inventory->purchase_order->supplier->name ?? '' }}
+                          {{  $inventory->expiration ?? '' }}
+                      </td>
+                      <td>
+                          {{  $inventory->qty ?? '' }}
                       </td>
                       <td>
                           <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->purchase_amount , 0, ',', ',') }}

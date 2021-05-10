@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use App\Models\Category;
 use App\Models\PurchaseOrder;
+use App\Models\Size;
+use App\Models\UCS;
 use Illuminate\Http\Request;
 use Validator;
 use Gate;
@@ -18,15 +20,16 @@ class InventoryController extends Controller
     public function index()
     {
         abort_if(Gate::denies('inventories_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $categories = Category::latest()->get();
+        $categories = Category::where('isRemove', 0)->latest()->get();
         $purchaseorder = PurchaseOrder::where('isReturn', 0)->latest()->get();
         $allpurchaseorder = PurchaseOrder::latest()->get();
-        return view('admin.inventories.inventories',compact('categories','purchaseorder', 'allpurchaseorder'));
+        $sizes = Size::where('isRemove', 0)->latest()->get();
+        return view('admin.inventories.inventories',compact('categories','purchaseorder', 'allpurchaseorder', 'sizes'));
     }
     public function loadinventories()
     {
         $inventories = Inventory::where('isRemove', 0)->latest()->get();
-        $categories = Category::latest()->get();
+        $categories = Category::where('isRemove', 0)->latest()->get();
         return view('admin.inventories.loadinventories', compact('categories','inventories'));
     }
 
@@ -45,16 +48,11 @@ class InventoryController extends Controller
             'purchase_order_number_id' => ['required'],
             'category_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
-
             'stock' => ['required' ,'integer','min:1'],
-            'pcs' => ['required' ,'integer','min:1'],
-
-            'size' => ['required', 'string', 'max:255'],
+            'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
-            
             'purchase_amount' => ['required' ,'integer','min:1'],
             'profit' => ['required' ,'integer','min:1'],
-            
             'note' => ['nullable'],
            
         ]);
@@ -67,27 +65,24 @@ class InventoryController extends Controller
         $total_amount_purchase = $request->input('purchase_amount') * $request->input('stock');
         $total_profit = $request->input('profit') * $request->input('stock'); 
         $total_price = $total_amount_purchase + $total_profit;
-        Inventory::create([
+
+        $userid = auth()->user()->id;
+        $product = Inventory::create([
             'category_id' => $request->input('category_id'),
             'purchase_order_number_id' => $request->input('purchase_order_number_id'),
             'name' => $request->input('name'),
-
             'stock' => $request->input('stock'),
-            'pcs' => $request->input('pcs'),
-
-            'size' => $request->input('size'),
+            'qty' => $request->input('stock'),
+            'size_id' => $request->input('size_id'),
             'expiration' => $request->input('expiration'),
-            
-            
             'purchase_amount' => $request->input('purchase_amount'),
             'profit' => $request->input('profit'),
             'price' => $price,
-
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-
             'note' => $request->input('note'),
+            'product_number' =>  time().'-'.$userid,
         ]);
 
         $totalpurchasedorder = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_amount_purchase');
@@ -101,6 +96,15 @@ class InventoryController extends Controller
             'total_price' => $totalprice,
             'total_orders' => $products,
         ]);
+        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+        $ucs_percase = $ucs->ucs * $request->input('stock');
+        UCS::create([
+            'purchase_order_number_id' => $request->input('purchase_order_number_id'),
+            'inventory_id' => $product->product_number,
+            'ucs' => $ucs_percase,
+            'case' => $product->stock,
+            'isPurchase' => 1,
+        ]);
 
         return response()->json(['success' => 'Product Added Successfully.']);
     }
@@ -108,9 +112,7 @@ class InventoryController extends Controller
 
     public function show(Inventory $inventory)
     {
-        if (request()->ajax()) {
-            return response()->json(['result' => $inventory]);
-        }
+        return view('admin.ordering.viewmodal', compact('inventory'));
     }
 
   
@@ -129,13 +131,9 @@ class InventoryController extends Controller
             'purchase_order_number_id' => ['required'],
             'category_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
-
             'stock' => ['required' ,'integer','min:1'],
-            'pcs' => ['required' ,'integer','min:1'],
-
-            'size' => ['required', 'string', 'max:255'],
+            'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
-            
             'purchase_amount' => ['required' ,'integer','min:1'],
             'profit' => ['required' ,'integer','min:1'],
             
@@ -156,22 +154,16 @@ class InventoryController extends Controller
             'category_id' => $request->input('category_id'),
             'purchase_order_number_id' => $request->input('purchase_order_number_id'),
             'name' => $request->input('name'),
-
             'stock' => $request->input('stock'),
-            'pcs' => $request->input('pcs'),
-
-            'size' => $request->input('size'),
+            'qty' => $request->input('stock'),
+            'size_id' => $request->input('size_id'),
             'expiration' => $request->input('expiration'),
-            
-            
             'purchase_amount' => $request->input('purchase_amount'),
             'profit' => $request->input('profit'),
             'price' => $price,
-
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-
             'note' => $request->input('note'),
         ]);
 
@@ -187,6 +179,12 @@ class InventoryController extends Controller
             'total_orders' => $products,
         ]);
 
+        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+        $ucs_percase = $ucs->ucs * $request->input('stock');
+        UCS::where('inventory_id',$inventory->product_number)->update([
+            'ucs' => $ucs_percase,
+            'case' =>  $request->input('stock'),
+        ]);
         return response()->json(['success' => 'Product Updated successfully.']);
     }
 

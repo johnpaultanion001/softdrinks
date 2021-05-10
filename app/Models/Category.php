@@ -12,6 +12,8 @@ class Category extends Model
 
     protected $fillable = [
         'name',
+        'note',
+        'isRemove',
     ];
 
     public function inventories()

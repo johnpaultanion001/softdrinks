@@ -70,7 +70,7 @@
 <form method="post" id="myForm" class="form-horizontal ">
     @csrf
     <div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-dialog modal-lg modal-dialog-centered ">
             <div class="modal-content">
         
                 <!-- Modal Header -->
@@ -88,55 +88,9 @@
                     <div id="modalbody-edit">
                     
                     </div>
-                    <div id="modalbody">
-                    <span id="form_result"></span>      
-                        <div class="card card-stats" style="border-bottom: 1px solid #111">
-                        <!-- Card body -->
-                            <div class="card-body">
-                                <div class="row">
-                                <div class="col">
-                                    <h5 class="card-title text-uppercase text-success mb-0" id="name"></h5>
-                                    <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0" id="price"></span> <small>/ PER CASE</small>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                                        <i class="fas fa-wine-bottle"></i>
-                                    </div>
-                                </div>
-                                </div>
-                                <p class="mt-3 mb-0 text-sm">
-                                <span class="mr-2 font-weight-bold">Size:
-                                    <span class="text-success font-weight-bold" id="size"></span>
-                                </span>
-                                
-                                <span class="mr-2 font-weight-bold">Stock:
-                                    <span class="text-success font-weight-bold" id="stock"></span>
-                                </span>
-                                <br>
-                                    <span class="text-nowrap font-weight-bold">Expiration:
-                                        <span class="text-nowrap text-success font-weight-bold" id="expiration"></span>
-                                    </span>
-                                    <span class="text-nowrap font-weight-bold">Sold:
-                                        <span class="text-nowrap text-success font-weight-bold " id="sales"></span>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card card-stats" style="border-bottom: 1px solid #111">
-                        <!-- Card body -->
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label class="control-label text-success" >QTY: </label>
-                                    <input type="number" name="purchase_qty" id="purchase_qty" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-purchase_qty"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="modalbody-view">
+                    
                     </div>
-
-
                     <input type="hidden" name="action" id="action" value="Add" />
                     <input type="hidden" name="hidden_id" id="hidden_id" />
                 </div>
@@ -268,9 +222,10 @@ $('#search').on('keyup',function(){
 })
 //modal focus
 $('#formModal').on('shown.bs.modal', function () {
-    $('#purchase_qty').focus();
+    $('.purchase_qty').focus();
 }) 
-//view product
+
+//view order
 $(document).on('click', '#view', function(){
     $('#formModal').modal('show');
     $('#modalbody-edit').hide();
@@ -278,60 +233,35 @@ $(document).on('click', '#view', function(){
     $('.form-control').removeClass('is-invalid');
     $('#form_result').html('');
     var id = $(this).attr('view');
-    var locale = 'de';
-    var options = { minimumFractionDigits: 0, maximumFractionDigits: 2};
-    var formatter = new Intl.NumberFormat(locale, options);
+    $('#formCheckoutModal').modal('hide');
+    $('.modal-title').text('View Order');
     $.ajax({
-    url :"/admin/inventories/"+id,
-    dataType:"json",
-    beforeSend: function() {
-        $("#action_button").attr("disabled", true);
-        $("#action_button").attr("value", "Loading..");
-        $('#modalbody').hide();
-        $('#loading-productmodal').show();
-        
-    },
-    success:function(data){
-        $('#loading-productmodal').hide();
-        $('#modalbody').show();
-        $('#purchase_qty').focus();
-        $.each(data.result, function(key,value){
-            if(key == $('#'+key).attr('id')){
-                $('#'+key).val(value)
-                if(key == 'name'){
-                    $('#name').text(value);
-                }
-                if(key == 'price'){
-                    $('#price').text(formatter.format(value));
-                }
-                if(key == 'size'){
-                    $('#size').text(value);
-                }
-                if(key == 'stock'){
-                    $('#stock').text(value);
-                }
-                if(key == 'expiration'){
-                    $('#expiration').text(value);
-                }
-                if(key == 'sales'){
-                    $('#sales').text(value);
-                }
-            }
-        })
-        $('#hidden_id').val(id);
-        $('.modal-title').text('Order Description');
-        $("#action_button").attr("disabled", false);
-        $("#action_button").attr("value", "Order");
-        $('#action').val('Add');
+        url: "/admin/inventories/"+id, 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $("#action_button").attr("disabled", true);
+            $("#action_button").attr("value", "Loading..");
+            $('#modalbody-view').hide();
+            $('#loading-productmodal').show();
+        },
+        success: function(response){
+            $('#loading-productmodal').hide();
+            $('#modalbody-view').show();
+            $("#action_button").attr("disabled", false);
+            $("#action_button").attr("value", "Order");
+            $('#hidden_id').val(id);
+            $('#action').val('Add');
+            
+            $("#modalbody-view").html(response);
         }
     })
-  
 });
 
 //edit order
 $(document).on('click', '#edit', function(){
     $('#formModal').modal('show');
-    $('#modalbody').hide();
+    $('#modalbody-view').hide();
     $('#myForm')[0].reset();
     $('.form-control').removeClass('is-invalid');
     $('#form_result').html('');
@@ -477,53 +407,57 @@ $('#myCheckoutForm').on('submit', function(event){
     event.preventDefault();
     $('.form-control').removeClass('is-invalid')
     var action_url = "{{ route('admin.ordering.checkout_order') }}";
-    var type = "POST";
-    $.ajax({
-        url: action_url,
-        method:type,
-        data:$(this).serialize(),
-        dataType:"json",
-        beforeSend: function(){
-            $("#checkoutaction_button").attr("disabled", true);
-            $("#checkoutaction_button").attr("value", "Loading..");
-        },
-        success:function(data){
-            $("#checkoutaction_button").attr("disabled", false);
-            $("#checkoutaction_button").attr("value", "Check Out");
-            if(data.success){
-               $.confirm({
-                    title: data.success,
-                    content: 'Do you want to view your reports?',
-                    autoClose: 'cancel|10000',
-                    type: 'green',
-                    buttons: {
-                        confirm: {
-                            text: 'Yes',
-                            btnClass: 'btn-blue',
-                            keys: ['enter', 'shift'],
-                            action: function(){
-                                window.location.href = "/admin/sales";
+    var  method = "POST";
+    $.confirm({
+        title: 'Confirmation',
+        content: 'You really want to chechout this orders?',
+        autoClose: 'cancel|10000',
+        type: 'green',
+        buttons: {
+            confirm: {
+                text: 'confirm',
+                btnClass: 'btn-blue',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    return $.ajax({
+                    url: action_url,
+                    method: method,
+                    data: {
+                        _token: '{!! csrf_token() !!}',
+                    },
+                    dataType:"json",
+                    beforeSend: function(){
+                        $("#checkoutaction_button").attr("disabled", true);
+                        $("#checkoutaction_button").attr("value", "Loading..");
+                    },
+                        success:function(data){
+                            $("#checkoutaction_button").attr("disabled", false);
+                            $("#checkoutaction_button").attr("value", "Check Out");
+                            if(data.nodata){
+                                $.alert({
+                                    title: 'Message Error',
+                                    content: data.nodata,
+                                    type: 'red',
+                                });
                             }
-                        },
-                        cancel:  {
-                            text: 'Later',
-                            btnClass: 'btn-red',
-                            keys: ['enter', 'shift'],
-                            action: function(){
+                            if(data.success){
+                                $('#success-checkout').addClass('bg-primary');
+                                $('#success-checkout').html('<strong>' + data.success + '</strong> <br>' + 'Click <a href="/admin/sales" class="btn-white btn btn-sm">HERE</a> To view your reports' );
+                                $("#success-checkout").fadeTo(10000, 500).slideUp(500, function(){
+                                    $("#success-checkout").slideUp(500);
+                                });
                                 $('#formCheckoutModal').modal('hide');
-                                return loadProduct(), loadCart() , cartsButton();;
+                                return loadProduct(), cartsButton();
                             }
+                            
                         }
-                    }
-                });
-               
-            }
-            if(data.nodata){
-                $.alert({
-                    title: 'Message Error',
-                    content: data.nodata,
-                    type: 'red',
-                });
+                    })
+                }
+            },
+            cancel:  {
+                text: 'cancel',
+                btnClass: 'btn-red',
+                keys: ['enter', 'shift'],
             }
         }
     });
@@ -534,7 +468,7 @@ $(document).on('click', '.delete', function(){
     var id = $(this).attr('delete');
     $.confirm({
         title: 'Confirmation',
-        content: 'You really want to remove this cart?',
+        content: 'You really want to remove this order?',
         autoClose: 'cancel|10000',
         type: 'red',
         buttons: {
@@ -595,7 +529,7 @@ $(document).on('click', '.print', function(){
         frameDoc.document.write('</head><body>');
         //Append the external CSS file.
         frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
-
+        frameDoc.document.write('<style>size: A4 portrait;</style>');
         var source = 'bootstrap.min.js';
         var script = document.createElement('script');
         script.setAttribute('type', 'text/javascript');

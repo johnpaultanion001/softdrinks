@@ -20,10 +20,10 @@ class CreatePendingProductsTable extends Migration
             $table->string('name');
 
             $table->integer('stock');
-            $table->integer('pcs');
+            $table->integer('qty');
 
             
-            $table->string('size');
+            $table->string('size_id');
             $table->integer('sales')->default(0);
             $table->date('expiration');
             
@@ -37,6 +37,7 @@ class CreatePendingProductsTable extends Migration
             
            
             $table->text('note')->nullable();
+            $table->string('product_number')->unique();
             $table->timestamps();
         });
     }

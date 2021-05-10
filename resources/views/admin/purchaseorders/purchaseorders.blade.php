@@ -24,7 +24,7 @@
 
 <!-- view modal -->
 <div class="modal" id="viewModal" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content ">
             <div class="modal-header bg-primary">
                 <p class="modal-title font-weight-bold text-uppercase text-white ">Modal Heading</p>
@@ -49,7 +49,7 @@
 <form method="post" id="purchaseorderForm" class="form-horizontal ">
     @csrf
     <div class="modal" id="purchaseorderModal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <p class="modal-title-purchase font-weight-bold text-uppercase text-white ">Modal Heading</p>
@@ -137,7 +137,7 @@
 <form method="post" id="productForm" class="form-horizontal ">
     @csrf
     <div class="modal" id="productModal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-default">
                     <p class="modal-title-product font-weight-bold text-uppercase text-white ">Modal Heading</p>
@@ -149,9 +149,9 @@
                 </div> 
                 <div id="modal-body-product" class="modal-body">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label" >Name: </label>
+                                <label class="control-label" >Product Name: </label>
                                 <input type="text" name="name" id="name" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-name"></strong>
@@ -160,7 +160,12 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Category: </label>
+                                <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
+                                    </div>
+                                </div>
                                 <select name="category_id" id="category_id" class="form-control select2">
                                     <option value="" disabled selected>Select Category</option>
                                     @foreach ($categories as $category)
@@ -172,12 +177,22 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                       <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Size: </label>
-                                <input type="text" name="size" id="size" class="form-control" />
+                               <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
+                                    </div>
+                                </div>
+                                <select name="size_id" id="size_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Size</option>
+                                    @foreach ($sizes as $size)
+                                        <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} - {{$size->category->name}} - UCS:{{$size->ucs}} </option>
+                                    @endforeach
+                                </select>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-size"></strong>
+                                    <strong id="error-size_id"></strong>
                                 </span>
                             </div>
                         </div>
@@ -192,7 +207,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Stock / Per Case: </label>
+                                <label class="control-label" >Purchase QTY: </label>
                                 <input type="number" name="stock" id="stock" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-stock"></strong>
@@ -201,16 +216,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Stock / Per PCS: </label>
-                                <input type="number" name="pcs" id="pcs" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-pcs"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >Purchase Amount / Per Case: </label>
+                                <label class="control-label" >Purchase Amount:</label>
                                 <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-purchase_amount"></strong>
@@ -219,7 +225,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Profit Amount / Per Case: </label>
+                                <label class="control-label" >Profit Amount:</label>
                                 <input type="number" name="profit" id="profit" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-profit"></strong>
@@ -451,7 +457,10 @@ $(document).on('click', '#create_product', function(){
     $('.modal-title-product').text('Add New Product');
     $('#product_button').val('Submit');
     $('#category_id').select2({
-        placeholder: 'Select category'
+        placeholder: 'Select Category'
+    })
+    $('#size_id').select2({
+        placeholder: 'Select Size'
     })
     $('#product_action').val('Add');
     $('#loading-productmodal').hide();
@@ -491,6 +500,11 @@ $(document).on('click', '.edit', function(){
                     $('#'+key).val(value)
                     if(key == 'category_id'){
                         $("#category_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+                    if(key == 'size_id'){
+                        $("#size_id").select2("trigger", "select", {
                             data: { id: value }
                         });
                     }
@@ -562,7 +576,10 @@ $('#productForm').on('submit', function(event){
                 $('.form-control').removeClass('is-invalid')
                 $('#productForm')[0].reset();
                 $('#category_id').select2({
-                    placeholder: 'Select category'
+                    placeholder: 'Select Category'
+                });
+                $('#size_id').select2({
+                    placeholder: 'Select Size'
                 });
                 $('#productModal').modal('hide');
                 purchaseModal();

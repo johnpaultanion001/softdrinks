@@ -2,7 +2,7 @@
 <div class="col-md-12">
     <div class="row">
         <div class="col-md-4 bg-primary mt-2 mr-1" style="border-radius: 5px;">
-            <p class="font-weight-bold text-white text-uppercase">Grand Total: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0 text-white">{{ number_format($orders->sum->total ?? '' , 0, ',', '.') }} </span></p>
+            <p class="font-weight-bold text-white text-uppercase">Total: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0 text-white">{{ number_format($orders->sum->total ?? '' , 0, ',', '.') }} </span></p>
             <div id="receiptreport" class="d-print-inline-flex receiptreport p4 bg-white" style="border-radius: 5px;">
                         <div class="col text-right">
                             <h6 class="card-title text-uppercase text-muted mb-0">{{$date}} <h5>
@@ -14,7 +14,7 @@
                                 @forelse($receipts as $receipt)
                                     <div class="col">
                                         <h5 class="card-title text-uppercase text-muted mb-0">{{$receipt->inventory->name}} </h5>
-                                        <h5 class="card-title text-uppercase text-muted mb-0">size:{{$receipt->inventory->size}} </h5>
+                                        <h5 class="card-title text-uppercase text-muted mb-0">size:{{$receipt->inventory->size->title}}  {{$receipt->inventory->size->size}} </h5>
                                         <h5 class="card-title text-uppercase text-muted mb-0">qty:{{$receipt->purchase_qty}} </h5>
                                         <h5 class="card-title text-uppercase text-muted mb-0">price:{{$receipt->inventory->price}} </h5>
                                         <h5 class="card-title text-uppercase text-muted mb-0">exp:{{$receipt->inventory->expiration}} </h5>
@@ -60,7 +60,7 @@
                                 </div> 
                             </div>
                             <p class="mt-3 mb-0 text-sm">
-                                 <span class="text-nowrap font-weight-bold ">Size: <span class="text-success mr-2 font-weight-bold" >{{$order->inventory->size}}</span></span>
+                                 <span class="text-nowrap font-weight-bold ">Size: <span class="text-success mr-2 font-weight-bold" >{{$order->inventory->size->title}} {{$order->inventory->size->size}}</span></span>
                                 <span class="text-nowrap font-weight-bold ">Price: <span class="text-success mr-2 font-weight-bold" >{{$order->inventory->price}}</span></span>
                                 <span class="text-nowrap font-weight-bold ">QTY: <span class="text-success mr-2 font-weight-bold" >{{$order->purchase_qty}}</span></span>
                                 <span class="text-nowrap font-weight-bold ">Date: <span class="text-success mr-2 font-weight-bold" > {{ $order->created_at->format('l, j \\/ F / Y h:i:s A') }}</span></span>
@@ -69,7 +69,7 @@
                         </div>
                     </div>  
                 @empty
-                   <input type="text" name="nodata" id="nodata" value="No Data" readonly  class="bg-default text-white form-control border-0"/>        
+                   <input type="text" name="nodata" id="nodata" value="No Data" readonly  class="nodata bg-default text-white form-control border-0"/>        
                 @endforelse
 
         </div>

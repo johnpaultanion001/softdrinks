@@ -117,7 +117,7 @@
 <form method="post" id="myForm" class="form-horizontal ">
     @csrf
     <div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered ">
+        <div class="modal-dialog modal-xl modal-dialog-centered ">
             <div class="modal-content">
         
                 <!-- Modal Header -->
@@ -133,9 +133,9 @@
                 </div> 
                 <div id="modal-body-product" class="modal-body">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Name: </label>
+                                <label class="control-label text-uppercase" >Product Name: </label>
                                 <input type="text" name="name" id="name" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-name"></strong>
@@ -144,7 +144,12 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Category: </label>
+                                <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
+                                    </div>
+                                </div>
                                 <select name="category_id" id="category_id" class="form-control select2">
                                     <option value="" disabled selected>Select Category</option>
                                     @foreach ($categories as $category)
@@ -158,10 +163,20 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Size: </label>
-                                <input type="text" name="size" id="size" class="form-control" />
+                                    <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
+                                    </div>
+                                </div>
+                                <select name="size_id" id="size_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Size</option>
+                                    @foreach ($sizes as $size)
+                                        <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} - {{$size->category->name}} - UCS:{{$size->ucs}} </option>
+                                    @endforeach
+                                </select>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-size"></strong>
+                                    <strong id="error-size_id"></strong>
                                 </span>
                             </div>
                         </div>
@@ -176,25 +191,17 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Stock / Per Case: </label>
+                                <label class="control-label text-uppercase" >Purchas QTY:</label>
                                 <input type="number" name="stock" id="stock" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-stock"></strong>
                                 </span>
                             </div>
                         </div>
+                       
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Stock / Per PCS: </label>
-                                <input type="number" name="pcs" id="pcs" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-pcs"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Purchase Amount / Per Case: </label>
+                                <label class="control-label text-uppercase" >Purchase Amount: </label>
                                 <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-purchase_amount"></strong>
@@ -203,7 +210,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Profit Amount / Per Case: </label>
+                                <label class="control-label text-uppercase" >Profit Amount: </label>
                                 <input type="number" name="profit" id="profit" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-profit"></strong>
@@ -301,6 +308,11 @@ $(document).on('click', '.edit', function(){
                             data: { id: value }
                         });
                     }
+                    if(key == 'size_id'){
+                        $("#size_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
                    
                 }
             })
@@ -337,12 +349,14 @@ $(document).on('click', '.remove', function(){
                       success:function(data){
                           if(data.success){
                             $('#titletable').text('Products');
+                        
+                            $('#success-alert').addClass('bg-primary');                
                             $('#success-alert').html('<strong>' + data.success + '</strong>');
                             $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
                                 $("#success-alert").slideUp(500);
-                                
                             });
-                            location.reload();
+
+                            return loadEditPurchase();
                            
                             
                           }
@@ -368,7 +382,9 @@ $(document).on('click', '#create_record', function(){
     $("#category_id").select2({
         placeholder: 'Select Category'
     });
-    
+    $('#size_id').select2({
+        placeholder: 'Select Size'
+    })
     $('#product_button').val('Submit');
     $('#product_action').val('Add');
     $('#form_result').html('');
@@ -427,17 +443,23 @@ $('#myForm').on('submit', function(event){
                     $("#product_button").attr("disabled", false);
                     $("#product_button").attr("value", "Submit");
                 }
+
+                $('#success-alert').addClass('bg-primary');                
                 $('#success-alert').html('<strong>' + data.success + '</strong>');
                 $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
                     $("#success-alert").slideUp(500);
                 });
+
                 $('.form-control').removeClass('is-invalid')
                 $('#myForm')[0].reset();
                 $('#category_id').select2({
                     placeholder: 'Select category'
                 });
+                $('#size_id').select2({
+                    placeholder: 'Select Size'
+                });
                 $('#formModal').modal('hide');
-                location.reload();
+                return loadEditPurchase();
                 
             }
            
