@@ -62,6 +62,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //users
     Route::resource('users', 'UsersController');
     route::get('loadusers', 'UsersController@load')->name('users.load');
+    route::get('user/{user}', 'UsersController@usershow')->name('user.usershow');
+    route::put('user/{user}', 'UsersController@userupdate')->name('user.userupdate');
+
 
     //order-purchase
     route::get('purchase-order', 'PurchaseOrderController@index')->name('purchase-order.index');

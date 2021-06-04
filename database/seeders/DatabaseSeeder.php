@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             StatusReturnSeeder::class,
             SizeSeeder::class,
+            OrderNumberSeeder::class,
+            
            
         ]);
     }

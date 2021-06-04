@@ -74,9 +74,10 @@
                   <h6 class="text-overflow m-0">ROLE: {{ Auth::user()->roles()->pluck('title')->implode(', ') }} </h6>
                  
                 </div>
-                <a href="#" class="dropdown-item">
+                <a href="{{ route('admin.user.usershow', Auth::user()->id ) }}" class="dropdown-item">
                   <i class="ni ni-single-02"></i>
                   <span>My profile</span>
+                 
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item"  onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
@@ -89,5 +90,3 @@
         </div>
       </div>
     </nav>
-
-   

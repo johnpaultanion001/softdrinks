@@ -38,7 +38,7 @@
         <table class="table align-items-center table-flush datatable-sales display" cellspacing="0" width="100%"">
         <thead class="thead-light">
             <tr>
-           
+            <th scope="col">Order Number</th>
             <th scope="col">Product Number</th>
             <th scope="col">Product Name</th>
             <th scope="col">Product Price</th>
@@ -53,6 +53,9 @@
         <tbody class="text-uppercase font-weight-bold">
             @foreach($sales as $key => $sale)
                 <tr data-entry-id="{{ $sale->id ?? '' }}">
+                    <td>
+                        {{  $sale->order_number ?? '' }}
+                    </td>
                     <td>
                         {{  $sale->inventory->product_number ?? '' }}
                     </td>

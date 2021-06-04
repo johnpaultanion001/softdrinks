@@ -17,14 +17,14 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'id'             => 1,
-                'name'           => 'Johnpaul Tanion',
+                'name'           => 'Sample Manager',
                 'email'          => 'manager@manager.com',
                 'password'       => '$2y$10$zPiaTbYwkxYcejFmEimhWedeAogTJvEb/yGmBVx390ihhPFy8r896',
                 'remember_token' => null,
             ],
             [
                 'id'             => 2,
-                'name'           => 'Test Cashier',
+                'name'           => 'Sample Cashier',
                 'email'          => 'cashier@cashier.com',
                 'password'       => '$2y$10$zPiaTbYwkxYcejFmEimhWedeAogTJvEb/yGmBVx390ihhPFy8r896',
                 'remember_token' => null,

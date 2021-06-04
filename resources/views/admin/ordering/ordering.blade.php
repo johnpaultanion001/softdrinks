@@ -168,7 +168,7 @@ function loadProduct(){
 }
 function loadCart(){
     $('#formCheckoutModal').modal('show');
-    $('.modal-title').text('Carts Information');
+    $('.modal-title').text('Orders Information');
     $.ajax({
         url: "checkout", 
         type: "get",
@@ -201,6 +201,40 @@ function cartsButton(){
         }	
     })
 }
+//print receipt automatic
+function printreceipt(){
+    $('#receipt-body').removeClass('receipt-body');
+    $('#receipt-body').removeClass('receipt-body');
+        var contents = $("#receiptreport").html();
+        var frame1 = $('<iframe />');
+        frame1[0].name = "frame1";
+        frame1.css({ "position": "absolute", "top": "-1000000px" });
+        $("body").append(frame1);
+        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+        frameDoc.document.open();
+        //Create a new HTML document.
+        frameDoc.document.write('<html><head><title>Title</title>');
+        frameDoc.document.write('</head><body>');
+        //Append the external CSS file.
+        frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+        // frameDoc.document.write('<style>size: A4 portrait;</style>');
+        var source = 'bootstrap.min.js';
+        var script = document.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', source);
+        //Append the DIV contents.
+        frameDoc.document.write(contents);
+        frameDoc.document.write('</body></html>');
+        frameDoc.document.close();
+        setTimeout(function () {
+        window.frames["frame1"].focus();
+        window.frames["frame1"].print();
+        frame1.remove();
+        }, 500);
+        $('#receipt-body').addClass('receipt-body');
+}
+
+
 //search
 $('#search').on('keyup',function(){
     $value=$(this).val();
@@ -447,7 +481,7 @@ $('#myCheckoutForm').on('submit', function(event){
                                     $("#success-checkout").slideUp(500);
                                 });
                                 $('#formCheckoutModal').modal('hide');
-                                return loadProduct(), cartsButton();
+                                return loadProduct(), cartsButton() , printreceipt();
                             }
                             
                         }

@@ -11,6 +11,7 @@ class Sales extends Model
     public $table = 'sales';
 
     protected $fillable = [
+        'order_number',
         'inventory_id',
         'user_id',
         'purchase_qty',

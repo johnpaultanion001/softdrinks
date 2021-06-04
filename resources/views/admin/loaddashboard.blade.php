@@ -47,9 +47,9 @@
                     <h5 class="card-title text-uppercase text-muted mb-0">Out of stock</h5>
                     <span class="h2 font-weight-bold mb-0">
                       @if($outofstock->count() > 0 ) 
-                            {{ number_format(count($outofstock) ?? '' , 0, ',', '.') }}
+                         {{ number_format(count($outofstock) ?? '' , 0, ',', '.') }}
                       @else
-                            0.00
+                           0
                       @endif  
                     </span>
                 </div>
@@ -64,7 +64,7 @@
                      @if($outofstockmonthly->count() > 0 ) 
                             {{ number_format(count($outofstockmonthly) ?? '' , 0, ',', '.') }}
                      @else
-                            0.00
+                            0
                       @endif  
                 </span>
                 <span class="text-nowrap">Since this month</span>

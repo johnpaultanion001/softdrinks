@@ -6,7 +6,7 @@
                     <div class="card-body">
                         <div class="row">
                         <div class="col">
-                            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{\Illuminate\Support\Str::limit($inventory->name,12)}}</h3>
+                            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{\Illuminate\Support\Str::limit($inventory->name,100)}}</h3>
                             <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 0, ',', ',') }}</span> <small>/ {{$inventory->category->name}}</small>
                         </div>
                         <div class="col-auto">

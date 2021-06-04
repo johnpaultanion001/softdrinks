@@ -85,9 +85,7 @@
                   <button type="submit" class="btn btn-primary my-4 form-control">Sign in</button>
                   
                 </div>
-                  <a class="btn btn-link" href="/">
-                      {{ __('Forgot Your Password?') }}
-                  </a>
+                 
               </form>    
             </div>
           </div>

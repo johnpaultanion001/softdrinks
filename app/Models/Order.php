@@ -11,6 +11,7 @@ class Order extends Model
     public $table = 'orders';
 
     protected $fillable = [
+        'order_number',
         'inventory_id',
         'user_id',
         'purchase_qty',

@@ -11,6 +11,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
+use App\Rules\MatchOldPassword;
 
 class UsersController extends Controller
 {
@@ -110,5 +111,38 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return response()->json(['success' => $user->delete()]);
+    }
+
+    public function usershow(User $user)
+    {
+        return view('admin.users.usershow', compact('user'));
+    }
+
+    public function userupdate(Request $request, User $user){
+      
+           
+
+            date_default_timezone_set('Asia/Manila');
+            $validated =  Validator::make($request->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255' ],
+                'current_password' => ['nullable',new MatchOldPassword],
+                'new_password' => ['nullable'],
+                'confirm_password' => ['nullable','same:new_password'],
+               
+            ]);
+    
+            if ($validated->fails()) {
+                return response()->json(['errors' => $validated->errors()]);
+            }
+    
+            User::find($user->id)->update([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => $request->input('new_password'),
+              
+            ]);
+            return response()->json(['success' => 'User Updated Successfully.']);
+        
     }
 }

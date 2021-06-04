@@ -9,6 +9,7 @@ use App\Models\Category;
 use Validator;
 use App\Models\Order;
 use App\Models\Sales;
+use App\Models\OrderNumber;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -61,6 +62,7 @@ class OrderingController extends Controller
        }
         if($passdata){
             Order::truncate();
+            OrderNumber::where('id', 1)->increment('order_number', 1);
             return response()->json(['success' => 'Successfully Check Out.']);
         }
     }
@@ -103,6 +105,10 @@ class OrderingController extends Controller
         if(date('Y-m-d') == $inventory->expiration){
             return response()->json(['expirationtoday' => 'This product has expired today. Expiration Date:'.$inventory->expiration]);
         }
+
+        $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+        $id = $ordernumber->order_number;
+
         $total = $request->purchase_qty * $inventory->price;
         $profit = $request->purchase_qty * $inventory->profit;
         $userid = auth()->user()->id;
@@ -113,6 +119,7 @@ class OrderingController extends Controller
         $order->total = $total;
         $order->profit = $profit;
         $order->user_id = $userid;
+        $order->order_number = $id;
         $order->save();
 
         Inventory::where('id', $inventory->id)->decrement('stock', $request->purchase_qty);
