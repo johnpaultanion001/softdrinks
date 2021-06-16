@@ -577,7 +577,7 @@ $(document).on('click', '.print', function(){
         window.frames["frame1"].print();
         frame1.remove();
         }, 500);
-        $('#receipt-body').addClass('receipt-body')
+        $('#receipt-body').addClass('receipt-body');
        
     });
 

@@ -71,6 +71,41 @@
   </div>
 </div>
 
+<form method="post" id="myForm" class="form-horizontal ">
+    @csrf
+    <div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered ">
+            <div class="modal-content">
+        
+                <!-- Modal Header -->
+                <div class="modal-header bg-primary">
+                    <p class="modal-title font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+        
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div id="loading-productmodal" class="loading-container">
+                        <div class="loading"></div>
+                        <div id="loading-text">loading</div>
+                    </div> 
+                    <div id="receiptmodal">
+                    
+                    </div>
+                    <input type="hidden" name="action" id="action" value="Add" />
+                    <input type="hidden" name="hidden_id" id="hidden_id" />
+                </div>
+        
+                <!-- Modal footer -->
+                <div class="modal-footer bg-white">
+                    <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Print Reciept" />
+                </div>
+        
+            </div>
+        </div>
+    </div>
+</form>
+
 
 
 @endsection
@@ -200,49 +235,67 @@ function fetch_data(from_date = '', to_date = '')
         }
     });
 
-// $(document).on('click', '.remove', function(){
-// var id = $(this).attr('remove');
-// $.confirm({
-//     title: 'Confirmation',
-//     content: 'You really want to remove this sales?',
-//     autoClose: 'cancel|10000',
-//     type: 'red',
-//     buttons: {
-//         confirm: {
-//             text: 'confirm',
-//             btnClass: 'btn-blue',
-//             keys: ['enter', 'shift'],
-//             action: function(){
-//                 return $.ajax({
-//                     url:"/admin/sales/"+id,
-//                     method:'DELETE',
-//                     data: {
-//                         _token: '{!! csrf_token() !!}',
-//                     },
-//                     dataType:"json",
-//                     beforeSend:function(){
-//                     $('#titletable').text('Loading...');
-//                     },
-//                     success:function(data){
-//                         if(data.success){
-//                             return loadSales();
-//                         }
-//                     }
-//                 })
-//             }
-//         },
-//         cancel:  {
-//             text: 'cancel',
-//             btnClass: 'btn-red',
-//             keys: ['enter', 'shift'],
-//         }
-//     }
-// });
+    $(document).on('click', '.receipt', function(){
+    $('#formModal').modal('show');
+    $('.modal-title').text('Print Receipt');
+    $('#myForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    var id = $(this).attr('receipt');
 
-// });
+    
 
- 
+    $.ajax({
+        url :"/admin/sales/"+id,
+        type: "get",
+        dataType: "HTMl",
+        beforeSend:function(){
+            $("#action_button").attr("disabled", true);
+            $("#action_button").attr("value", "Loading..");
+            $('#loading-productmodal').show();
+            $('#modalbody').hide();
+            
+        },
+        success:function(response){
 
+            $("#action_button").attr("disabled", false);
+            $("#action_button").attr("value", "Print Receipt");
+            $('#loading-productmodal').hide();
+            $("#receiptmodal").html(response);
+        }
+    })
+}); 
+
+$('#myForm').on('submit', function(event){
+    event.preventDefault();
+    $('#receipt-body').removeClass('receipt-body');
+        var contents = $("#receiptreport").html();
+        var frame1 = $('<iframe />');
+        frame1[0].name = "frame1";
+        frame1.css({ "position": "absolute", "top": "-1000000px" });
+        $("body").append(frame1);
+        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+        frameDoc.document.open();
+        //Create a new HTML document.
+        frameDoc.document.write('<html><head><title>Title</title>');
+        frameDoc.document.write('</head><body>');
+        //Append the external CSS file.
+        frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+        frameDoc.document.write('<style>size: A4 portrait;</style>');
+        var source = 'bootstrap.min.js';
+        var script = document.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', source);
+        //Append the DIV contents.
+        frameDoc.document.write(contents);
+        frameDoc.document.write('</body></html>');
+        frameDoc.document.close();
+        setTimeout(function () {
+        window.frames["frame1"].focus();
+        window.frames["frame1"].print();
+        frame1.remove();
+        }, 500);
+        $('#receipt-body').addClass('receipt-body');
+});
 </script>
 @endsection
 

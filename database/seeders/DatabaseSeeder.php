@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             StatusReturnSeeder::class,
             SizeSeeder::class,
             OrderNumberSeeder::class,
+            SalesSeeder::class,
             
            
         ]);

@@ -35,9 +35,10 @@
     <div class="table-responsive">
        
         <!-- Projects table -->
-        <table class="table align-items-center table-flush datatable-sales display" cellspacing="0" width="100%"">
+        <table class="table align-items-center table-flush datatable-sales display" cellspacing="0" width="100%">
         <thead class="thead-light">
             <tr>
+            <th scope="col">Actions</th> 
             <th scope="col">Order Number</th>
             <th scope="col">Product Number</th>
             <th scope="col">Product Name</th>
@@ -53,6 +54,9 @@
         <tbody class="text-uppercase font-weight-bold">
             @foreach($sales as $key => $sale)
                 <tr data-entry-id="{{ $sale->id ?? '' }}">
+                    <td>
+                        <button type="button" name="receipt" receipt="{{  $sale->id ?? '' }}" class="text-uppercase receipt btn btn-success btn-sm">Receipt</button>  
+                    </td>
                     <td>
                         {{  $sale->order_number ?? '' }}
                     </td>

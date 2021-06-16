@@ -23,7 +23,7 @@ class RolesController extends Controller
     public function load()
     {
         abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $roles = Role::latest()->get();
+        $roles = Role::where('isRemove', 0)->latest()->get();
         return view('admin.roles.loadroles', compact('roles'));
     }
   
@@ -98,6 +98,9 @@ class RolesController extends Controller
     public function destroy(Role $role)
     {
         abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        return response()->json(['success' => $role->delete()]);
+        Role::find($role->id)->update([
+            'isRemove' => '1',
+        ]);
+        return response()->json(['success' => 'Role Removed Successfully.']);
     }
 }

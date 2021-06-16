@@ -83,11 +83,10 @@ class SalesController extends Controller
                 return view('admin.sales.loadsales', compact('sales'));
             }
     }
-    public function destroy(Sales $sale)
+    public function receipt(Sales $sale)
     {
-        Sales::find($sale->id)->update([
-            'isRemove' => '1',
-        ]);
-        return response()->json(['success' => 'Sales Removed Successfully.']);
+       $receipts = Sales::where('isRemove', 0)->where('order_number',$sale->order_number)->latest()->get();
+       $date = date("Y-m-d H:i:s");
+       return view('admin.sales.receiptmodal', compact('receipts', 'date'));
     }
 }

@@ -38,7 +38,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('sales-yearly', 'SalesController@yearly')->name('sales.yearly');
     Route::post('salesfilter', 'SalesController@filter')->name('sales.filter');
     Route::post('/daterange/fetch_data', 'SalesController@fetch_data')->name('daterange.fetch_data');
-    Route::delete('sales/{sale}', 'SalesController@destroy')->name('sales.destroy');
+    Route::get('sales/{sale}', 'SalesController@receipt')->name('sales.receipt');
 
     //order
     Route::delete('orders/{order}', 'OrderController@destroy')->name('order.destroy');

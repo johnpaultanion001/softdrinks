@@ -28,7 +28,7 @@ class UsersController extends Controller
     public function load()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $users = User::latest()->get();
+        $users = User::where('isRemove', 0)->latest()->get();
         return view('admin.users.loadusers', compact('users'));
     }
 
@@ -110,7 +110,11 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        return response()->json(['success' => $user->delete()]);
+        
+        User::find($user->id)->update([
+            'isRemove' => '1',
+        ]);
+        return response()->json(['success' => 'User Removed Successfully.']);
     }
 
     public function usershow(User $user)
