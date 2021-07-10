@@ -24,7 +24,7 @@
         <div class="table-responsive">
           <!-- Projects table -->
           <table class="table align-items-center table-flush datatable-customers display" cellspacing="0" width="100%">
-            <thead class="thead-light">
+            <thead class="thead-white">
               <tr>
                 <th>Actions</th>
                 <th>Customer Code</th>
@@ -58,7 +58,7 @@
                           <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($customer->current_balance , 0, ',', ',') }}
                         </td>
                         <td>
-                            {{ $customer->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                            {{ $customer->created_at->format('F d,Y h:i A') }}
                         </td>
                      
                     </tr>

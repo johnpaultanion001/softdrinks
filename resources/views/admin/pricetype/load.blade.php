@@ -45,7 +45,7 @@
                             <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($pricetype->discount , 0, ',', ',') }}
                         </td>
                         <td>
-                            {{ $pricetype->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                            {{ $pricetype->created_at->format('F d,Y h:i A') }}
                         </td>
                      
                     </tr>

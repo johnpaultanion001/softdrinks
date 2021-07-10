@@ -9,9 +9,9 @@
               <h3 class="mb-0 text-uppercase" id="titletable">Inventories</h3>
              
             </div>
-            <div class="col text-right">
+            <!-- <div class="col text-right">
               <button type="button" name="create_record" id="create_record" class="create_record text-uppercase btn btn-sm btn-primary">New Product</button>
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -19,7 +19,7 @@
         <div class="table-responsive">
           <!-- Projects table -->
           <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%">
-            <thead class="thead-light">
+            <thead class="thead-white">
               <tr>
                 <th scope="col">Actions</th>
                 <th scope="col">Receiving Goods ID</th>
@@ -58,11 +58,11 @@
                     
                       <td>
                           <button type="button" name="view" view="{{  $inventory->id ?? '' }}"  class="view text-uppercase btn btn-warning btn-sm">View</button>
-                          @if ($inventory->purchase_order->isReturn == 0)
+                          <!-- @if ($inventory->purchase_order->isReturn == 0)
                               <button type="button" name="edit" edit="{{  $inventory->id ?? '' }}"  class="edit text-uppercase btn btn-info btn-sm">Edit</button>
                           @elseif ($inventory->purchase_order->isReturn == 1)
 
-                          @endif 
+                          @endif  -->
                           <button type="button" name="remove" remove="{{  $inventory->id ?? '' }}" id="{{  $inventory->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
                       </td>
 
@@ -136,7 +136,7 @@
                           {{  $inventory->purchase_order->user->name ?? '' }}
                       </td>
                       <td>
-                          {{ $inventory->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                          {{ $inventory->created_at->format('F d,Y h:i A') }}
                       </td>
                     </tr>
                 @endforeach
@@ -159,7 +159,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    sale: [[ 1, 'desc' ]],
+    order: [[ 1, 'desc' ]],
     pageLength: 100,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });

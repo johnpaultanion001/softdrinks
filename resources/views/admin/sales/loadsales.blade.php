@@ -2,7 +2,7 @@
     <div class="card-header border-0">
         <div class="row align-items-center">
         <div class="col-md-12">
-        <small class="mb-0 text-uppercase font-weight-bold modal-title" id="title-sales"></small>
+        <small class="mb-0 text-uppercase font-weight-bold modal-title" id="title-sales"> </small> <small>Filter By: {{$title_filter}} </small> 
         <i class="fa fa-spinner fa-spin text-primary button-loading ml-2"></i>
             
         </div>
@@ -102,7 +102,7 @@
                         {{  $sale->user->name ?? '' }}
                     </td>
                     <td>
-                        {{ $sale->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                        {{ $sale->created_at->format('F d,Y h:i A') }}
                         
                     </td>
                 </tr>
@@ -133,7 +133,8 @@
                      <h3 class="text-uppercase">Jewel & Nickel Store</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase font-wiegth-bold">Profit Report</h5>
-                     <small>From To</small>
+                     <small>Filter By: {{$title_filter}} </small> 
+                     <br>
                   </div>
                   <div class="table-responsive">
           

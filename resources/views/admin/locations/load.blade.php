@@ -23,7 +23,7 @@
         <div class="table-responsive">
           <!-- Projects table -->
           <table class="table align-items-center table-flush display" cellspacing="0" width="100%">
-            <thead class="thead-light">
+            <thead class="thead-white">
               <tr>
                 <th>Actions</th>
                 <th>Location Code</th>
@@ -56,7 +56,7 @@
                             {{  $location->remarks ?? '' }}
                         </td>
                         <td>
-                            {{ $location->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                            {{ $location->created_at->format('F d,Y h:i A') }}
                         </td>
                      
                     </tr>

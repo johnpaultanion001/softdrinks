@@ -375,7 +375,6 @@ $(document).on('click', '.view', function(){
     $('#myForm')[0].reset();
     $('.form-control').removeClass('is-invalid');
     $('.form_disable').attr('readonly' , true)
-    $('.select2').prop("disabled", true);
     $('#form_result').html('');
     $('#puchase-order-number-view').show();
     $('#puchase-order-number-edit').hide();

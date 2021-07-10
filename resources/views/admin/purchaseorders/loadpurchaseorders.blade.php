@@ -123,7 +123,7 @@
                             {{  $order->remarks ?? '' }}
                         </td>
                         <td>
-                          {{ $order->updated_at->format('l, j \\/ F / Y h:i:s A') }}
+                          {{ $order->updated_at->format('F d,Y h:i A') }}
                         </td>
                         
                     </tr>
@@ -148,7 +148,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    sale: [[ 1, 'desc' ]],
+    order: [[ 1, 'desc' ]],
     pageLength: 100,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });

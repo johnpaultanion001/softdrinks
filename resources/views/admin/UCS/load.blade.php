@@ -19,12 +19,13 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-ucs display" cellspacing="0" width="100%"">
-            <thead class="thead-light">
+          <table class="table align-items-center table-flush datatable-ucs display" cellspacing="0" width="100%">
+            <thead class="thead-white">
               <tr>
                 
-                <th>Product Number</th>
-                <th>Purchase Order Number & Supplier</th>
+                <th>Product ID</th>
+                <th>Product Code</th>
+                <th>Receiving Good ID & Supplier</th>
                 <th>Product Name</th>
                 <th>Category</th>
                 <th>Product Size</th>
@@ -41,13 +42,16 @@
                     <tr data-entry-id="{{ $ucs->id ?? '' }}">
                       
                         <td>
-                            {{  $ucs->inventory->product_number ?? '' }}
+                            {{  $ucs->inventory->product_id ?? '' }}
+                        </td>
+                        <td>
+                            {{  $ucs->inventory->product_code ?? '' }}
                         </td>
                         <td>
                             {{  $ucs->purchase_order_number_id ?? '' }} - {{  $ucs->purchase_order->supplier->name ?? '' }}
                         </td>
                         <td>
-                            {{  $ucs->inventory->name ?? '' }}
+                            {{  $ucs->inventory->long_description ?? '' }}
                         </td>
                         <td>
                             {{  $ucs->inventory->category->name ?? '' }}
@@ -65,7 +69,7 @@
                             {{  $ucs->ucs ?? '' }}
                         </td>
                         <td>
-                            {{ $ucs->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                            {{ $ucs->created_at->format('F d,Y h:i A') }}
                         </td>
                     </tr>
                 @endforeach
@@ -88,7 +92,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    sale: [[ 1, 'desc' ]],
+    order: [[ 1, 'desc' ]],
     pageLength: 100,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });

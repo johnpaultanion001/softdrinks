@@ -22,8 +22,8 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-status display" cellspacing="0" width="100%"">
-            <thead class="thead-light">
+          <table class="table align-items-center table-flush datatable-status display" cellspacing="0" width="100%">
+            <thead class="thead-white">
               <tr>
                 <th>Actions</th>
                 <th>Code</th>
@@ -52,7 +52,7 @@
                              {{ $stat->user->name ?? '' }}
                         </td>
                         <td>
-                            {{ $stat->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                            {{ $stat->created_at->format('F d,Y h:i A') }}
                         </td>
                         
                     </tr>
@@ -76,7 +76,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    sale: [[ 1, 'desc' ]],
+    order: [[ 1, 'desc' ]],
     pageLength: 100,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });

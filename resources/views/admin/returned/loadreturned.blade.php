@@ -19,7 +19,7 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-returned display" cellspacing="0" width="100%"">
+          <table class="table align-items-center table-flush datatable-returned display" cellspacing="0" width="100%">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Actions</th>
@@ -50,7 +50,7 @@
                           {{  $return->purchase_order->supplier->name ?? '' }}
                       </td>
                       <td>
-                          {{  $return->purchase_order->created_at->format('l, j \\/ F / Y h:i:s A') ?? '' }}
+                          {{  $return->purchase_order->created_at->format('F d,Y h:i A') ?? '' }}
                       </td>
                       <td>
                           {{  $return->total_orders_returned ?? '' }}
@@ -65,7 +65,7 @@
                           {{  $return->user->name ?? '' }}
                       </td>
                       <td>
-                          {{ $return->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                          {{ $return->created_at->format('F d,Y h:i A') }}
                       </td>
                     </tr>
                 @endforeach
@@ -88,7 +88,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    sale: [[ 1, 'desc' ]],
+    order: [[ 1, 'desc' ]],
     pageLength: 100,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });

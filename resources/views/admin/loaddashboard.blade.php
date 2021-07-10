@@ -13,7 +13,8 @@
                         <h5 class="card-title text-uppercase text-muted mb-0">Products</h5>
                         <span class="h2 font-weight-bold mb-0">
                            @if($allproducts->count() > 0 ) 
-                                {{ number_format(count($allproducts) ?? '' , 0, ',', '.') }}
+                                {{ count($allproducts) ?? '' }}
+                               
                            @else
                                0
                            @endif
@@ -28,7 +29,7 @@
                     <p class="mt-3 mb-0 text-sm">
                     <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>
                        @if($productsmonthly->count() > 0 ) 
-                            {{ number_format(count($productsmonthly) ?? '' , 0, ',', '.') }}
+                            {{ number_format(count($productsmonthly) ?? '' , 2, '.', ',') }}
                         @else
                           0.00
                         @endif
@@ -47,7 +48,7 @@
                     <h5 class="card-title text-uppercase text-muted mb-0">Out of stock</h5>
                     <span class="h2 font-weight-bold mb-0">
                       @if($outofstock->count() > 0 ) 
-                         {{ number_format(count($outofstock) ?? '' , 0, ',', '.') }}
+                         {{ count($outofstock) ?? '' }}
                       @else
                            0
                       @endif  
@@ -81,7 +82,7 @@
                     <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
                     <span class="h2 font-weight-bold mb-0">
                       @if($allprofit->sum->total > 0 )
-                            {{ number_format($allprofit->sum->total ?? '' , 0, ',', '.') }}
+                            {{ number_format($allprofit->sum->total ?? '' , 2, '.', ',') }}
                       @else
                             0.00
                       @endif  
@@ -96,7 +97,7 @@
                 <p class="mt-3 mb-0 text-sm">
                 <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>
                       @if($salesmonthly->sum->total > 0 ) 
-                            {{ number_format($salesmonthly->sum->total ?? '' , 0, ',', '.') }}
+                            {{ number_format($salesmonthly->sum->total ?? '' , 2, '.', ',') }}
                       @else
                             0.00
                       @endif
@@ -115,7 +116,7 @@
                     <h5 class="card-title text-uppercase text-muted mb-0">Profit</h5>
                     <span class="h2 font-weight-bold mb-0">
                       @if($allprofit->sum->profit > 0 ) 
-                            {{ number_format($allprofit->sum->profit ?? '' , 0, ',', '.') }}
+                            {{ number_format($allprofit->sum->profit ?? '' , 2, '.', ',') }}
                       @else
                             0.00
                       @endif
@@ -130,7 +131,7 @@
                 <p class="mt-3 mb-0 text-sm">
                 <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>
                       @if($profitmonthly->sum->profit > 0 ) 
-                            {{ number_format($profitmonthly->sum->profit ?? '' , 0, ',', '.') }}
+                            {{ number_format($profitmonthly->sum->profit ?? '' , 2, '.', ',') }}
                       @else
                             0.00
                       @endif</span>
@@ -166,7 +167,7 @@
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">Product name</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Product stock</th>
                     <th scope="col">Product price</th>
                     <th scope="col">Sold</th>
@@ -176,16 +177,16 @@
                 @forelse($newproduct as $key => $product)
                 <tr data-entry-id="{{ $order->id ?? '' }}">
                     <td>
-                        {{  $product->name ?? '' }}
+                        {{  $product->short_description ?? '' }}
                     </td>
                     <td>
                        {{  $product->stock ?? '' }}
                     </td>
                     <td>
-                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($product->price ?? '' , 0, ',', '.') }}
+                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($product->price ?? '' , 2, '.', ',') }}
                     </td>
                    <td>
-                        {{  $product->sales ?? '' }}
+                        {{  $product->sold ?? '' }}
                     </td>
                 </tr>
                 @empty
@@ -204,7 +205,7 @@
               <div class="row align-items-center">
                 <div class="col">
                   <h5 class="mb-0 text-uppercase">Sales for today</h5>
-                  <h3 class="mb-0"><large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($salestoday->sum->total , 0, ',', '.') }}</h3>
+                  <h3 class="mb-0"><large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($salestoday->sum->total , 2, '.', ',') }}</h3>
 
                 </div>
                 <div class="col text-right">
@@ -217,11 +218,12 @@
               <table class="table align-items-center table-flush" >
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">Product Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Sold To</th>
                     <th scope="col">Sold</th>
                     <th scope="col">Sales</th>
                     <th scope="col">Profit</th>
-                    <th scope="col">User</th>
+                   
 
                   </tr>
                 </thead>
@@ -230,20 +232,21 @@
                 @forelse($salestoday as $key => $sales)
                 <tr data-entry-id="{{ $sales->id ?? '' }}">
                     <td>
-                        {{  $sales->inventory->name ?? '' }}
+                        {{  $sales->inventory->short_description ?? '' }}
+                    </td>
+                    <td>
+                       {{  $sales->customer->customer_name ?? '' }}
                     </td>
                     <td>
                        {{  $sales->purchase_qty ?? '' }}
                     </td>
                     <td>
-                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sales->total ?? '' , 0, ',', '.') }}
+                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sales->total ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
-                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sales->profit ?? '' , 0, ',', '.') }}
+                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sales->profit ?? '' , 2, '.', ',') }}
                     </td>
-                    <td>
-                       {{  $sales->user->name ?? '' }}
-                    </td>
+                  
                 </tr>
                 @empty
                     <td>
