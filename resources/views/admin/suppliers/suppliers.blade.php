@@ -47,7 +47,7 @@
                             <div id="modalbody" class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Name: </label>
+                                        <label class="control-label text-uppercase" >Name Of Supplier: </label>
                                         <input type="text" name="name" id="name" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-name"></strong>
@@ -57,10 +57,10 @@
                                 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Contact: </label>
-                                        <input type="number" name="contact" id="contact" class="form-control" />
+                                        <label class="control-label text-uppercase" >Contact Number: </label>
+                                        <input type="number" name="contact_number" id="contact_number" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
-                                            <strong id="error-contact"></strong>
+                                            <strong id="error-contact_number"></strong>
                                         </span>
                                     </div>
                                 </div>
@@ -76,10 +76,10 @@
                                
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Note/Optional:</label>
-                                        <textarea name="note" id="note" class="form-control "></textarea>
+                                        <label class="control-label text-uppercase" >Remarks/Optional:</label>
+                                        <textarea name="remarks" id="remarks" class="form-control "></textarea>
                                         <span class="invalid-feedback" role="alert">
-                                            <strong id="error-note"></strong>
+                                            <strong id="error-remarks"></strong>
                                         </span>
                                     </div>
                                 </div>

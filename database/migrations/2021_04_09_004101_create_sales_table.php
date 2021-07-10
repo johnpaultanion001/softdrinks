@@ -23,6 +23,10 @@ class CreateSalesTable extends Migration
             $table->float('total');
             $table->integer('isRemove')->default(0);
             $table->integer('status')->default(0);
+            $table->integer('customer_id');
+            $table->integer('pricetype_id');
+            $table->float('discounted');
+            $table->float('total_cost');
             $table->timestamps();
         });
     }

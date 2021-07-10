@@ -10,6 +10,7 @@ use App\Models\Supplier;
 use App\Models\Category;
 use App\Models\Size;
 use App\Models\UCS;
+use App\Models\Location;
 use App\Models\PendingProduct;
 use Validator;
 use Gate;
@@ -21,10 +22,11 @@ class PurchaseOrderController extends Controller
     {
         abort_if(Gate::denies('purchase_order_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
+        $locations = Location::where('isRemove', 0)->latest()->get();
         $products = PendingProduct::latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
         $sizes = Size::where('isRemove', 0)->latest()->get();
-        return view('admin.purchaseorders.purchaseorders', compact('suppliers','products','categories','sizes'));
+        return view('admin.purchaseorders.purchaseorders', compact('suppliers','products','categories','sizes','locations'));
     }
     public function total()
     {
@@ -49,9 +51,10 @@ class PurchaseOrderController extends Controller
         $orders = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
+        $locations = Location::where('isRemove', 0)->latest()->get();
         $purchaseorder = PurchaseOrder::latest()->get();
         $sizes = Size::where('isRemove', 0)->latest()->get();
-        return view('admin.purchaseorders.editpurchase.edit', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber' , 'sizes'));
+        return view('admin.purchaseorders.editpurchase.edit', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber' , 'sizes' , 'locations'));
     }
     public function loadedit(PurchaseOrder $purchasenumber)
     {
@@ -66,7 +69,19 @@ class PurchaseOrderController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'supplier_id' => ['required'],
-            'notes' => ['nullable'],
+            'name_of_a_driver' => ['required'],
+            'plate_number' => ['required'],
+            'remarks' => ['nullable'],
+
+            'doc_no' => ['nullable'],
+            'entry_date' => ['required' , 'date', 'after:yesterday'],
+            'po_no' => ['nullable'],
+            'po_date' => ['required' , 'date' ,'after:yesterday'],
+            'location_id' => ['required'],
+            'reference' => ['nullable'],
+
+            'trade_discount' => ['nullable'],
+            'terms_discount' => ['nullable'],
         ]);
 
         
@@ -91,13 +106,30 @@ class PurchaseOrderController extends Controller
         PurchaseOrder::create([
             'user_id' => $userid,
             'supplier_id' => $request->input('supplier_id'),
+            'name_of_a_driver' => $request->input('name_of_a_driver'),
+            'plate_number' => $request->input('plate_number'),
             'purchase_order_number' => $id,
             'total_purchased_order' => $totalpurchasedorder,
             'total_profit' => $totalprofit,
             'total_price' => $totalprice,
             'total_orders' => $products,
-            'notes' => $request->input('notes')
+            'remarks' => $request->input('remarks'),
+
+            'doc_no' => $request->input('doc_no'),
+            'entry_date' => $request->input('entry_date'),
+            'po_no' => $request->input('po_no'),
+            'po_date' => $request->input('po_date'),
+            'location_id' => $request->input('location_id'),
+            'reference' => $request->input('reference'),
+            'trade_discount' => $request->input('trade_discount'),
+            'terms_discount' => $request->input('terms_discount'),
         ]);
+
+        PendingProduct::latest()->update([
+            'location_id' => $request->input('location_id'),
+            'supplier_id' => $request->input('supplier_id'),
+        ]);
+        
         PendingProduct::query()
         ->latest()
         ->each(function ($oldRecord) {
@@ -117,6 +149,18 @@ class PurchaseOrderController extends Controller
         $validated =  Validator::make($request->all(), [
             'supplier_id' => ['required'],
             'notes' => ['nullable'],
+            'name_of_a_driver' => ['required'],
+            'plate_number' => ['required'],
+
+            'doc_no' => ['nullable'],
+            'entry_date' => ['required' , 'date'],
+            'po_no' => ['nullable'],
+            'po_date' => ['required' , 'date'],
+            'location_id' => ['required'],
+            'reference' => ['nullable'],
+
+            'trade_discount' => ['nullable'],
+            'terms_discount' => ['nullable'],
         ]);
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
@@ -131,13 +175,29 @@ class PurchaseOrderController extends Controller
         PurchaseOrder::find($purchasenumber->id)->update([
             'user_id' => $userid,
             'supplier_id' => $request->input('supplier_id'),
+            'name_of_a_driver' => $request->input('name_of_a_driver'),
+            'plate_number' => $request->input('plate_number'),
             'purchase_order_number' => $request->input('purchase_order_number'),
             'total_purchased_order' => $totalpurchasedorder,
             'total_profit' => $totalprofit,
             'total_price' => $totalprice,
             'total_orders' => $products,
-            'notes' => $request->input('notes')
+            'remarks' => $request->input('remarks'),
+
+            'doc_no' => $request->input('doc_no'),
+            'entry_date' => $request->input('entry_date'),
+            'po_no' => $request->input('po_no'),
+            'po_date' => $request->input('po_date'),
+            'location_id' => $request->input('location_id'),
+            'reference' => $request->input('reference'),
+            'trade_discount' => $request->input('trade_discount'),
+            'terms_discount' => $request->input('terms_discount'),
         ]);
+
+        Inventory::where('isRemove', 0)->where('purchase_order_number_id',$request->input('purchase_order_number'))->update([
+            'location_id' => $request->input('location_id'),
+        ]);
+
         return response()->json(['success' => 'Purchased Order Updated Successfully.']);
     }
 }

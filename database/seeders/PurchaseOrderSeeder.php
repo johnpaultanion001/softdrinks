@@ -24,7 +24,21 @@ class PurchaseOrderSeeder extends Seeder
                 'total_profit' => '12900',
                 'total_price' => '106100',
                 'total_orders' => '3',
-                'notes' => 'Sample',
+                'remarks' => 'Sample',
+                'name_of_a_driver' => 'John Paul Tanion',
+                'plate_number' => 'ABC 123',
+
+                'doc_no' => '123',
+                'entry_date' => date("Y-m-d H:i:s"),
+                'po_no' => '123',
+                'po_date' => date("Y-m-d H:i:s"),
+                'location_id' => '1',
+                'reference' => 'sample',
+
+                'trade_discount' => '0',
+                'terms_discount' => '0',
+
+
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],

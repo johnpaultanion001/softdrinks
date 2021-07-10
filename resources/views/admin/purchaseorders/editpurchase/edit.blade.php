@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','Purchase Orders - Edit')
+@section('sub-title',' RECEIVING GOODS - Edit')
 @section('navbar')
     @include('../partials.navbar')
 @endsection
@@ -25,7 +25,7 @@
                 <div class="card-header border-0">
                 <div class="row align-items-center">
                     <div class="col">
-                    <h3 class="mb-0 text-uppercase" >Purchase Order - Edit</h3>
+                    <h3 class="mb-0 text-uppercase" > RECEIVING GOODS - Edit</h3>
                     </div>
                   
                 </div>
@@ -35,13 +35,50 @@
                     <form method="post" id="myPurchaseForm" class="form-horizontal">
                         @csrf
                         <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >DOC NO.</label>
+                                    <input type="text" name="doc_no" id="doc_no" class="form-control" value="{{$purchasenumber->doc_no}}"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-doc_no"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Entry Date:</label>
+                                    <input type="date" name="entry_date" id="entry_date" class="form-control" value="{{$purchasenumber->entry_date}}" />
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-entry_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO NO.</label>
+                                    <input type="text" name="po_no" id="po_no" class="form-control"  value="{{$purchasenumber->po_no}}"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_no"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO Date.</label>
+                                    <input type="date" name="po_date" id="po_date" class="form-control"  value="{{$purchasenumber->po_date}}"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label text-uppercase" >Supplier: </label>
                                     <select name="supplier_id" id="supplier_id" class="form-control select2">
                                     <option value="" disabled selected>Select Supplier</option>
                                         @foreach ($suppliers as $supplier)
-                                            <option value="{{$supplier->id}}"> {{$supplier->name}}</option>
+                                            <option value="{{$supplier->id}}">Supplier Code: {{$supplier->id}} - {{$supplier->name}}</option>
                                         @endforeach
                                     </select>
                                     <span class="invalid-feedback" role="alert">
@@ -49,39 +86,132 @@
                                     </span>
                                 </div>
                             </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col"><label class="control-label text-uppercase" >Location: </label></div>
+                                        <div class="col text-right">
+                                            <a class="btn btn-sm btn-white text-uppercase" href="/admin/locations">New Location?</a>
+                                        </div>
+                                    </div>
+                                    <select name="location_id" id="location_id" class="form-control select2">
+                                        <option value="" disabled selected>Select Location</option>
+                                        @foreach ($locations as $location)
+                                            <option value="{{$location->id}}">Location Code: {{$location->id}} - {{$location->location_name}}</option>
+                                            
+                                        @endforeach
+                                    </select>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-location_id"></strong>
+                                    </span>
+                                   
+                                </div>
+                               
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Name of a Driver:</label>
+                                    <input type="text" name="name_of_a_driver" id="name_of_a_driver" class="form-control" value="{{$purchasenumber->name_of_a_driver}}"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-name_of_a_driver"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Plate Number: </label>
+                                    <input type="text" name="plate_number" id="plate_number" class="form-control" value="{{$purchasenumber->plate_number}}"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-plate_number"></strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Trade Discount:</label>
+                                    <input type="text" name="trade_discount" id="trade_discount" class="form-control" value="{{$purchasenumber->trade_discount}}"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-trade_discount"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Terms Discount: </label>
+                                    <input type="text" name="terms_discount" id="terms_discount" class="form-control" value="{{$purchasenumber->terms_discount}}"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-terms_discount"></strong>
+                                    </span>
+                                </div>
+                            </div>
                             
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Note / Optional: </label>
-                                    <textarea name="notes" id="notes" class="form-control">{{$purchasenumber->notes}}</textarea>
+                                    <label class="control-label text-uppercase" >Remarks: </label>
+                                    <textarea name="remarks" id="remarks" class="form-control">{{$purchasenumber->remarks}}</textarea>
                                     <span class="invalid-feedback" role="alert">
-                                        <strong id="error-notes"></strong>
+                                        <strong id="error-remarks"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Reference: </label>
+                                    <textarea name="reference" id="reference" class="form-control">{{$purchasenumber->reference}}</textarea>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-reference"></strong>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="row text-center mt-5">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="control-label font-weight-bold text-uppercase text-dark" >Total Purchased:</label>
-                                    <p><large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($purchasenumber->total_purchased_order , 0, ',', ',') }} </p>
+                                                
+                        <hr>
+                        <div class="row">
+                            
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Product Count:</label>
+                                                <input type="text"  class="form-control" readonly value="{{$purchasenumber->total_orders}}"/>
+                                        </div>
                                 </div>
-                            </div>
 
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase font-weight-bold text-dark" >Total Profit: </label>
-                                    <p><large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($purchasenumber->total_profit , 0, ',', ',') }} </p>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Total Purchased:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_purchased_order , 0, ',', ',') }}"/>
+                                        </div>
                                 </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase font-weight-bold text-dark" >Total Price:</label>
-                                    <p><large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($purchasenumber->total_price , 0, ',', ',') }}</p>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Total Profit:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_profit , 0, ',', ',') }}"/>
+                                        </div>
                                 </div>
-                            </div>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Total Price:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_price , 0, ',', ',') }}"/>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Created By:</label>
+                                                <input type="text"  class="form-control" readonly value="{{ $purchasenumber->user->name }}"/>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Vat Amount:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ 0"/>
+                                        </div>
+                                </div>
                         </div>
+
+
+                        
+
                         <div class="col text-right mb-3">
                             <button type="button" name="create_record" id="create_record" class="create_record text-uppercase btn btn-sm btn-primary">New Product</button>
                         </div>
@@ -96,6 +226,7 @@
                         
                         <input type="hidden" name="hidden_id" id="hidden_id" value="{{$purchasenumber->id}}" />
                         <input type="hidden" name="current_supplier_id" id="current_supplier_id" value="{{$purchasenumber->supplier->id}}" />
+                        <input type="hidden" name="current_location_id" id="current_location_id" value="{{$purchasenumber->location->id}}" />
                         <input type="hidden" name="purchase_order_number" id="purchase_order_number" value="{{$purchasenumber->purchase_order_number}}" />
                     
                         <div class="form-group text-right">
@@ -132,102 +263,122 @@
                     <div id="loading-text">loading</div>
                 </div> 
                 <div id="modal-body-product" class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Product Name: </label>
-                                <input type="text" name="name" id="name" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-name"></strong>
-                                </span>
-                            </div>
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" >Product Code: </label>
+                            <input type="text" name="product_code" id="product_code" class="form-control" autocomplete="off"/>
+                            <div id="productCodeList"></div>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-product_code"></strong>
+                            </span>
+                        
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
-                                    <div class="col text-right">
-                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
-                                    </div>
-                                </div>
-                                <select name="category_id" id="category_id" class="form-control select2">
-                                    <option value="" disabled selected>Select Category</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{$category->id}}"> {{$category->name}}</option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-category_id"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                    <div class="row">
-                                    <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
-                                    <div class="col text-right">
-                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
-                                    </div>
-                                </div>
-                                <select name="size_id" id="size_id" class="form-control select2">
-                                    <option value="" disabled selected>Select Size</option>
-                                    @foreach ($sizes as $size)
-                                        <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} - {{$size->category->name}} - UCS:{{$size->ucs}} </option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-size_id"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Expiration: </label>
-                                <input type="date" name="expiration" id="expiration" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-expiration"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Purchas QTY:</label>
-                                <input type="number" name="stock" id="stock" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-stock"></strong>
-                                </span>
-                            </div>
-                        </div>
-                       
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Purchase Amount: </label>
-                                <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-purchase_amount"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Profit Amount: </label>
-                                <input type="number" name="profit" id="profit" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-profit"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Note / Optional: </label>
-                                <textarea name="note" id="note" class="form-control"></textarea>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-note"></strong>
-                                </span>
-                            </div>
-                        </div>
-                            
                     </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" >Long Description: </label>
+                        <input type="text" name="long_description" id="long_description" class="form-control"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-long_description"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" >Short Description: </label>
+                            <input type="text" name="short_description" id="short_description" class="form-control" />
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-short_description"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
+                                <div class="col text-right">
+                                    <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
+                                </div>
+                            </div>
+                            <select name="category_id" id="category_id" class="form-control select2">
+                                <option value="" disabled selected>Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{$category->id}}"> {{$category->name}}</option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-category_id"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                        <div class="row">
+                                <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
+                                <div class="col text-right">
+                                    <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
+                                </div>
+                            </div>
+                            <select name="size_id" id="size_id" class="form-control select2">
+                                <option value="" disabled selected>Select Size</option>
+                                @foreach ($sizes as $size)
+                                    <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} - {{$size->category->name}} - UCS:{{$size->ucs}} </option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-size_id"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" >Expiration: </label>
+                            <input type="date" name="expiration" id="expiration" class="form-control" />
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-expiration"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" >Purchase QTY: </label>
+                            <input type="number" name="stock" id="stock" class="form-control" />
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-stock"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" >Purchase Amount:</label>
+                            <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-purchase_amount"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" >Profit Amount:</label>
+                            <input type="number" name="profit" id="profit" class="form-control" />
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-profit"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label" >Product Remarks: </label>
+                            <textarea name="product_remarks" id="product_remarks" class="form-control"></textarea>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-product_remarks"></strong>
+                            </span>
+                        </div>
+                    </div>
+      
+                </div>
                     <input type="hidden" name="product_action" id="product_action" value="Add" />
                     <input type="hidden" name="product_hidden_id" id="product_hidden_id" />
                     <input type="hidden" name="purchase_order_number_id" id="purchase_order_number_id" value="{{$purchasenumber->purchase_order_number}}" />
@@ -242,6 +393,9 @@
         </div>
     </div>
 </form>
+
+
+
 @endsection
 
 @section('script')
@@ -249,8 +403,13 @@
 
 $(function () {
     var supplier_id = $('#current_supplier_id').val();
+    var location_id = $('#current_location_id').val();
+
     $("#supplier_id").select2("trigger", "select", {
         data: { id: supplier_id }
+    });
+    $("#location_id").select2("trigger", "select", {
+        data: { id: location_id }
     });
 
     return loadEditPurchase();

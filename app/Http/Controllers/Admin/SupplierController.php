@@ -33,8 +33,8 @@ class SupplierController extends Controller
         $validated =  Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required'],
-            'contact' => ['required', 'numeric' , 'digits:11'],
-            'note' => ['nullable'],
+            'contact_number' => ['required', 'numeric' , 'digits:11'],
+            'remarks' => ['nullable'],
            
         ]);
 
@@ -45,8 +45,8 @@ class SupplierController extends Controller
         Supplier::create([
             'name' => $request->input('name'),
             'address' => $request->input('address'),
-            'contact' => $request->input('contact'),
-            'note' => $request->input('note'),
+            'contact_number' => $request->input('contact_number'),
+            'remarks' => $request->input('remarks'),
         ]);
 
         return response()->json(['success' => 'Supplier Added Successfully.']);
@@ -73,8 +73,8 @@ class SupplierController extends Controller
         $validated =  Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required'],
-            'contact' => ['required', 'numeric' , 'digits:11'],
-            'note' => ['nullable'],
+            'contact_number' => ['required', 'numeric' , 'digits:11'],
+            'remarks' => ['nullable'],
            
         ]);
 
@@ -85,8 +85,8 @@ class SupplierController extends Controller
         Supplier::find($supplier->id)->update([
             'name' => $request->input('name'),
             'address' => $request->input('address'),
-            'contact' => $request->input('contact'),
-            'note' => $request->input('note'),
+            'contact_number' => $request->input('contact_number'),
+            'remarks' => $request->input('remarks'),
         ]);
         return response()->json(['success' => 'Supplier Updated Successfully.']);
     }

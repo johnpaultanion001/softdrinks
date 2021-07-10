@@ -63,6 +63,7 @@ class ReturnedController extends Controller
     {
         $status = StatusReturn::where('isRemove', 0)->latest()->get();
         $returnedproducts = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id',$returned->purchase_order_number)->latest()->get();
+      
         return view('admin.returned.returnedproduct', compact('returned','status','returnedproducts'));
     }
 

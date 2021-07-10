@@ -15,16 +15,20 @@ class CreatePendingProductsTable extends Migration
     {
         Schema::create('pending_products', function (Blueprint $table) {
             $table->id();
+
             $table->string('category_id');
             $table->string('purchase_order_number_id');
-            $table->string('name');
+            
+            $table->string('product_code');
+            $table->longText('long_description');
+            $table->longText('short_description');
 
             $table->integer('stock');
             $table->integer('qty');
-
+            $table->integer('sold')->default(0);
             
             $table->string('size_id');
-            $table->integer('sales')->default(0);
+            
             $table->date('expiration');
             
             $table->float('purchase_amount', 8, 2);
@@ -36,8 +40,13 @@ class CreatePendingProductsTable extends Migration
             $table->float('total_price', 8, 2);
             
            
-            $table->text('note')->nullable();
-            $table->string('product_number')->unique();
+            $table->longText('product_remarks')->nullable();
+            
+
+            $table->string('location_id')->default(1);
+            $table->string('product_id')->unique();
+            $table->string('supplier_id')->default(1);
+
             $table->timestamps();
         });
     }

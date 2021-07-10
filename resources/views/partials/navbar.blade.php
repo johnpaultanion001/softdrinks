@@ -8,11 +8,11 @@
                  @if(request()->is('admin/dashboard'))
                     Default
                 @elseif(request()->is('admin/purchase-order') || request()->is('admin/purchase-order/*'))
-                    Purchase Orders   
+                    Receiving Goods   
                 @elseif(request()->is('admin/inventories'))
                     Inventories
                 @elseif(request()->is('admin/ordering'))
-                    Ordering
+                    Sales Invoice
                 @elseif(request()->is('admin/sales'))
                     Sales
                 @elseif(request()->is('admin/graph'))
@@ -33,6 +33,14 @@
                     Sizes 
                 @elseif(request()->is('admin/ucs') || request()->is('admin/ucs/*'))
                     UCS
+                @elseif(request()->is('admin/customers') || request()->is('admin/customers/*'))
+                  Customers
+                @elseif(request()->is('admin/locations') || request()->is('admin/locations/*'))
+                  Locations
+                @elseif(request()->is('admin/location_transfer') || request()->is('admin/location_transfer/*'))
+                  Location Transfer
+                @elseif(request()->is('admin/price_type') || request()->is('admin/price_type/*'))
+                  Price Type
                 @endif
                 
                  

@@ -19,7 +19,18 @@ class PurchaseOrder extends Model
         'total_price',
         'isReturn',
         'total_orders',
-        'notes',
+        'remarks',
+        'name_of_a_driver' ,
+        'plate_number',
+        
+        'doc_no',
+        'entry_date',
+        'po_no',
+        'po_date',
+        'location_id',
+        'reference',
+        'trade_discount',
+        'terms_discount',
        
     ];
     public function inventories()
@@ -49,6 +60,10 @@ class PurchaseOrder extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'location_id');
     }
 
 }

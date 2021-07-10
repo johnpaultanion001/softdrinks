@@ -23,6 +23,7 @@ class CreatePendingReturnedProductsTable extends Migration
             $table->float('deposit', 8, 2);
             $table->text('note')->nullable();
             $table->integer('isRemove')->default(0);
+           
             $table->timestamps();
         });
     }

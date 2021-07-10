@@ -17,7 +17,7 @@ class OrderNumberSeeder extends Seeder
         $number = [
             [
                 'id'    => '1',
-                'order_number' => '100001',
+                'order_number' => '100002',
             ],
            
         ];

@@ -20,11 +20,16 @@ class InventorySeeder extends Seeder
                 'id'    => '1',
                 'category_id'    => '1',
                 'purchase_order_number_id' => '1',
-                'name' => 'Coke',
+                
+                'product_code' => 'CXL',
+                'long_description' => 'Coke 1.5 L',
+                'short_description' => 'Coke 1.5 L',
+
                 'stock' => '200',
                 'qty' => '200',
-                'size_id' => '1',
-                'sales' => '0',
+                'sold' => '0',
+
+                'size_id' => '3',
                 'expiration' => '2021-07-24',
                 'purchase_amount' => '400',
                 'profit' => '50',
@@ -32,49 +37,68 @@ class InventorySeeder extends Seeder
                 'total_amount_purchase' => '79200',
                 'total_profit' => '9900',
                 'total_price' => '89100',
-                'note' => 'sample',
+                'product_remarks' => 'sample',
                 'isRemove' => '0',
-                'product_number' => '1622720357-1',
+                'location_id' => 2,
+                'product_id' => '1221121',
+                
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
+
+                'supplier_id' => '1',
             ],
             [
                 'id'    => '2',
                 'category_id'    => '3',
                 'purchase_order_number_id' => '1',
-                'name' => 'Coke in Can',
+
+                'product_code' => 'SXL',
+                'long_description' => 'Sprite 1.5 L',
+                'short_description' => 'Sprite 1.5 L',
+
                 'stock' => '200',
                 'qty' => '200',
-                'size_id' => '6',
-                'sales' => '0',
+                'sold' => '0',
+
+
+                'size_id' => '3',
                 'expiration' => '2021-07-24',
 
                 'purchase_amount' => '20',
                 'profit' => '5',
                 'price' => '25',
-
+                'location_id' => 2,
                 'total_amount_purchase' => '4000',
                 'total_profit' => '1000',
                 'total_price' => '5000',
 
-                'note' => 'sample',
+                'product_remarks' => 'sample',
                 'isRemove' => '0',
-                'product_number' => '1622720279-1',
+                'product_id' => '1221122',
+                
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
+                'supplier_id' => '1',
             ],
+
 
             [
                 'id'    => '3',
                 'category_id'    => '1',
                 'purchase_order_number_id' => '1',
-                'name' => 'Mountain Dew',
+
+                'product_code' => 'MDXL',
+                'long_description' => 'MOUNTAIN DEW 1.5 L',
+                'short_description' => 'MOUNTAIN DEW 1.5 L',
+
                 'stock' => '20',
                 'qty' => '20',
-                'size_id' => '2',
-                'sales' => '0',
-                'expiration' => '2021-07-24',
+                'sold' => '0',
 
+                'size_id' => '2',
+                
+                'expiration' => '2021-07-24',
+                'location_id' => 2,
                 'purchase_amount' => '500',
                 'profit' => '100',
                 'price' => '600',
@@ -83,11 +107,13 @@ class InventorySeeder extends Seeder
                 'total_profit' => '2000',
                 'total_price' => '12000',
 
-                'note' => 'sample',
+                'product_remarks' => 'sample',
                 'isRemove' => '0',
-                'product_number' => '1622720208-1',
+                'product_id' => '1221123',
+                
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
+                'supplier_id' => '1',
             ],
            
         ];

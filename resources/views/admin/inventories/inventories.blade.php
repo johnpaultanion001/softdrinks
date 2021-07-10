@@ -10,17 +10,70 @@
 
 
 @section('content')
-<div id="loadinventories">
-     
-    <div id="loading-container" class="loading-container">
-        <div class="loading"></div>
-        <div id="loading-text">loading</div>
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                <small class="text-white">Filer By Category</small>
+                    <select name="filter_category" id="filter_category" class="form-control select2">
+                        <option value="" disabled selected>Filter By Category</option>
+                        @foreach ($categories as $category)
+                            <option value="{{$category->id}}"> {{$category->name}}</option>
+                        @endforeach
+                    </select>
+                
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                <small class="text-white">Filer By Supplier</small>
+                    <select name="filter_supplier" id="filter_supplier" class="form-control select2">
+                        <option value="" disabled selected>Filter By Supplier</option>
+                        @foreach ($suppliers as $supplier)
+                            <option value="{{$supplier->id}}"> {{$supplier->name}}</option>
+                        @endforeach
+                    </select>
+                    
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                <small class="text-white">Filer By Size</small>
+                    <select name="filter_size" id="filter_size" class="form-control select2">
+                        <option value="" disabled selected>Filter By Size</option>
+                        @foreach ($sizes as $size)
+                            <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} </option>
+                        @endforeach
+                    </select>
+                
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                <small class="text-white">Filer By Location</small>
+                    <select name="filter_location" id="filter_location" class="form-control select2">
+                        <option value="" disabled selected>Filter By Location</option>
+                        @foreach ($locations as $location)
+                            <option value="{{$location->id}}"> {{$location->location_name}}</option>
+                        @endforeach
+                    </select>
+                    
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<div id="loading-container" class="loading-container">
+    <div class="loading"></div>
+    <div id="loading-text">loading</div>
+</div>
+<div id="loadinventories">
+    
+</div>
 
-@section('footer')
-    @include('../partials.footer')
-@endsection
+
+
 
 
 
@@ -158,10 +211,10 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Note / Optional: </label>
-                                        <textarea name="note" id="note" class="form-control form_disable"></textarea>
+                                        <label class="control-label text-uppercase" >Remarks: </label>
+                                        <textarea name="remarks" id="remarks" class="form-control form_disable"></textarea>
                                         <span class="invalid-feedback" role="alert">
-                                            <strong id="error-note"></strong>
+                                            <strong id="error-remarks"></strong>
                                         </span>
                                     </div>
                                 </div>
@@ -465,6 +518,104 @@ $('#myForm').on('submit', function(event){
         }
     });
 });
+
+$('select[name="filter_category"]').on("change", function(event){
+  var category = $('#filter_category').val();
+  if(category != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"inventories/filter",
+          method:"POST",
+          dataType: "HTMl",
+          data:{category:category, _token:_token},
+          beforeSend: function() {
+            $("#loadinventories").hide();
+            $('#loading-container').show();
+          },
+          success:function(data){
+            $('#loading-container').hide();
+            $("#loadinventories").show();
+            $("#loadinventories").html(data);
+          }
+         });
+        }
+});
+
+$('select[name="filter_location"]').on("change", function(event){
+  var location = $('#filter_location').val();
+  if(location != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"inventories/filter",
+          method:"POST",
+          dataType: "HTMl",
+          data:{location:location, _token:_token},
+          beforeSend: function() {
+            $("#loadinventories").hide();
+            $('#loading-container').show();
+          },
+          success:function(data){
+            $('#loading-container').hide();
+            $("#loadinventories").show();
+            $("#loadinventories").html(data);
+          }
+         });
+        }
+});
+
+$('select[name="filter_supplier"]').on("change", function(event){
+  var supplier = $('#filter_supplier').val();
+  if(supplier != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"inventories/filter",
+          method:"POST",
+          dataType: "HTMl",
+          data:{supplier:supplier, _token:_token},
+          beforeSend: function() {
+            $("#loadinventories").hide();
+            $('#loading-container').show();
+          },
+          success:function(data){
+            $('#loading-container').hide();
+            $("#loadinventories").show();
+            $("#loadinventories").html(data);
+          }
+         });
+        }
+});
+
+$('select[name="filter_size"]').on("change", function(event){
+  var size = $('#filter_size').val();
+  if(size != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"inventories/filter",
+          method:"POST",
+          dataType: "HTMl",
+          data:{size:size, _token:_token},
+          beforeSend: function() {
+            $("#loadinventories").hide();
+            $('#loading-container').show();
+          },
+          success:function(data){
+            $('#loading-container').hide();
+            $("#loadinventories").show();
+            $("#loadinventories").html(data);
+          }
+         });
+        }
+});
+
+
+
+
+
+
 
 </script>
 @endsection

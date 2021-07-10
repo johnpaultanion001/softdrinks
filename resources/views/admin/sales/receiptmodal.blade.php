@@ -1,34 +1,103 @@
+<div id="receiptreport" class="d-print-inline-flex receiptreport p4 bg-white mt-2" style="border-radius: 5px;">
+                
+                <div class="col">
+                    <h4 class="text-center card-title text-uppercase text-dark mb-0">Jewel & Nickel <br> Store </h4>
+                    <h5 class="text-center card-title text-muted mb-0">J.P Extension Libis Binangonan , Rizal <br>
+                    Fernando L. Arada - Prop. <br>
+                    Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
+                    <br>
+                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date: {{$date}} </h6></div>
 
-    <p class="font-weight-bold text-uppercase text-dark">Total: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0 text-dark">{{ number_format($receipts->sum->total ?? '' , 0, ',', '.') }} </span></p>
-    <div id="receiptreport" class="d-print-inline-flex receiptreport p4 bg-white" style="border-radius: 5px;">
-                <div class="col text-right">
-                    <h6 class="card-title text-uppercase text-muted mb-0">{{$date}} <h5>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <small class="text-muted mt-3 ml-1">Sold To:</small>
+                            <div class="col-sm-8">
+                                <small id="customer_name"></small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <small class="text-muted mt-3 ml-1">Address:</small>
+                            <div class="col-sm-8">
+                                    <small id="area"></small>
+                                    <small id="current_balance"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="receipt-body mt--3 p-2" id="receipt-body">
+                    <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Unit</th>
+                                    <th scope="col">Articles</th>
+                                    <th scope="col">Unit Price</th>
+                                    <th scope="col">Amount</th>
+                                </tr>
+                            </thead>
+                                <tbody>
+                                    @forelse($receipts as $key => $receipt)
+                                        <tr>
+                                            <td>{{$receipt->purchase_qty}}</td>
+                                            <td>{{$receipt->inventory->category->name}}</td>
+                                            <td>{{$receipt->inventory->short_description}}</td>
+                                            <td>₱ {{$receipt->inventory->price}}</td>
+                                            <td>₱ {{$receipt->total}}</td>
+                                        </tr>
+                                    @empty
+                                    <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>No Data Availalbe</td>
+                                            <td></td>
+                                            <td></td>
+                                    </tr>
+                                    @endforelse
+                                    <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total:</td>
+                                    <td> ₱ {{ number_format($receipts->sum->total ?? '' , 0, ',', ',') }}</td>
+                                    
+                                    </tr>
+                                </tfoot>
+                    </table>
                 </div>
                 <div class="col">
-                    <h5 class="text-center card-title text-uppercase text-muted mb-0">Sample Receipt</h5>
-                </div>
-                <div class="receipt-body" id="receipt-body">
-                        @forelse($receipts as $receipt)
-                            <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">{{$receipt->inventory->name}} </h5>
-                                <h5 class="card-title text-uppercase text-muted mb-0">size:{{$receipt->inventory->size->title}}  {{$receipt->inventory->size->size}} </h5>
-                                <h5 class="card-title text-uppercase text-muted mb-0">qty:{{$receipt->purchase_qty}} </h5>
-                                <h5 class="card-title text-uppercase text-muted mb-0">price:{{$receipt->inventory->price}} </h5>
-                                <h5 class="card-title text-uppercase text-muted mb-0">exp:{{$receipt->inventory->expiration}} </h5>
-                            </div>
-                            <div class="col text-right">
-                                <h5 class="card-title text-uppercase text-muted mb-0">₱ {{ number_format($receipt->total ?? '' , 0, ',', ',') }}</h5>
-                            </div>
-                            
-                        @empty
-                            <input type="text" value="No Data" readonly  class="noreiept bg-white text-dark form-control border-0"/>
-                        @endforelse
+                    <div class="row mt-2 p-2">
+                        <div class="col-4">
+                            <h3 class="text-center card-title text-uppercase text-danger mb-0">1111</h3>
+                        </div>
+                        <div class="col-8">
+                            <small>Recieved the above goods in good order and condition</small>      
+                        </div>
                     </div>
-            <hr class="my-3">
-            <div class="col">
-                <h5 class="card-title text-uppercase text-muted mb-0">Total</h5>
-                <div class="col text-right">
-                    <h5 class="card-title text-uppercase text-muted mb-0">₱ {{ number_format($receipts->sum->total ?? '' , 0, ',', ',') }}</h5>
                 </div>
-            </div>
+                <div class="col">
+                    <div class="row mt-2 p-2 ">
+                        <div class="col-6">
+                            <small>Dealer Of:</small>     
+                        </div>
+                        <div class="col-6">
+                            <small>By:___________________</small>      
+                        </div>
+                        <div class="col-12">
+                            <small>Coke Products/San Miguel Beer Products And Rice</small>     
+                        </div>
+                    </div>
+                </div>
+
+                
+                
+            
     </div>

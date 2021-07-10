@@ -7,7 +7,9 @@ use App\Models\Inventory;
 use App\Models\Category;
 use App\Models\PurchaseOrder;
 use App\Models\Size;
+use App\Models\Supplier;
 use App\Models\UCS;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Validator;
 use Gate;
@@ -21,23 +23,54 @@ class InventoryController extends Controller
     {
         abort_if(Gate::denies('inventories_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $categories = Category::where('isRemove', 0)->latest()->get();
+        $locations = Location::where('isRemove', 0)->latest()->get();
+        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
         $purchaseorder = PurchaseOrder::where('isReturn', 0)->latest()->get();
         $allpurchaseorder = PurchaseOrder::latest()->get();
         $sizes = Size::where('isRemove', 0)->latest()->get();
-        return view('admin.inventories.inventories',compact('categories','purchaseorder', 'allpurchaseorder', 'sizes'));
+        return view('admin.inventories.inventories',compact('categories','purchaseorder', 'allpurchaseorder', 'sizes' ,'locations'  ,'suppliers'));
     }
     public function loadinventories()
     {
         $inventories = Inventory::where('isRemove', 0)->latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
-        return view('admin.inventories.loadinventories', compact('categories','inventories'));
+        $locations = Location::where('isRemove', 0)->latest()->get();
+        return view('admin.inventories.loadinventories', compact('categories','inventories' ,'locations'));
     }
 
 
   
-    public function create()
-    {
-      
+    public function filter(Request $request){
+        //filter
+
+        
+        $query = Inventory::query();
+
+        if($request->get('category'))
+        {
+            $query->where('category_id', $request->get('category'));
+        }
+        if($request->get('location'))
+        {
+            $query->where('location_id', $request->get('location'));
+            
+        }
+        if($request->get('supplier'))
+        {
+            $query->where('supplier_id', $request->get('supplier'));
+        }
+        if($request->get('size'))
+        {
+            $query->where('size_id', $request->get('size'));
+        }
+        
+        
+        $inventories = $query->where('isRemove', 0)->latest()->get();
+        
+        $categories = Category::where('isRemove', 0)->latest()->get();
+        $locations = Location::where('isRemove', 0)->latest()->get();
+        return view('admin.inventories.loadinventories', compact('categories','inventories' ,'locations'));
+
     }
 
 
@@ -53,7 +86,7 @@ class InventoryController extends Controller
             'expiration' => ['required' ,'date','after:today'],
             'purchase_amount' => ['required' ,'integer','min:1'],
             'profit' => ['required' ,'integer','min:1'],
-            'note' => ['nullable'],
+            'product_remarks' => ['nullable'],
            
         ]);
 
@@ -81,7 +114,7 @@ class InventoryController extends Controller
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-            'note' => $request->input('note'),
+            'product_remarks' => $request->input('product_remarks'),
             'product_number' =>  time().'-'.$userid,
         ]);
 
@@ -137,7 +170,7 @@ class InventoryController extends Controller
             'purchase_amount' => ['required' ,'integer','min:1'],
             'profit' => ['required' ,'integer','min:1'],
             
-            'note' => ['nullable'],
+            'product_remarks' => ['nullable'],
            
         ]);
 
@@ -164,7 +197,7 @@ class InventoryController extends Controller
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-            'note' => $request->input('note'),
+            'product_remarks' => $request->input('product_remarks'),
         ]);
 
         $totalpurchasedorder = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_amount_purchase');

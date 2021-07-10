@@ -57,6 +57,44 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >DOC NO.</label>
+                                    <input type="text" name="doc_no" id="doc_no" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-doc_no"></strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Entry Date:</label>
+                                    <input type="date" name="entry_date" id="entry_date" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-entry_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO NO.</label>
+                                    <input type="text" name="po_no" id="po_no" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_no"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO Date.</label>
+                                    <input type="date" name="po_date" id="po_date" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <div class="row">
@@ -68,7 +106,7 @@
                                     <select name="supplier_id" id="supplier_id" class="form-control select2">
                                         <option value="" disabled selected>Select Supplier</option>
                                         @foreach ($suppliers as $supplier)
-                                            <option value="{{$supplier->id}}"> {{$supplier->name}}</option>
+                                            <option value="{{$supplier->id}}">Supplier Code: {{$supplier->id}} - {{$supplier->name}}</option>
                                             
                                         @endforeach
                                     </select>
@@ -82,18 +120,86 @@
                            
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Note / Optional: </label>
-                                    <textarea name="notes" id="notes" class="form-control"></textarea>
+                                    <div class="row">
+                                        <div class="col"><label class="control-label text-uppercase" >Location: </label></div>
+                                        <div class="col text-right">
+                                            <a class="btn btn-sm btn-white text-uppercase" href="/admin/locations">New Location?</a>
+                                        </div>
+                                    </div>
+                                    <select name="location_id" id="location_id" class="form-control select2">
+                                        <option value="" disabled selected>Select Location</option>
+                                        @foreach ($locations as $location)
+                                            <option value="{{$location->id}}">Location Code: {{$location->id}} - {{$location->location_name}}</option>
+                                            
+                                        @endforeach
+                                    </select>
                                     <span class="invalid-feedback" role="alert">
-                                        <strong id="error-notes"></strong>
+                                        <strong id="error-location_id"></strong>
+                                    </span>
+                                   
+                                </div>
+                               
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Name of a Driver:</label>
+                                    <input type="text" name="name_of_a_driver" id="name_of_a_driver" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-name_of_a_driver"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Plate Number: </label>
+                                    <input type="text" name="plate_number" id="plate_number" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-plate_number"></strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Trade Discount:</label>
+                                    <input type="text" name="trade_discount" id="trade_discount" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-trade_discount"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Terms Discount: </label>
+                                    <input type="text" name="terms_discount" id="terms_discount" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-terms_discount"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Remarks: </label>
+                                    <textarea name="remarks" id="remarks" autocomplete="on" class="form-control"></textarea>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-remarks"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Reference: </label>
+                                    <textarea name="reference" id="reference" autocomplete="on" class="form-control"></textarea>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-reference"></strong>
                                     </span>
                                 </div>
                             </div>
                             
                     </div>
-
-                   
-                        
+ 
                     <div id="alltotal"> 
 
                     </div>
@@ -134,7 +240,7 @@
 </form>
 
 <!-- Create Product Order Modal -->
-<form method="post" id="productForm" class="form-horizontal ">
+<form method="post" id="productForm" class="form-horizontal">
     @csrf
     <div class="modal" id="productModal" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -149,15 +255,38 @@
                 </div> 
                 <div id="modal-body-product" class="modal-body">
                     <div class="row">
-                        <div class="col-sm-12">
+
+                        <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label" >Product Name: </label>
-                                <input type="text" name="name" id="name" class="form-control" />
+                                <label class="control-label" >Product Code: </label>
+                                <input type="text" name="product_code" id="product_code" class="form-control" autocomplete="off"/>
+                                <div id="productCodeList"></div>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-name"></strong>
+                                    <strong id="error-product_code"></strong>
+                                </span>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" >Long Description: </label>
+                               <input type="text" name="long_description" id="long_description" class="form-control"/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-long_description"></strong>
                                 </span>
                             </div>
                         </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" >Short Description: </label>
+                                <input type="text" name="short_description" id="short_description" class="form-control" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-short_description"></strong>
+                                </span>
+                            </div>
+                        </div>
+                  
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <div class="row">
@@ -234,10 +363,10 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label" >Note / Optional: </label>
-                                <textarea name="note" id="note" class="form-control"></textarea>
+                                <label class="control-label" >Product Remarks: </label>
+                                <textarea name="product_remarks" id="product_remarks" class="form-control"></textarea>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-note"></strong>
+                                    <strong id="error-product_remarks"></strong>
                                 </span>
                             </div>
                         </div>
@@ -325,7 +454,7 @@ function loadPendingProduct(){
 $(document).on('click', '.view', function(){
     $('#viewModal').modal('show');
     var id = $(this).attr('view');
-    $('.modal-title').text('View Purchased Order');
+    $('.modal-title').text('VIEW RECEIVING GOODS');
     $.ajax({
         url: "/admin/purchase-order/"+id, 
         type: "get",
@@ -352,7 +481,7 @@ $(document).on('click', '#back-button', function(){
 function purchaseModal(){
     $('#purchaseorderModal').modal('show');
     $('.form-control').removeClass('is-invalid')
-    $('.modal-title-purchase').text('Purchase Order');
+    $('.modal-title-purchase').text('INSERT RECEIVING GOODS');
     $('#purchase_button').val('Submit');
     $('#supplier_id').select2({
         placeholder: 'Select Supplier'
@@ -474,6 +603,7 @@ $(document).on('click', '.edit', function(){
     $('#productForm')[0].reset();
     $('.form-control').removeClass('is-invalid')
     $('#form_result').html('');
+    $('#productCodeList').fadeOut();
     var id = $(this).attr('edit');
 
     $.ajax({
@@ -643,7 +773,71 @@ $(document).on('click', '.remove', function(){
 
 });
 
+//autocomplete
 
+$('#product_code').keyup(function(){ 
+       
+        if($('#product_action').val() == 'Edit'){
+            $('#productCodeList').fadeOut();
+        }else{
+        var query = $(this).val();
+        if(query != '')
+        {
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+            url:"{{ route('admin.pending-product.autocomplete') }}",
+            method:"POST",
+            data:{query:query, _token:_token},
+            success:function(data){
+                if (data == undefined){
+                    $('#productCodeList').fadeOut();
+                }
+                $('#productCodeList').fadeIn();  
+                $('#productCodeList').html(data);
+              }
+            });
+        }
+        if(query == ''){
+            $('#productCodeList').fadeOut();
+            }
+        
+        }
+    });
+
+    $(document).on('click', 'li', function(){  
+        var query = $(this).text();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ route('admin.pending-product.autocompleteresult') }}",
+          method:"POST",
+          dataType:"json",
+          data:{query:query, _token:_token},
+          success:function(data){
+
+            $.each(data.result, function(key,value){
+                if(key == $('#'+key).attr('id')){
+                    $('#'+key).val(value)
+                }
+                if(key == 'category_id'){
+                        $("#category_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+                    if(key == 'size_id'){
+                        $("#size_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+            })
+            $('#productCodeList').fadeOut(); 
+          }
+         });
+        }
+    });  
+
+  
 
 </script>
 @endsection

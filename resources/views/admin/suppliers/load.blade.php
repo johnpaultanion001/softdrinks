@@ -26,11 +26,13 @@
             <thead class="thead-light">
               <tr>
                 <th>Actions</th>
-                <th>Name</th>
+                <th>Supplier Code</th>
+                <th>Supplier Name</th>
                 <th>Address</th>
-                <th>Contact</th>
+                <th>Contact Number</th>
+                <th>Remarks</th>
                 <th>Date</th>
-                <th>Note</th>
+                
                 
               </tr>
             </thead>
@@ -42,20 +44,24 @@
                             <button type="button" name="remove" remove="{{  $supplier->id ?? '' }}" id="{{  $supplier->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
                         </td>
                         <td>
+                            {{  $supplier->id ?? '' }}
+                        </td>
+                        <td>
                             {{  $supplier->name ?? '' }}
                         </td>
                         <td>
                             {{  $supplier->address ?? '' }}
                         </td>
                         <td>
-                             {{ $supplier->contact ?? '' }}
+                             {{ $supplier->contact_number ?? '' }}
+                        </td>
+                        <td>
+                            {{  $supplier->remarks ?? '' }}
                         </td>
                         <td>
                             {{ $supplier->created_at->format('l, j \\/ F / Y h:i:s A') }}
                         </td>
-                        <td>
-                            {{  $supplier->note ?? '' }}
-                        </td>
+                        
                     </tr>
                 @endforeach
             </tbody>

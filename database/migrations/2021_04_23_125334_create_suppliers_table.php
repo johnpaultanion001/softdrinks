@@ -17,8 +17,8 @@ class CreateSuppliersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('address');
-            $table->string('contact');
-            $table->text('note')->nullable();
+            $table->string('contact_number');
+            $table->text('remarks')->nullable();
             $table->integer('isRemove')->default(0);
             $table->timestamps();
         });

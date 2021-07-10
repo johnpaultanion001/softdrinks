@@ -1,11 +1,4 @@
 
-<div class="header bg-primary pb-6">
-    <div class="container-fluid">
-      
-    </div>
-</div>
-
-<!-- Page content -->
 <div class="container-fluid mt--6 table-load">
   <div class="row">
     <div class="col-xl-12">
@@ -14,35 +7,49 @@
           <div class="row align-items-center">
             <div class="col">
               <h3 class="mb-0 text-uppercase" id="titletable">Inventories</h3>
+             
             </div>
             <div class="col text-right">
               <button type="button" name="create_record" id="create_record" class="create_record text-uppercase btn btn-sm btn-primary">New Product</button>
             </div>
           </div>
         </div>
+
+        <!-- table -->
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%"">
+          <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Actions</th>
-                <th scope="col">Product Number</th>
-                <th scope="col">Purchase Order Number & Supplier</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Stock</th>
+                <th scope="col">Receiving Goods ID</th>
+                <th scope="col">Product ID</th>
+
+                <th scope="col">Product Code</th>
+                <th scope="col">Long Description</th>
+                <th scope="col">Short Description</th>
+
+                <th scope="col">Supplier Code/Name</th>
+
                 <th scope="col">Size</th>
                 <th scope="col">Category</th>
+                <th scope="col">Location Code/Name</th>
                 <th scope="col">Expiration</th>
+
                 <th scope="col">Purchase QTY</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Sold</th>
+
                 <th scope="col">Purchase Amount</th>
                 <th scope="col">Profit</th>
                 <th scope="col">Price</th>
                 <th scope="col">Total Amount Purchase</th>
                 <th scope="col">Total Amount Profit</th>
                 <th scope="col">Total Amount Price</th>
-                <th scope="col">Note</th>
-                <th scope="col">User</th>
+                <th scope="col">Remarks</th>
+                <th scope="col">Created By</th>
                 <th scope="col">Date</th>
+
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
@@ -58,20 +65,28 @@
                           @endif 
                           <button type="button" name="remove" remove="{{  $inventory->id ?? '' }}" id="{{  $inventory->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
                       </td>
+
                       <td>
-                          {{  $inventory->product_number ?? '' }}
+                          {{  $inventory->purchase_order_number_id ?? '' }}
                       </td>
                       <td>
-                          {{  $inventory->purchase_order_number_id ?? '' }} - {{  $inventory->purchase_order->supplier->name ?? '' }}
+                          {{  $inventory->product_id ?? '' }}
                       </td>
 
                       <td>
-                          {{  $inventory->name ?? '' }}
-                      </td>
-                      <td>
-                          {{  $inventory->stock ?? '' }}
+                          {{  $inventory->product_code ?? '' }}
                       </td>
                       
+                      <td>
+                          {{  $inventory->long_description ?? '' }}
+                      </td>
+                      <td>
+                          {{  $inventory->short_description ?? '' }}
+                      </td>
+
+                      <td>
+                          {{  $inventory->supplier->id ?? '' }}/{{  $inventory->supplier->name ?? '' }}
+                      </td>
                       <td>
                           {{  $inventory->size->title ?? '' }}  {{  $inventory->size->size ?? '' }}
                       </td>
@@ -79,11 +94,21 @@
                           {{  $inventory->category->name ?? '' }}
                       </td>
                       <td>
+                          {{  $inventory->location->id ?? '' }}/{{  $inventory->location->location_name ?? '' }}
+                      </td>
+                      <td>
                           {{  $inventory->expiration ?? '' }}
                       </td>
                       <td>
                           {{  $inventory->qty ?? '' }}
                       </td>
+                      <td>
+                          {{  $inventory->stock ?? '' }}
+                      </td>
+                      <td>
+                          {{  $inventory->sold ?? '' }}
+                      </td>
+
                       <td>
                           <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->purchase_amount , 0, ',', ',') }}
             
@@ -105,7 +130,7 @@
 
                       </td>
                       <td>
-                          {{  $inventory->note ?? '' }}
+                          {{  $inventory->product_remarks ?? '' }}
                       </td>
                       <td>
                           {{  $inventory->purchase_order->user->name ?? '' }}
@@ -147,4 +172,5 @@ $(function () {
 
     
 });
+
 </script>

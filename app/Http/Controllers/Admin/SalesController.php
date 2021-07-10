@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sales;
+use App\Models\OrderNumber;
 use Carbon\Carbon;
 
 class SalesController extends Controller
@@ -26,13 +27,14 @@ class SalesController extends Controller
     public function daily(){
         date_default_timezone_set('Asia/Manila');
         $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
+       
+
         if($userid == '2'){
             $sales = Sales::where('user_id', $userid)->where('isRemove', 0)->latest()->whereDay('created_at', '=', date('d'))
             ->get();
             return view('admin.sales.loadsales', compact('sales'));
         }
-        $sales = Sales::where('isRemove', 0)->latest()->whereDay('created_at', '=', date('d'))
-                        ->get();
+        $sales = Sales::where('isRemove', 0)->latest()->whereDay('created_at', '=', date('d'))->get();
         return view('admin.sales.loadsales', compact('sales'));
     }
     public function monthly(){
@@ -62,6 +64,7 @@ class SalesController extends Controller
  
     function fetch_data(Request $request)
     {
+        date_default_timezone_set('Asia/Manila');
         $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
         if($userid == '2'){
             if($request->ajax())
@@ -85,8 +88,9 @@ class SalesController extends Controller
     }
     public function receipt(Sales $sale)
     {
+       date_default_timezone_set('Asia/Manila');
        $receipts = Sales::where('isRemove', 0)->where('order_number',$sale->order_number)->latest()->get();
-       $date = date("Y-m-d H:i:s");
-       return view('admin.sales.receiptmodal', compact('receipts', 'date'));
+       $date = date('F d,Y h:i A');
+       return view('admin.sales.receiptmodal', compact('receipts', 'date' ));
     }
 }

@@ -1,14 +1,17 @@
 <div class="table-responsive">
     <table class="table align-items-center table-flush datatable-products">
-        <thead class="thead-light">
+        <thead class="thead-white">
         <tr>
             <th scope="col">Actions</th>
-            <th scope="col">Product Number</th>
-            <th scope="col">Purchase Order Number</th>
-            <th scope="col">Product Name</th>
+            <th scope="col">Product ID</th>
+            <th scope="col">Product Code</th>
+            <th scope="col">Long Description</th>
+            <th scope="col">Short Description</th>
+
             <th scope="col">Size</th>
             <th scope="col">Category</th>
             <th scope="col">Expiration</th>
+
             <th scope="col">Purchase QTY</th>
             <th scope="col">Purchase Amount</th>
             <th scope="col">Profit</th>
@@ -16,11 +19,11 @@
             <th scope="col">Total Amount Purchase</th>
             <th scope="col">Total Amount Profit</th>
             <th scope="col">Total Amount Price</th>
-            <th scope="col">Note</th>
+            <th scope="col">Remarks</th>
             <th scope="col">Date</th>
         </tr>
         </thead>
-        <tbody class="text-uppercase font-weight-bold display" cellspacing="0" width="100%"">
+        <tbody class="text-uppercase font-weight-bold display" cellspacing="0" width="100%">
         @foreach($pendingproducts as $key => $product)
                 <tr data-entry-id="{{ $product->id ?? '' }}">
                     <td>
@@ -28,13 +31,16 @@
                         <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
                     </td>
                     <td>
-                        {{  $product->product_number ?? '' }}
+                        {{  $product->product_id ?? '' }}
                     </td>
                     <td>
-                        {{  $product->purchase_order_number_id ?? '' }}
+                        {{  $product->product_code ?? '' }}
                     </td>
                     <td>
-                        {{  $product->name ?? '' }}
+                        {{  $product->long_description ?? '' }}
+                    </td>
+                    <td>
+                        {{  $product->short_description ?? '' }}
                     </td>
                     <td>
                         {{  $product->size->title ?? '' }} {{  $product->size->size ?? '' }}
@@ -69,7 +75,7 @@
 
                     </td>
                     <td>
-                        {{  $product->note ?? '' }}
+                        {{  $product->remarks ?? '' }}
                     </td>
                     <td>
                         {{ $product->created_at->format('l, j \\/ F / Y h:i:s A') }}

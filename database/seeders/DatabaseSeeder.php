@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder
             SizeSeeder::class,
             OrderNumberSeeder::class,
             SalesSeeder::class,
-            
+            CustomerSeeder::class,
+            LocationSeeder::class,
+            PriceTypeSeeder::class,
            
         ]);
     }

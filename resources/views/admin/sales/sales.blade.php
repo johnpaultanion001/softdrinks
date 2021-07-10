@@ -296,6 +296,42 @@ $('#myForm').on('submit', function(event){
         }, 500);
         $('#receipt-body').addClass('receipt-body');
 });
+
+$(document).on('click', '#btn_show_profit_report', function(){
+    $('#modal_profit_report').modal('show');
+    $('.modal-title-profit-report').text('Profit Report');
+    
+});
+
+$(document).on('click', '#btn_print_profit_report', function(){
+    var contents = $(".print_report").html();
+    var frame1 = $('<iframe />');
+    frame1[0].name = "frame1";
+    frame1.css({ "position": "absolute", "top": "-1000000px" });
+    $("body").append(frame1);
+    var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+    frameDoc.document.open();
+    //Create a new HTML document.
+    frameDoc.document.write('<html><head><title>Title</title>');
+    frameDoc.document.write('</head><body>');
+    //Append the external CSS file.
+    frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+    frameDoc.document.write('<style>size: A4 portrait;</style>');
+    var source = 'bootstrap.min.js';
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', source);
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+    frameDoc.document.close();
+    setTimeout(function () {
+    window.frames["frame1"].focus();
+    window.frames["frame1"].print();
+    frame1.remove();
+    }, 500);
+});
+
 </script>
 @endsection
 

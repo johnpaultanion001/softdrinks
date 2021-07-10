@@ -6,7 +6,7 @@
                     <div class="card-body">
                         <div class="row">
                         <div class="col">
-                            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{\Illuminate\Support\Str::limit($inventory->name,100)}}</h3>
+                            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{\Illuminate\Support\Str::limit($inventory->long_description,100)}}</h3>
                             <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 0, ',', ',') }}</span> <small>/ {{$inventory->category->name}}</small>
                         </div>
                         <div class="col-auto">
@@ -36,7 +36,7 @@
                                     <span class="text-uppercase">Expiration: <span class="text-success font-weight-bold"> {{$inventory->expiration}}</span> </span>
                                 </div>
                                 <div class="col-6">
-                                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$inventory->sales}}</span></span>
+                                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$inventory->sold}}</span></span>
                                 </div>
                                 <div class="col-12">
                                     <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$inventory->purchase_order->supplier->name}}</span></span>

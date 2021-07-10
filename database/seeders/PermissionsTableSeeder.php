@@ -83,6 +83,22 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => '18',
                 'title' => 'setting_access',
             ],
+            [
+                'id'    => '19',
+                'title' => 'customers_access',
+            ],
+            [
+                'id'    => '20',
+                'title' => 'locations_access',
+            ],
+            [
+                'id'    => '21',
+                'title' => 'location_transfer_access',
+            ],
+            [
+                'id'    => '22',
+                'title' => 'price_type_access',
+            ],
 
             
 

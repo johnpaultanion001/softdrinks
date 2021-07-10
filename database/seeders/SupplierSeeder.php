@@ -18,20 +18,20 @@ class SupplierSeeder extends Seeder
         $suppliers = [
             [
                 'id'    => 1,
-                'Name' => 'Coca Cola Company',
+                'name' => 'Coca Cola Company',
                 'address' => 'Antipolo Branch',
-                'contact' => '1234567423',
-                'note' => 'Monday Morning',
+                'contact_number' => '1234567423',
+                'remarks' => 'Monday Morning',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
                 
             ],
             [
                 'id'    => 2,
-                'Name' => 'Sprite Company',
+                'name' => 'Sprite Company',
                 'address' => 'Pasig Branch',
-                'contact' => '1234567423',
-                'note' => 'Tuesday Morning',
+                'contact_number' => '1234567423',
+                'remarks' => 'Tuesday Morning',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],

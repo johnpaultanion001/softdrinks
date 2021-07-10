@@ -29,12 +29,11 @@
                         <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <input class="form-control" id="search" name="search" placeholder="Search by name of product or price" type="text">
+                        <input class="form-control" id="search" name="search" placeholder="Search by description/Code of product or price" type="text">
                     </div>
                 </div>
            </div>
-          
-          
+        
         </div>
 
     </div>
@@ -52,6 +51,8 @@
     <div id="loadproduct">
         
     </div>
+
+
 
     
     
@@ -124,13 +125,13 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <span id="CheckoutForm_result"></span>
-                    
-                    <div class="row" id="checkoutview">
-                    
-                    </div>  
-                                     
+                        <div class="row" id="checkoutview">
+                        
+                        </div>  
+                                 
                     <input type="hidden" name="action" id="checkout_action" value="Add" />
                     <input type="hidden" name="hidden_id" id="checkouthidden_id" />
+                  
                 </div>
         
              
@@ -442,6 +443,8 @@ $('#myCheckoutForm').on('submit', function(event){
     $('.form-control').removeClass('is-invalid')
     var action_url = "{{ route('admin.ordering.checkout_order') }}";
     var  method = "POST";
+    var customer = $('#select_customer').val();
+    var pricetype = $('#select_pricetype').val();
     $.confirm({
         title: 'Confirmation',
         content: 'You really want to chechout this orders?',
@@ -457,7 +460,7 @@ $('#myCheckoutForm').on('submit', function(event){
                     url: action_url,
                     method: method,
                     data: {
-                        _token: '{!! csrf_token() !!}',
+                        customer:customer,pricetype:pricetype, _token: '{!! csrf_token() !!}',
                     },
                     dataType:"json",
                     beforeSend: function(){

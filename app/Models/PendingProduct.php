@@ -14,9 +14,14 @@ class PendingProduct extends Model
     protected $fillable = [
         'category_id',
         'purchase_order_number_id',
-        'name',
+
+        'product_code',
+        'long_description',
+        'short_description',
+        
         'stock',
         'qty',
+        'sold',
 
         'size_id',
 
@@ -29,8 +34,10 @@ class PendingProduct extends Model
         'total_price',
 
         'expiration',
-        'note',
-        'product_number',
+        'product_remarks',
+        'location_id',
+        'product_id',
+        'supplier_id',
     ];
     public function category()
     {

@@ -101,12 +101,12 @@ class OrderController extends Controller
             }
 
             Inventory::where('id',  $order->inventory->id)->decrement('stock', $changeqty);
-            Inventory::where('id',  $order->inventory->id)->increment('sales', $changeqty);
+            Inventory::where('id',  $order->inventory->id)->increment('sold', $changeqty);
          }
          if($order->purchase_qty > $request->purchase_qty_edit){
             $changeqty = $order->purchase_qty - $request->purchase_qty_edit;
             Inventory::where('id', $order->inventory_id)->increment('stock', $changeqty);
-            Inventory::where('id', $order->inventory_id)->decrement('sales', $changeqty);
+            Inventory::where('id', $order->inventory_id)->decrement('sold', $changeqty);
          }
 
         $total = $request->purchase_qty_edit * $order->inventory->price;
@@ -132,7 +132,7 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
        Inventory::where('id', $order->inventory->id)->increment('stock', $order->purchase_qty);
-       Inventory::where('id', $order->inventory->id)->decrement('sales', $order->purchase_qty); 
+       Inventory::where('id', $order->inventory->id)->decrement('sold', $order->purchase_qty); 
        return response()->json(['success' => 'Order Removed Successfully.' , $order->delete()]);
     }
 }

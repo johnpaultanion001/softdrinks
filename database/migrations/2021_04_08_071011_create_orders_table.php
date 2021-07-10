@@ -22,6 +22,10 @@ class CreateOrdersTable extends Migration
             $table->float('profit');
             $table->float('total');
             $table->integer('status')->default(0);
+            $table->integer('customer_id')->default(0);
+            $table->integer('pricetype_id')->default(0);
+            $table->float('discounted')->default(0);
+            $table->float('total_cost');
             $table->timestamps();
         });
     }

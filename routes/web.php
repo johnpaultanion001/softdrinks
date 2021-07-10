@@ -15,6 +15,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Invetories
     Route::resource('inventories', 'InventoryController');
     Route::get('loadinventories', 'InventoryController@loadinventories')->name('loadinventories');
+    Route::post('inventories/filter', 'InventoryController@filter')->name('filter');
+
     // Categories
     Route::resource('categories', 'CategoryController');
     // Ordering
@@ -22,6 +24,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('loadproduct',  'OrderingController@loadproduct');
     Route::get('loadcart',  'OrderingController@loadcart');
     Route::get('cartsbutton',  'OrderingController@cartsbutton');
+    Route::get('ordering/{customer}/customer', 'OrderingController@selectcustomer')->name('ordering.selectcustomer');
+    Route::get('ordering/{pricetype}/pricetype', 'OrderingController@selectpricetype')->name('ordering.selectpricetype');
+
+
+
     // search product
     Route::get('search','OrderingController@search')->name('search');
     // check out cart
@@ -29,6 +36,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('checkout-order', 'OrderingController@checkout_order')->name('ordering.checkout_order');
     // add to cart
     Route::post('addtocart/{inventory}',  'OrderingController@addtocart')->name('ordering.addtocart');
+
 
     //sales
     Route::get('sales', 'SalesController@index')->name('sales.index');
@@ -94,11 +102,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('totalpendingproduct', 'PurchaseOrderController@total')->name('purchaseorder.total');
     route::post('purchase-order', 'PurchaseOrderController@store')->name('purchase-order.store');
     route::put('purchase-order/{purchasenumber}', 'PurchaseOrderController@update')->name('purchase-order.update');
+     
 
 
     Route::resource('purchase-order/pending-product', 'PendingProductController');
     route::get('loadpendingproduct', 'PendingProductController@load')->name('pending-prooduct.load');
-    
+    //autocomplte
+    Route::post('autocomplete/','PendingProductController@autocomplete')->name('pending-product.autocomplete');
+    Route::post('autocomplete/result','PendingProductController@autocompleteresult')->name('pending-product.autocompleteresult');
 
     //suppliers
     Route::resource('suppliers', 'SupplierController');
@@ -115,5 +126,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Categories
     Route::resource('categories', 'CategoryController');
-    route::get('loadcategories', 'CategoryController@load')->name('categorie.load');
+    route::get('loadcategories', 'CategoryController@load')->name('categories.load');
+
+    //Customers
+    Route::resource('customers', 'CustomerController');
+    route::get('loadcustomers', 'CustomerController@load')->name('customers.load');
+
+    //price type
+    Route::resource('price_type', 'PriceTypeController');
+    route::get('loadprice_type', 'PriceTypeController@load')->name('price_type.load');
+
+
+    //Location
+    Route::resource('locations', 'LocationController');
+    route::get('loadlocations', 'LocationController@load')->name('locations.load');
+
+    //Location Transfer
+    Route::resource('location_transfer', 'LocationTransferController');
+    route::get('loadllocation_transfer', 'LocationTransferController@load')->name('locationtransfer.load');
+    route::get('location_transfer/{location}/from', 'LocationTransferController@locationfrom')->name('locationtransfer.locationfrom');
+    route::get('location_transfer/{location}/to', 'LocationTransferController@locationto')->name('locationtransfer.locationto');
+   
 });

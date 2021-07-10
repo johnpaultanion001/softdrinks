@@ -13,25 +13,31 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%"">
+          <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Actions</th>
-                <th scope="col">Product Number</th>
-                <th scope="col">Purchase Order Number & Supplier</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Stock</th>
+                <th scope="col">Receiving Goods ID</th>
+                <th scope="col">Product ID</th>
+                <th scope="col">Product Code</th>
+                <th scope="col">Long Description</th>
+                <th scope="col">Short Description</th>
+
                 <th scope="col">Size</th>
                 <th scope="col">Category</th>
                 <th scope="col">Expiration</th>
+
                 <th scope="col">Purchase QTY</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Sold</th>
+
                 <th scope="col">Purchase Amount</th>
                 <th scope="col">Profit</th>
                 <th scope="col">Price</th>
                 <th scope="col">Total Amount Purchase</th>
                 <th scope="col">Total Amount Profit</th>
                 <th scope="col">Total Amount Price</th>
-                <th scope="col">Note</th>
+                <th scope="col">Remarks</th>
                 <th scope="col">User</th>
                 <th scope="col">Date</th>
               </tr>
@@ -45,19 +51,20 @@
                           <button type="button" name="remove" remove="{{  $order->id ?? '' }}" id="{{  $order->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
                       </td>
                       <td>
-                          {{  $order->product_number ?? '' }}
+                        {{  $order->purchase_order_number_id ?? '' }}
                       </td>
                       <td>
-                          {{  $order->purchase_order_number_id ?? '' }} - {{  $order->purchase_order->supplier->name ?? '' }}
-                      </td>
-
-                      <td>
-                          {{  $order->name ?? '' }}
+                          {{  $order->product_id ?? '' }}
                       </td>
                       <td>
-                          {{  $order->stock ?? '' }}
+                          {{  $order->product_code ?? '' }}
                       </td>
-                     
+                      <td>
+                          {{  $order->long_description ?? '' }}
+                      </td>
+                      <td>
+                          {{  $order->short_description ?? '' }}
+                      </td>
                       <td>
                           {{  $order->size->title ?? '' }} {{  $order->size->size ?? '' }}
                       </td>
@@ -70,6 +77,12 @@
                       </td>
                       <td>
                           {{  $order->qty ?? '' }}
+                      </td>
+                      <td>
+                          {{  $order->stock ?? '' }}
+                      </td>
+                      <td>
+                          {{  $order->sold ?? '' }}
                       </td>
                       <td>
                           <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->purchase_amount , 0, ',', ',') }}
@@ -92,7 +105,7 @@
 
                       </td>
                       <td>
-                          {{  $order->note ?? '' }}
+                          {{  $order->product_remarks ?? '' }}
                       </td>
                       <td>
                           {{  $order->purchase_order->user->name ?? '' }}

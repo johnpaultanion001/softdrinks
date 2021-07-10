@@ -13,28 +13,42 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0 text-uppercase" id="titletable">Purchase Orders</h3>
+              <h3 class="mb-0 text-uppercase" id="titletable">Receiving Goods</h3>
             </div>
             <div class="col text-right">
-              <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">New Purchase Order</button>
+              <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">Insert Receiving Goods</button>
             </div>
           </div>
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%"">
-            <thead class="thead-light">
+          <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%">
+            <thead class="thead-white">
               <tr>
                 <th scope="col">Actions</th>
-                <th scope="col">Purchase Order Number</th>
-                <th scope="col">Name Of Supplier</th>
-                <th scope="col">Total Orders</th>
+                <th scope="col">Receiving Goods ID</th>
+                <th scope="col">Doc No.</th>
+                <th scope="col">Po No.</th>
+                <th scope="col">Po Date</th>
+                <th scope="col">Entry Date</th>
+                <th scope="col">Location Code/Name</th>
+                <th scope="col">Supplier Code/Name</th>
+                <th scope="col">Name of a Driver</th>
+                <th scope="col">Plate Number</th>
+
+                <th scope="col">Trade Discount</th>
+                <th scope="col">Terms Discount</th>
+                <th scope="col">Reference</th>
+
+                <th scope="col">Product Count</th>
                 <th scope="col">Total Purchased Order</th>
                 <th scope="col">Total Profit</th>
                 <th scope="col">Total Price</th>
-                <th scope="col">User</th>
-                <th scope="col">Note</th>
-                <th scope="col">Date</th>
+                <th scope="col">Vat Amount</th>
+
+                <th scope="col">Created By</th>
+                <th scope="col">Remarks</th>
+                <th scope="col">Last Update</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
@@ -55,10 +69,40 @@
                             {{  $order->purchase_order_number ?? '' }}
                         </td>
                         <td>
-                            {{  $order->supplier->name ?? '' }}
+                            {{  $order->doc_no ?? '' }}
                         </td>
                         <td>
-                            {{  $order->total_orders?? '' }}
+                            {{  $order->po_no ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->po_date ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->entry_date ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->location->id ?? '' }} / {{  $order->location->location_name ?? '' }}
+                        </td>
+                        <td>
+                           {{  $order->supplier->id ?? '' }} / {{  $order->supplier->name ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->name_of_a_driver ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->plate_number ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->trade_discount ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->terms_discount ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->reference ?? '' }}
+                        </td>
+                        <td>
+                            {{  $order->total_orders ?? '' }}
                         </td>
                         <td>
                           <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_purchased_order ?? '' , 0, ',', ',') }}
@@ -70,13 +114,16 @@
                           <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_price ?? '' , 0, ',', ',') }}
                         </td>
                         <td>
+                          <large class="text-success font-weight-bold mr-1">₱</large> 0
+                        </td>
+                        <td>
                             {{  $order->user->name ?? '' }}
                         </td>
                         <td>
-                            {{  $order->notes ?? '' }}
+                            {{  $order->remarks ?? '' }}
                         </td>
                         <td>
-                          {{ $order->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                          {{ $order->updated_at->format('l, j \\/ F / Y h:i:s A') }}
                         </td>
                         
                     </tr>

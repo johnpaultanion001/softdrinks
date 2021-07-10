@@ -36,7 +36,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
-
+    
+   
     
     @yield('third_party_stylesheets')
     @stack('page_css')
@@ -62,11 +63,24 @@
         border: 1px solid #111;
         color: #111;
     }
+    .form-control[readonly] {
+    background-color: white;
+    }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active
+    {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    }
     .receipt-body{
         overflow: auto;
         max-height: 270px;
     }
- 
+    .box{
+    width:600px;
+    margin:0 auto;
+   }
         
     
   
@@ -91,7 +105,7 @@
                 {{ csrf_field() }}
              </form>
         
-        <!-- Argon Scripts -->
+
       
         <script src="{{ asset('/assets/vendor/jquery/dist/jquery.min.js') }}"></script>
         <script src="{{ asset('/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -100,12 +114,7 @@
         <script src="{{ asset('/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js') }}"></script>
         <script src="{{ asset('/assets/js/argon.js?v=1.2.0') }}"></script>
 
-        <!-- Optional JS -->
-        <!-- <script src="../assets/vendor/chart.js/dist/Chart.min.js"></script>
-        <script src="../assets/vendor/chart.js/dist/Chart.extension.js"></script> -->
-        <!-- <script src="{{ asset('assets/vendor/chart.js/dist/Chart.extension.js') }}"></script>
-        <script src="{{ asset('assets/vendor/chart.js/dist/Chart.min.js') }}"></script> -->
-        <!-- Argon JS -->
+  
        
         
 
@@ -138,7 +147,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
-
+        
        
 
 
@@ -227,6 +236,20 @@
             
             }
         ]
+        });
+
+        $.extend(true, $.fn.dataTable.withoutbuttons, {
+        language: {
+            url: languages['{{ app()->getLocale() }}']
+        },
+       
+        order: [],
+        scrollX: true,
+        pageLength: 100,
+        dom: 'lBfrtip<"actions">',
+        buttons: [
+            'selectAll',
+        ],
         });
 
         $.fn.dataTable.ext.classes.sPageButton = '';

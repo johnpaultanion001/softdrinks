@@ -5,7 +5,7 @@
         <div class="row">
         <div class="col">
            
-            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$order->inventory->name}}</h3>
+            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$order->inventory->long_description}}</h3>
             <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->inventory->price , 0, ',', ',') }}</span> <small>/ {{$order->inventory->category->name}}</small>
 
 

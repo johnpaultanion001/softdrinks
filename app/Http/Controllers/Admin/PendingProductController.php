@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PendingProduct;
+use App\Models\Inventory;
 use App\Models\PurchaseOrder;
 use App\Models\UCS;
 use App\Models\Size;
@@ -13,12 +14,44 @@ use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use datetime;
 
-
 class PendingProductController extends Controller
 {
     public function index()
     {
        
+    }
+
+     function autocomplete(Request $request)
+    {
+        if($request->get('query'))
+        {
+            $query = $request->get('query');
+            $data = Inventory::where('product_code', 'LIKE', "%{$query}%")->get();
+            $output = '<ul class="dropdown-menu" style="display:block; position:absolute; margin-top: -20px; margin-left: 12px;">';
+            foreach($data as $row)
+            {
+                $output .= '
+                <li><a class="dropdown-item" href="#" class="text-dark">'.$row->product_code.'</a></li>
+                ';
+            }
+            $output .= '</ul>';
+            echo $output;
+        }
+    }
+
+    function autocompleteresult(Request $request)
+    {
+        if($request->get('query'))
+        {
+            $query = $request->get('query');
+            $data = Inventory::where('product_code', 'LIKE', "%{$query}%")->get();
+           
+            foreach($data as $row)
+            {
+                return response()->json(['result' => $row]);
+            }
+        
+        }
     }
    
     public function load()
@@ -37,13 +70,17 @@ class PendingProductController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'category_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
+
+            'long_description' => ['required'],
+            'short_description' => ['required'],
+            'product_code' => ['required', 'string', 'max:255'],
+            
             'stock' => ['required' ,'integer','min:1'],
             'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
             'purchase_amount' => ['required' ,'integer','min:1'],
             'profit' => ['required' ,'integer','min:1'],
-            'note' => ['nullable'],  
+            'product_remarks' => ['nullable'],  
         ]);
 
         if ($validated->fails()) {
@@ -62,7 +99,11 @@ class PendingProductController extends Controller
        $product = PendingProduct::create([
             'category_id' => $request->input('category_id'),
             'purchase_order_number_id' => $id,
-            'name' => $request->input('name'),
+
+            'long_description' => $request->input('long_description'),
+            'short_description' => $request->input('short_description'),
+            'product_code' => $request->input('product_code'),
+
             'stock' => $request->input('stock'),
             'qty' => $request->input('stock'),
             'size_id' => $request->input('size_id'),
@@ -73,15 +114,16 @@ class PendingProductController extends Controller
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-            'note' => $request->input('note'),
-            'product_number' =>  time().'-'.$userid,
+            'product_remarks' => $request->input('product_remarks'),
+            'product_id' => time().$userid
+           
         ]);
         $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
         $ucs_percase = $ucs->ucs * $request->input('stock');
 
         UCS::create([
             'purchase_order_number_id' => $id,
-            'inventory_id' => $product->product_number,
+            'inventory_id' => $product->product_id,
             'ucs' => $ucs_percase,
             'case' => $product->stock,
         ]);
@@ -106,18 +148,17 @@ class PendingProductController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'category_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
+            'long_description' => ['required'],
+            'short_description' => ['required'],
 
-            'stock' => ['required' ,'integer','min:1'],
+            'product_code' => ['required', 'string', 'max:255'],
             
-
+            'stock' => ['required' ,'integer','min:1'],
             'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
-            
             'purchase_amount' => ['required' ,'integer','min:1'],
             'profit' => ['required' ,'integer','min:1'],
-            
-            'note' => ['nullable'],
+            'product_remarks' => ['nullable'],  
            
         ]);
 
@@ -136,7 +177,10 @@ class PendingProductController extends Controller
         PendingProduct::find($pending_product->id)->update([
             'category_id' => $request->input('category_id'),
             'purchase_order_number_id' => $id,
-            'name' => $request->input('name'),
+            'long_description' => $request->input('long_description'),
+            'short_description' => $request->input('short_description'),
+            'product_code' => $request->input('product_code'),
+
             'stock' => $request->input('stock'),
             'qty' => $request->input('stock'),
             'size_id' => $request->input('size_id'),
@@ -147,7 +191,7 @@ class PendingProductController extends Controller
             'total_amount_purchase' => $total_amount_purchase,
             'total_profit' => $total_profit,
             'total_price' => $total_price,
-            'note' => $request->input('note'),
+            'product_remarks' => $request->input('product_remarks'),
         ]);
         $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
         $ucs_percase = $ucs->ucs * $request->input('stock');

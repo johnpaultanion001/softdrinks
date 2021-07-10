@@ -33,39 +33,163 @@
                 <div class="card-body">
                     <form method="post" id="myReturnedForm" class="form-horizontal">
                         @csrf
+                      
                         <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >DOC NO.</label>
+                                    <input type="text" name="doc_no" id="doc_no" class="form-control" value="{{$returned->doc_no}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-doc_no"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Entry Date:</label>
+                                    <input type="date" name="entry_date" id="entry_date" class="form-control" value="{{$returned->entry_date}}" readonly />
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-entry_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO NO.</label> 
+                                    <input type="text" name="po_no" id="po_no" class="form-control"  value="{{$returned->po_no}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_no"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO Date.</label>
+                                    <input type="date" name="po_date" id="po_date" class="form-control"  value="{{$returned->po_date}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Supplier: </label>
-                                    <p>{{$returned->supplier->name}}</p>
+                                    <label class="control-label text-uppercase" >Supplier Code/Name:</label>
+                                    <input type="text" name="po_date" id="po_date" class="form-control"  value="{{$returned->supplier->id}}/{{$returned->supplier->name}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_date"></strong>
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Date of purchase: </label>
-                                    <p>{{$returned->created_at->format('l, j \\/ F / Y h:i:s A') }}</p>
-                                  
+                                    <label class="control-label text-uppercase" >Location Code/Name:</label>
+                                    <input type="text" name="po_date" id="po_date" class="form-control"  value="{{$returned->location->id}}/{{$returned->location->location_name}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Name of a Driver:</label>
+                                    <input type="text" name="name_of_a_driver" id="name_of_a_driver" class="form-control" value="{{$returned->name_of_a_driver}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-name_of_a_driver"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Plate Number: </label>
+                                    <input type="text" name="plate_number" id="plate_number" class="form-control" value="{{$returned->plate_number}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-plate_number"></strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Trade Discount:</label>
+                                    <input type="text" name="trade_discount" id="trade_discount" class="form-control" value="{{$returned->trade_discount}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-trade_discount"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Terms Discount: </label>
+                                    <input type="text" name="terms_discount" id="terms_discount" class="form-control" value="{{$returned->terms_discount}}" readonly/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-terms_discount"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Remarks: </label>
+                                    <textarea name="remarks" id="remarks" class="form-control" readonly>{{$returned->remarks}}</textarea>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-remarks"></strong>
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Purchase Order Number: </label>
-                                    <p>{{$returned->purchase_order_number}}</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Total Case Returning: </label>
-                                    <p>{{ number_format($returnedproducts->sum('case') ?? '' , 0, ',', ',') }}</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Total Deposit: </label>
-                                    <p><large class="text-success font-weight-bold mr-1">₱</large>{{ number_format($returnedproducts->sum('deposit') ?? '' , 0, ',', ',') }}</p>
+                                    <label class="control-label text-uppercase" >Reference: </label>
+                                    <textarea name="reference" id="reference" class="form-control" readonly>{{$returned->reference}}</textarea>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-reference"></strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
+
+                        <hr>
+                        <div class="row">
+                            
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Product Count:</label>
+                                                <input type="text"  class="form-control" readonly value="{{$returned->total_orders}}"/>
+                                        </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Total Purchased:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($returned->total_purchased_order , 0, ',', ',') }}"/>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Total Profit:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($returned->total_profit , 0, ',', ',') }}"/>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Total Price:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($returned->total_price , 0, ',', ',') }}"/>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Created By:</label>
+                                                <input type="text"  class="form-control" readonly value="{{ $returned->user->name }}"/>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3">
+                                        <div class="form-group">
+                                                <label class="control-label text-uppercase" >Vat Amount:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ 0"/>
+                                        </div>
+                                </div>
+                        </div>
+
                         <div class="col text-right mb-3">
                             <button type="button" name="create_record" id="create_record" class="create_record text-uppercase btn btn-sm btn-primary">New Return Product</button>
                         </div>

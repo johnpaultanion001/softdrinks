@@ -18,6 +18,10 @@ class Order extends Model
         'profit',
         'total',
         'status',
+        'customer_id',
+        'pricetype_id',
+        'discounted',
+        'total_cost',
     ];
     public function inventory()
     {
@@ -26,5 +30,14 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Custommer::class, 'customer_id');
+    }
+    public function pricetype()
+    {
+        return $this->belongsTo(PriceType::class, 'pricetype_id');
     }
 }
