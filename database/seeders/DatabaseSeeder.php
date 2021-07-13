@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             LocationSeeder::class,
             PriceTypeSeeder::class,
+            OrderSalesSeeder::class,
            
         ]);
     }

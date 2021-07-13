@@ -235,7 +235,7 @@
                         {{  $sales->inventory->short_description ?? '' }}
                     </td>
                     <td>
-                       {{  $sales->customer->customer_name ?? '' }}
+                      
                     </td>
                     <td>
                        {{  $sales->purchase_qty ?? '' }}

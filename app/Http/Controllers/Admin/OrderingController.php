@@ -12,7 +12,9 @@ use App\Models\Sales;
 use App\Models\OrderNumber;
 use App\Models\Customer;
 use App\Models\PriceType;
+use App\Models\OrderSales;
 use Gate;
+use DB;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -89,6 +91,35 @@ class OrderingController extends Controller
         Order::latest()->decrement('profit', $discounted);
         Order::latest()->decrement('total', $discounted);
 
+        
+        $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+        $id = $ordernumber->order_number;
+        $total_profit = Order::sum('profit');
+        $total_sales = Order::sum('total');
+        $total_cost = Order::sum('total_cost');
+        $total_qty = Order::sum('purchase_qty');
+
+        OrderSales::create([
+            'order_number_id' => $id,
+            'total_profit' => $total_profit,
+            'total_sales' => $total_sales,
+            'total_cost' => $total_cost,
+            'pricetype_id' => $request->get('pricetype'),
+            'customer_id' => $request->get('customer'),
+            'total_qty' => $total_qty,
+            'subtotal' => $request->get('subtotal'),
+            'total' => $request->get('total'),
+        ]);
+
+        $ids = Order::pluck('inventory_id');
+        Inventory::whereIn('id' , $ids)->update([
+            'stock' => DB::raw ('stock - orders'),
+            'sold' => DB::raw ('sold + orders'),
+            'orders' => 0,
+        ]);
+
+
+
 
         $passdata = Order::query()
         ->each(function ($oldRecord) {
@@ -101,6 +132,7 @@ class OrderingController extends Controller
         if($passdata){
             Order::truncate();
             OrderNumber::where('id', 1)->increment('order_number', 1);
+
             return response()->json(['success' => 'Successfully Check Out.']);
         }
     }
@@ -145,6 +177,15 @@ class OrderingController extends Controller
         if(date('Y-m-d') == $inventory->expiration){
             return response()->json(['expirationtoday' => 'This product has expired today. Expiration Date:'.$inventory->expiration]);
         }
+        if($inventory->orders > $inventory->stock){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$inventory->stock]);
+        }
+        if($inventory->orders == $inventory->stock){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$inventory->stock]);
+        }
+        if( $inventory->orders + $request->purchase_qty > $inventory->stock){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$inventory->stock]);
+        }
 
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
         $id = $ordernumber->order_number;
@@ -159,6 +200,7 @@ class OrderingController extends Controller
         $order->inventory_id = $inventory->id;
         $order->purchase_qty = $request->purchase_qty;
         $order->total = $total;
+        $order->total_amount_receipt = $total;
         $order->profit = $profit;
         $order->user_id = $userid;
         $order->order_number = $id;
@@ -166,8 +208,9 @@ class OrderingController extends Controller
 
         $order->save();
 
-        Inventory::where('id', $inventory->id)->decrement('stock', $request->purchase_qty);
-        Inventory::where('id', $inventory->id)->increment('sold', $request->purchase_qty);
+        // Inventory::where('id', $inventory->id)->decrement('stock', $request->purchase_qty);
+        // Inventory::where('id', $inventory->id)->increment('sold', $request->purchase_qty);
+        Inventory::where('id', $inventory->id)->increment('orders', $request->purchase_qty);
 
         return response()->json(['success' => 'Order Successfully Inserted.']);
 

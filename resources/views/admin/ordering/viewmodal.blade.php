@@ -33,10 +33,13 @@
                     <span class="text-uppercase">Expiration: <span class="text-success font-weight-bold"> {{$inventory->expiration}}</span> </span>
                 </div>
                 <div class="col-6">
-                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$inventory->sales}}</span></span>
+                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$inventory->sold}}</span></span>
                 </div>
-                <div class="col-12">
+                <div class="col-6">
                     <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$inventory->purchase_order->supplier->name}}</span></span>
+                </div>
+                <div class="col-6">
+                    <span class="text-uppercase">Orders: <span class="text-success font-weight-bold"> {{$inventory->orders}}</span></span>
                 </div>
             </div>
         </p>

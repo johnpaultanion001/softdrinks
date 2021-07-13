@@ -68,12 +68,25 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Total:</td>
-                                            <td> ₱ {{ number_format($orders->sum->total ?? '' , 0, ',', ',') }}</td>
-                                            
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Sub Total:</td>
+                                                <td>₱ {{ number_format($orders->sum->total ?? '' , 0, ',', ',') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Discounted:</td>
+                                                <td> ₱ <span id="rdiscount">0</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Total:</td>
+                                                <td>  ₱ <span id="rtotal">{{ number_format($orders->sum->total ?? '' , 0, ',', ',') }}</span></td>
                                             </tr>
                                         </tfoot>
                             </table>
@@ -267,7 +280,9 @@ $('select[name="select_pricetype"]').on("change", function(event){
 
             total = subtotal - discount;
 
+            $('#rdiscount').text(discount);
             $('#total').text(total);
+            $('#rtotal').text(total);
             
           }
          });

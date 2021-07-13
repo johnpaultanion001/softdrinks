@@ -101,7 +101,7 @@
 
         <div class="col-sm-3">
                 <div class="form-group">
-                        <label class="control-label text-uppercase" >Total Purchased:</label>
+                        <label class="control-label text-uppercase" >Total Cost:</label>
                         <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_purchased_order , 0, ',', ',') }}"/>
                 </div>
         </div>
@@ -113,7 +113,7 @@
         </div>
         <div class="col-sm-3">
                 <div class="form-group">
-                        <label class="control-label text-uppercase" >Total Price:</label>
+                        <label class="control-label text-uppercase" >Total Sales:</label>
                         <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_price , 0, ',', ',') }}"/>
                 </div>
         </div>
@@ -159,12 +159,12 @@
             <th scope="col">Stock</th>
             <th scope="col">Sold</th>
 
-            <th scope="col">Purchase Amount</th>
-            <th scope="col">Profit</th>
-            <th scope="col">Price</th>
-            <th scope="col">Total Amount Purchase</th>
-            <th scope="col">Total Amount Profit</th>
-            <th scope="col">Total Amount Price</th>
+            <th scope="col">Unit Cost</th>
+            <th scope="col">Unit Profit</th>
+            <th scope="col">Unit Sales</th>
+            <th scope="col">Total Cost</th>
+            <th scope="col">Total Profit</th>
+            <th scope="col">Total Sales</th>
             <th scope="col">Remarks</th>
             <th scope="col">Created By</th>
             <th scope="col">Date</th>

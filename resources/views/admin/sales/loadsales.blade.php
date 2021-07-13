@@ -50,6 +50,7 @@
             <th scope="col">Product Size</th>
             <th scope="col">Category</th>
             <th scope="col">Quantity Sold</th>
+            <th scope="col">Sold To</th>
             <th scope="col">Discounted</th>
             <th scope="col">Total Sales</th>
             <th scope="col">Total Cost</th>
@@ -84,6 +85,9 @@
                     </td>
                     <td>
                         {{  $sale->purchase_qty ?? '' }}
+                    </td>
+                    <td>
+                        {{  $sale->ordersales->customer->customer_name ?? '' }}
                     </td>
                     <td>
                         <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->discounted ?? '' , 2, '.', ',') }}

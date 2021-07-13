@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sales;
+use App\Models\OrderSales;
 use App\Models\OrderNumber;
 use Carbon\Carbon;
 
@@ -99,7 +100,7 @@ class SalesController extends Controller
     {
        date_default_timezone_set('Asia/Manila');
        $receipts = Sales::where('isRemove', 0)->where('order_number',$sale->order_number)->latest()->get();
-       $date = date('F d,Y h:i A');
-       return view('admin.sales.receiptmodal', compact('receipts', 'date' ));
+       $ordernumber = OrderSales::where('order_number_id',$sale->order_number)->first();
+       return view('admin.sales.receiptmodal', compact('receipts', 'ordernumber'));
     }
 }

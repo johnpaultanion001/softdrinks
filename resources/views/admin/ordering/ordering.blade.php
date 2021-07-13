@@ -397,6 +397,15 @@ $('#myForm').on('submit', function(event){
                     type: 'red',
                 })  
             }
+            if(data.maxstock){
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Order");
+                $.alert({
+                    title: 'Error Message',
+                    content: data.maxstock,
+                    type: 'red',
+                })  
+            }
             
             if(data.success){
                 
@@ -445,10 +454,12 @@ $('#myCheckoutForm').on('submit', function(event){
     var  method = "POST";
     var customer = $('#select_customer').val();
     var pricetype = $('#select_pricetype').val();
+    var subtotal = $('#subtotal').text();
+    var total = $('#total').text();
+
     $.confirm({
         title: 'Confirmation',
         content: 'You really want to chechout this orders?',
-        autoClose: 'cancel|10000',
         type: 'green',
         buttons: {
             confirm: {
@@ -460,7 +471,7 @@ $('#myCheckoutForm').on('submit', function(event){
                     url: action_url,
                     method: method,
                     data: {
-                        customer:customer,pricetype:pricetype, _token: '{!! csrf_token() !!}',
+                        customer:customer,pricetype:pricetype,subtotal:subtotal,total:total, _token: '{!! csrf_token() !!}',
                     },
                     dataType:"json",
                     beforeSend: function(){
@@ -478,13 +489,45 @@ $('#myCheckoutForm').on('submit', function(event){
                                 });
                             }
                             if(data.success){
+
                                 $('#success-checkout').addClass('bg-primary');
                                 $('#success-checkout').html('<strong>' + data.success + '</strong> <br>' + 'Click <a href="/admin/sales" class="btn-white btn btn-sm">HERE</a> To view your reports' );
                                 $("#success-checkout").fadeTo(10000, 500).slideUp(500, function(){
                                     $("#success-checkout").slideUp(500);
                                 });
                                 $('#formCheckoutModal').modal('hide');
-                                return loadProduct(), cartsButton() , printreceipt();
+
+                                $('#receipt-body').removeClass('receipt-body');
+                                $('#receipt-body').removeClass('receipt-body');
+                                var contents = $("#receiptreport").html();
+                                var frame1 = $('<iframe />');
+                                frame1[0].name = "frame1";
+                                frame1.css({ "position": "absolute", "top": "-1000000px" });
+                                $("body").append(frame1);
+                                var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+                                frameDoc.document.open();
+                                //Create a new HTML document.
+                                frameDoc.document.write('<html><head><title>Title</title>');
+                                frameDoc.document.write('</head><body>');
+                                //Append the external CSS file.
+                                frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+                                // frameDoc.document.write('<style>size: A4 portrait;</style>');
+                                var source = 'bootstrap.min.js';
+                                var script = document.createElement('script');
+                                script.setAttribute('type', 'text/javascript');
+                                script.setAttribute('src', source);
+                                //Append the DIV contents.
+                                frameDoc.document.write(contents);
+                                frameDoc.document.write('</body></html>');
+                                frameDoc.document.close();
+                                setTimeout(function () {
+                                window.frames["frame1"].focus();
+                                window.frames["frame1"].print();
+                                frame1.remove();
+                                }, 500);
+                                $('#receipt-body').addClass('receipt-body');
+
+                                return loadProduct(), cartsButton() ;
                             }
                             
                         }
@@ -506,7 +549,6 @@ $(document).on('click', '.delete', function(){
     $.confirm({
         title: 'Confirmation',
         content: 'You really want to remove this order?',
-        autoClose: 'cancel|10000',
         type: 'red',
         buttons: {
             confirm: {

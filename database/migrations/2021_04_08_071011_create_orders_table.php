@@ -26,6 +26,7 @@ class CreateOrdersTable extends Migration
             $table->string('pricetype_id')->default(0);
             $table->float('discounted')->default(0);
             $table->float('total_cost');
+            $table->float('total_amount_receipt');
             $table->timestamps();
         });
     }

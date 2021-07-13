@@ -22,6 +22,7 @@ class Order extends Model
         'pricetype_id',
         'discounted',
         'total_cost',
+        'total_amount_receipt',
     ];
     public function inventory()
     {

@@ -70,11 +70,9 @@ class PendingProductController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'category_id' => ['required'],
-
             'long_description' => ['required'],
             'short_description' => ['required'],
             'product_code' => ['required', 'string', 'max:255'],
-            
             'stock' => ['required' ,'integer','min:1'],
             'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
@@ -97,9 +95,10 @@ class PendingProductController extends Controller
         $userid = auth()->user()->id;
 
        $product = PendingProduct::create([
-            'category_id' => $request->input('category_id'),
+            
             'purchase_order_number_id' => $id,
 
+            'category_id' => $request->input('category_id'),
             'long_description' => $request->input('long_description'),
             'short_description' => $request->input('short_description'),
             'product_code' => $request->input('product_code'),
@@ -115,7 +114,7 @@ class PendingProductController extends Controller
             'total_profit' => $total_profit,
             'total_price' => $total_price,
             'product_remarks' => $request->input('product_remarks'),
-            'product_id' => time().$userid
+            'product_id' => time().$userid,
            
         ]);
         $ucs = Size::where('id', $request->input('size_id'))->firstorfail();

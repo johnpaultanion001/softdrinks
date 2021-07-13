@@ -22,6 +22,7 @@ class Inventory extends Model
         'stock',
         'qty',
         'sold',
+        'orders',
 
         'size_id',
 
@@ -38,6 +39,7 @@ class Inventory extends Model
         'location_id',
         'product_id',
         'supplier_id',
+        'isRemove',
        
     ];
     public function category()

@@ -27,6 +27,7 @@ class CreateSalesTable extends Migration
             $table->string('pricetype_id');
             $table->float('discounted');
             $table->float('total_cost');
+            $table->float('total_amount_receipt');
             $table->timestamps();
         });
     }

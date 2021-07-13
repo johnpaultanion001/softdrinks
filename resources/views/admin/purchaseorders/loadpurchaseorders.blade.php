@@ -41,9 +41,9 @@
                 <th scope="col">Reference</th>
 
                 <th scope="col">Product Count</th>
-                <th scope="col">Total Purchased Order</th>
+                <th scope="col">Total Cost</th>
                 <th scope="col">Total Profit</th>
-                <th scope="col">Total Price</th>
+                <th scope="col">Total Sales</th>
                 <th scope="col">Vat Amount</th>
 
                 <th scope="col">Created By</th>
@@ -105,13 +105,13 @@
                             {{  $order->total_orders ?? '' }}
                         </td>
                         <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_purchased_order ?? '' , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_purchased_order ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_profit ?? '' , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_profit ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_price ?? '' , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->total_price ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
                           <large class="text-success font-weight-bold mr-1">₱</large> 0

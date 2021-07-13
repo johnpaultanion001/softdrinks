@@ -92,6 +92,10 @@ class OrderController extends Controller
         if(date('Y-m-d') == $order->inventory->expiration){
             return response()->json(['expirationtoday' => 'This product has expired today. Expiration Date:'.$order->inventory->expiration]);
         }
+        if($order->inventory->orders  >  $order->inventory->stock){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$order->inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$order->inventory->stock]);
+        }
+        
 
         if($order->purchase_qty < $request->purchase_qty_edit){
             $changeqty = $request->purchase_qty_edit - $order->purchase_qty;
@@ -99,14 +103,20 @@ class OrderController extends Controller
             if($changeqty  > $order->inventory->stock){
                 return response()->json(['nostock' => 'Insufficient Stocks. Availalbe Stock:'.$order->inventory->stock]);
             }
+            if($order->inventory->orders + $changeqty  >  $order->inventory->stock){
+                return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$order->inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$order->inventory->stock]);
+            }
+            // Inventory::where('id',  $order->inventory->id)->decrement('stock', $changeqty);
+            // Inventory::where('id',  $order->inventory->id)->increment('sold', $changeqty);
 
-            Inventory::where('id',  $order->inventory->id)->decrement('stock', $changeqty);
-            Inventory::where('id',  $order->inventory->id)->increment('sold', $changeqty);
+            Inventory::where('id', $order->inventory->id)->increment('orders', $changeqty);
          }
          if($order->purchase_qty > $request->purchase_qty_edit){
             $changeqty = $order->purchase_qty - $request->purchase_qty_edit;
-            Inventory::where('id', $order->inventory_id)->increment('stock', $changeqty);
-            Inventory::where('id', $order->inventory_id)->decrement('sold', $changeqty);
+    
+            // Inventory::where('id', $order->inventory_id)->increment('stock', $changeqty);
+            // Inventory::where('id', $order->inventory_id)->decrement('sold', $changeqty);
+            Inventory::where('id', $order->inventory->id)->decrement('orders', $changeqty);
          }
 
         $total = $request->purchase_qty_edit * $order->inventory->price;
@@ -116,6 +126,7 @@ class OrderController extends Controller
         $order->inventory_id = $order->inventory->id;
         $order->purchase_qty = $request->purchase_qty_edit;
         $order->total = $total;
+        $order->total_amount_receipt = $total;
         $order->profit = $profit;
         
         $order->save();
@@ -131,8 +142,10 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-       Inventory::where('id', $order->inventory->id)->increment('stock', $order->purchase_qty);
-       Inventory::where('id', $order->inventory->id)->decrement('sold', $order->purchase_qty); 
+        //    Inventory::where('id', $order->inventory->id)->increment('stock', $order->purchase_qty);
+        //    Inventory::where('id', $order->inventory->id)->decrement('sold', $order->purchase_qty); 
+
+       Inventory::where('id', $order->inventory->id)->decrement('orders', $order->purchase_qty);
        return response()->json(['success' => 'Order Removed Successfully.' , $order->delete()]);
     }
 }

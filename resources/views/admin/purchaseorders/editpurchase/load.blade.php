@@ -31,12 +31,12 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Sold</th>
 
-                <th scope="col">Purchase Amount</th>
-                <th scope="col">Profit</th>
-                <th scope="col">Price</th>
-                <th scope="col">Total Amount Purchase</th>
-                <th scope="col">Total Amount Profit</th>
-                <th scope="col">Total Amount Price</th>
+                <th scope="col">Unit Cost</th>
+                <th scope="col">Unit Profit</th>
+                <th scope="col">Unit Sales</th>
+                <th scope="col">Total Cost</th>
+                <th scope="col">Total Profit</th>
+                <th scope="col">Total Sales</th>
                 <th scope="col">Remarks</th>
                 <th scope="col">User</th>
                 <th scope="col">Date</th>
@@ -85,23 +85,23 @@
                           {{  $order->sold ?? '' }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->purchase_amount , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->purchase_amount , 2, '.', ',') }}
             
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->profit , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->profit , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($order->price , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($order->price , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($order->total_amount_purchase , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($order->total_amount_purchase , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->total_profit , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->total_profit , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->total_price , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($order->total_price , 2, '.', ',') }}
 
                       </td>
                       <td>
@@ -131,7 +131,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    sale: [[ 1, 'desc' ]],
+    order: [[ 1, 'desc' ]],
     pageLength: 100,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });

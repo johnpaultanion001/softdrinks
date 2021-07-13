@@ -23,6 +23,7 @@ class Sales extends Model
         'pricetype_id',
         'discounted',
         'total_cost',
+        'total_amount_receipt',
     ];
     public function inventory()
     {
@@ -39,5 +40,10 @@ class Sales extends Model
     public function pricetype()
     {
         return $this->belongsTo(PriceType::class, 'pricetype_id');
+    }
+
+    public function ordersales()
+    {
+        return $this->belongsTo(OrderSales::class, 'order_number' , 'order_number_id' );
     }
 }

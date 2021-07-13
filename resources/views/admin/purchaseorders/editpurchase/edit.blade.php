@@ -179,20 +179,20 @@
 
                                 <div class="col-sm-3">
                                         <div class="form-group">
-                                                <label class="control-label text-uppercase" >Total Purchased:</label>
-                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_purchased_order , 0, ',', ',') }}"/>
+                                                <label class="control-label text-uppercase" >Total Cost:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_purchased_order , 2, '.', ',') }}"/>
                                         </div>
                                 </div>
                                 <div class="col-sm-3">
                                         <div class="form-group">
                                                 <label class="control-label text-uppercase" >Total Profit:</label>
-                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_profit , 0, ',', ',') }}"/>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_profit , 2, '.', ',') }}"/>
                                         </div>
                                 </div>
                                 <div class="col-sm-3">
                                         <div class="form-group">
-                                                <label class="control-label text-uppercase" >Total Price:</label>
-                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_price , 0, ',', ',') }}"/>
+                                                <label class="control-label text-uppercase" >Total Sales:</label>
+                                                <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_price , 2, '.', ',') }}"/>
                                         </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -352,7 +352,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="control-label" >Purchase Amount:</label>
+                            <label class="control-label" >Unit Cost:</label>
                             <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
                             <span class="invalid-feedback" role="alert">
                                 <strong id="error-purchase_amount"></strong>
@@ -361,7 +361,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="control-label" >Profit Amount:</label>
+                            <label class="control-label" >Unit Profit:</label>
                             <input type="number" name="profit" id="profit" class="form-control" />
                             <span class="invalid-feedback" role="alert">
                                 <strong id="error-profit"></strong>
@@ -487,7 +487,6 @@ $(document).on('click', '.remove', function(){
   $.confirm({
       title: 'Confirmation',
       content: 'You really want to remove this product?',
-      autoClose: 'cancel|10000',
       type: 'red',
       buttons: {
           confirm: {
@@ -665,6 +664,68 @@ $('#myPurchaseForm').on('submit', function(event){
         }
     });
 });
+
+$('#product_code').keyup(function(){ 
+       
+       if($('#product_action').val() == 'Edit'){
+           $('#productCodeList').fadeOut();
+       }else{
+       var query = $(this).val();
+       if(query != '')
+       {
+           var _token = $('input[name="_token"]').val();
+           $.ajax({
+           url:"{{ route('admin.pending-product.autocomplete') }}",
+           method:"POST",
+           data:{query:query, _token:_token},
+           success:function(data){
+               if (data == undefined){
+                   $('#productCodeList').fadeOut();
+               }
+               $('#productCodeList').fadeIn();  
+               $('#productCodeList').html(data);
+             }
+           });
+       }
+       if(query == ''){
+           $('#productCodeList').fadeOut();
+           }
+       
+       }
+   });
+
+   $(document).on('click', 'li', function(){  
+       var query = $(this).text();
+       if(query != '')
+       {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+         url:"{{ route('admin.pending-product.autocompleteresult') }}",
+         method:"POST",
+         dataType:"json",
+         data:{query:query, _token:_token},
+         success:function(data){
+
+           $.each(data.result, function(key,value){
+               if(key == $('#'+key).attr('id')){
+                   $('#'+key).val(value)
+               }
+               if(key == 'category_id'){
+                       $("#category_id").select2("trigger", "select", {
+                           data: { id: value }
+                       });
+                   }
+                   if(key == 'size_id'){
+                       $("#size_id").select2("trigger", "select", {
+                           data: { id: value }
+                       });
+                   }
+           })
+           $('#productCodeList').fadeOut(); 
+         }
+        });
+       }
+   });  
 
 </script>
 @endsection

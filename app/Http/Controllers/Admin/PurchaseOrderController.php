@@ -195,7 +195,7 @@ class PurchaseOrderController extends Controller
         ]);
 
         Inventory::where('isRemove', 0)->where('purchase_order_number_id',$request->input('purchase_order_number'))->update([
-            'location_id' => $request->input('location_id'),
+            'supplier_id' => $request->input('supplier_id'),
         ]);
 
         return response()->json(['success' => 'Purchased Order Updated Successfully.']);

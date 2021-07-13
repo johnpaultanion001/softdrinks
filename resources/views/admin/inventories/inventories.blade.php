@@ -75,163 +75,153 @@
 
 
 
-
-
-<form method="post" id="myForm" class="form-horizontal ">
-            @csrf
-            <div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
-                <div class="modal-dialog modal-xl modal-dialog-centered ">
-                    <div class="modal-content">
-                
-                        <!-- Modal Header -->
-                        <div class="modal-header bg-primary">
-                            <p class="modal-title text-white text-uppercase font-weight-bold">Modal Heading</p>
-                            <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                        </div>
-                
-                        
-                        <div id="loading-productmodal" class="loading-container">
-                            <div class="loading"></div>
-                            <div id="loading-text">loading</div>
-                        </div> 
-                        <div id="modal-body-product" class="modal-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Product Name: </label>
-                                        <input type="text" name="name" id="name" class="form-control form_disable" />
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-name"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6" id="purhase-number">
-                                        <div class="form-group" id="puchase-order-number-edit">
-                                            <div class="row">
-                                                <div class="col"><label class="control-label text-uppercase" >Purchase Order Number: </label></div>
-                                            </div>
-                                            <select name="purchase_order_number_id" id="purchase_order_number_id" class="form-control select2">
-                                                <option value="" disabled selected>Select Purchase Order Number</option>
-                                                @foreach ($purchaseorder as $purchase)
-                                                    <option value="{{$purchase->id}}">Purchase Order Number: {{$purchase->purchase_order_number}} - Supplier: {{$purchase->supplier->name}} - Date:{{$purchase->created_at->format('l, j \\/ F / Y h:i:s A') }}</option>
-                                                @endforeach
-                                            </select>
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong id="error-purchase_order_number_id"></strong>
-                                            </span>
-                                            <div class="col text-right">
-                                                <a class="btn btn-sm btn-white text-uppercase" href="/admin/purchase-order">New Purchase Order Number?</a>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="puchase-order-number-view">
-                                            <div class="row">
-                                                <div class="col"><label class="control-label text-uppercase" >Supplier: </label></div>
-                                            </div>
-                                            <select name="purchase_order_number_id_view"  id="purchase_order_number_id_view" class="form-control select2">
-                                                <option value="" disabled selected>Select Purchase Order Number</option>
-                                                @foreach ($allpurchaseorder as $purchase)
-                                                    <option value="{{$purchase->id}}">{{$purchase->supplier->name}} </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
-                                            <div class="col text-right">
-                                                <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
-                                            </div>
-                                        </div>
-                                        <select name="category_id" id="category_id" class="form-control select2">
-                                            <option value="" disabled selected>Select Category</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{$category->id}}"> {{$category->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-category_id"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                         <div class="row">
-                                            <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
-                                            <div class="col text-right">
-                                                <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
-                                            </div>
-                                        </div>
-                                        <select name="size_id" id="size_id" class="form-control select2">
-                                            <option value="" disabled selected>Select Size</option>
-                                            @foreach ($sizes as $size)
-                                                <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} - {{$size->category->name}} - UCS:{{$size->ucs}} </option>
-                                            @endforeach
-                                        </select>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-size_id"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Expiration: </label>
-                                        <input type="date" name="expiration" id="expiration" class="form-control form_disable" />
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-expiration"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Purchase QTY:</label>
-                                        <input type="number" name="stock" id="stock" class="form-control form_disable" />
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-stock"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Purchase Amount: </label>
-                                        <input type="number" name="purchase_amount" id="purchase_amount" class="form-control form_disable" />
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-purchase_amount"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Profit Amount: </label>
-                                        <input type="number" name="profit" id="profit" class="form-control form_disable" />
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-profit"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Remarks: </label>
-                                        <textarea name="remarks" id="remarks" class="form-control form_disable"></textarea>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-remarks"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                    
-                            </div>
-                            <input type="hidden" name="product_action" id="product_action" value="Add" />
-                            <input type="hidden" name="product_hidden_id" id="product_hidden_id" />
-                        </div>
-
-                        <div class="modal-footer bg-white">
-                            <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-                            <input type="submit" name="product_button" id="product_button" class="text-uppercase btn btn-default" value="Submit" />
-                        </div>
-                    </div>
+<form method="post" id="myForm" class="form-horizontal">
+    @csrf
+    <div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-default">
+                    <p class="modal-title font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
                 </div>
+                <div id="loading-productmodal" class="loading-container">
+                    <div class="loading"></div>
+                    <div id="loading-text">loading</div>
+                </div> 
+                <div id="modal-body-product" class="modal-body">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" >Product Code: </label>
+                                <input type="text" name="product_code" id="product_code" class="form-control" autocomplete="off" readonly/>
+                                <div id="productCodeList"></div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-product_code"></strong>
+                                </span>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" >Long Description: </label>
+                               <input type="text" name="long_description" id="long_description" class="form-control" readonly/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-long_description"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" >Short Description: </label>
+                                <input type="text" name="short_description" id="short_description" class="form-control" readonly />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-short_description"></strong>
+                                </span>
+                            </div>
+                        </div>
+                  
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
+                                    </div>
+                                </div>
+                                <select name="category_id" id="category_id" class="form-control select2" disabled>
+                                    <option value="" disabled selected>Select Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->id}}"> {{$category->name}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-category_id"></strong>
+                                </span>
+                            </div>
+                        </div>
+                       <div class="col-sm-6">
+                            <div class="form-group">
+                               <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
+                                    </div>
+                                </div>
+                                <select name="size_id" id="size_id" class="form-control select2" disabled>
+                                    <option value="" disabled selected>Select Size</option>
+                                    @foreach ($sizes as $size)
+                                        <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} - {{$size->category->name}} - UCS:{{$size->ucs}} </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-size_id"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Expiration: </label>
+                                <input type="date" name="expiration" id="expiration" class="form-control" readonly/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-expiration"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Purchase QTY: </label>
+                                <input type="number" name="qty" id="qty" class="form-control" readonly/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-qty"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Unit Cost:</label>
+                                <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" readonly />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-purchase_amount"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Unit Profit:</label>
+                                <input type="number" name="profit" id="profit" class="form-control" readonly />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-profit"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label" >Product Remarks: </label>
+                                <textarea name="product_remarks" id="product_remarks" class="form-control" readonly></textarea>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-product_remarks"></strong>
+                                </span>
+                            </div>
+                        </div>
+                              
+                    </div>
+                    <input type="hidden" name="product_action" id="product_action" value="Add" />
+                    <input type="hidden" name="product_hidden_id" id="product_hidden_id" />
+                </div>
+
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal" >Close</button>
+                    <input type="submit" name="product_button" id="product_button" class="text-uppercase btn btn-default" value="Submit" />
+                </div>
+        
             </div>
-        </form>
+        </div>
+    </div>
+</form>
+
+
 @endsection
 
 @section('script')

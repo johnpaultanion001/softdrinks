@@ -6,17 +6,17 @@
                     Fernando L. Arada - Prop. <br>
                     Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
                     <br>
-                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date: {{$date}} </h6></div>
+                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $ordernumber->created_at->format('F d,Y h:i A') }} </h6></div>
 
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <small class="text-muted mt-3 ml-1">Sold To:</small>
+                            <small class="text-muted mt-3 ml-1">Sold To: {{$ordernumber->customer->customer_name}}</small>
                             <div class="col-sm-8">
                                 <small id="customer_name"></small>
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <small class="text-muted mt-3 ml-1">Address:</small>
+                            <small class="text-muted mt-3 ml-1">Address: {{$ordernumber->customer->area}}</small>
                             <div class="col-sm-8">
                                     <small id="area"></small>
                                     <small id="current_balance"></small>
@@ -41,8 +41,8 @@
                                             <td>{{$receipt->purchase_qty}}</td>
                                             <td>{{$receipt->inventory->category->name}}</td>
                                             <td>{{$receipt->inventory->short_description}}</td>
-                                            <td>₱ {{$receipt->inventory->price}}</td>
-                                            <td>₱ {{$receipt->total}}</td>
+                                            <td>₱ {{ number_format($receipt->inventory->price ?? '' , 2, '.', ',') }}</td>
+                                            <td>₱  {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                         </tr>
                                     @empty
                                     <tr>
@@ -63,20 +63,36 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>Total:</td>
-                                    <td> ₱ {{ number_format($receipts->sum->total ?? '' , 0, ',', ',') }}</td>
-                                    
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Sub Total:</td>
+                                        <td> ₱ {{ number_format($ordernumber->subtotal ?? '' , 2, '.', ',') }}</td>
                                     </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Discounted:</td>
+                                        <td> ₱ {{ number_format($ordernumber->pricetype->discount ?? '' , 2, '.', ',') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total:</td>
+                                        <td> ₱ {{ number_format($ordernumber->total ?? '' , 2, '.', ',') }}</td>
+                                    </tr>
+                                    
                                 </tfoot>
                     </table>
                 </div>
                 <div class="col">
                     <div class="row mt-2 p-2">
                         <div class="col-4">
-                            <h3 class="text-center card-title text-uppercase text-danger mb-0">1111</h3>
+                            <h3 class="text-center card-title text-uppercase text-danger mb-0">
+                               {{$ordernumber->order_number_id}}
+                            </h3>
                         </div>
                         <div class="col-8">
                             <small>Recieved the above goods in good order and condition</small>      

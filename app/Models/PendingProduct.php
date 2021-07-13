@@ -22,6 +22,7 @@ class PendingProduct extends Model
         'stock',
         'qty',
         'sold',
+        'orders',
 
         'size_id',
 

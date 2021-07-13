@@ -10,7 +10,7 @@
 
         <div class="col-sm-3">
                 <div class="form-group">
-                        <label class="control-label text-uppercase" >Total Purchased:</label>
+                        <label class="control-label text-uppercase" >Total Cost:</label>
                         <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_amount_purchase') ?? '' , 0, ',', ',') }}"/>
                 </div>
         </div>
@@ -22,7 +22,7 @@
         </div>
         <div class="col-sm-3">
                 <div class="form-group">
-                        <label class="control-label text-uppercase" >Total Price:</label>
+                        <label class="control-label text-uppercase" >Total Sales:</label>
                         <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_price') ?? '' , 0, ',', ',') }}"/>
                 </div>
         </div>

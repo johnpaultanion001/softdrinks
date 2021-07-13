@@ -6,7 +6,7 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0 text-uppercase" id="titletable">Inventories</h3>
+              <h3 class="mb-0 text-uppercase" id="titletable">Inventories</h3> 
              
             </div>
             <!-- <div class="col text-right">
@@ -40,12 +40,12 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Sold</th>
 
-                <th scope="col">Purchase Amount</th>
-                <th scope="col">Profit</th>
-                <th scope="col">Price</th>
-                <th scope="col">Total Amount Purchase</th>
-                <th scope="col">Total Amount Profit</th>
-                <th scope="col">Total Amount Price</th>
+                <th scope="col">Unit Cost</th>
+                <th scope="col">Unit Profit</th>
+                <th scope="col">Unit Sales</th>
+                <th scope="col">Total Cost</th>
+                <th scope="col">Total Profit</th>
+                <th scope="col">Total Sales</th>
                 <th scope="col">Remarks</th>
                 <th scope="col">Created By</th>
                 <th scope="col">Date</th>

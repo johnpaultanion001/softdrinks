@@ -25,6 +25,7 @@ class CreateInventoriesTable extends Migration
             $table->integer('stock');
             $table->integer('qty');
             $table->integer('sold')->default(0);
+            $table->integer('orders')->default(0);
             
             $table->string('size_id');
             
