@@ -67,24 +67,27 @@
                                         <td></td>
                                         <td></td>
                                         <td>Sub Total:</td>
-                                        <td> ₱ {{ number_format($ordernumber->subtotal ?? '' , 2, '.', ',') }}</td>
+                                        <td> ₱ {{ number_format($receipts->sum->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td>Discounted:</td>
-                                        <td> ₱ {{ number_format($ordernumber->pricetype->discount ?? '' , 2, '.', ',') }}</td>
+                                        <td> ₱ {{ number_format($receipts->sum->discounted ?? '' , 2, '.', ',') }}</td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td>Total:</td>
-                                        <td> ₱ {{ number_format($ordernumber->total ?? '' , 2, '.', ',') }}</td>
+                                        <td> ₱ {{ number_format($receipts->sum->total ?? '' , 2, '.', ',') }}</td>
                                     </tr>
                                     
                                 </tfoot>
+                    
+
+
                     </table>
                 </div>
                 <div class="col">

@@ -114,7 +114,6 @@ $(document).on('click', '.remove', function(){
   $.confirm({
       title: 'Confirmation',
       content: 'You really want to remove this status?',
-      autoClose: 'cancel|10000',
       type: 'red',
       buttons: {
           confirm: {

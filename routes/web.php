@@ -146,5 +146,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('loadllocation_transfer', 'LocationTransferController@load')->name('locationtransfer.load');
     route::get('location_transfer/{location}/from', 'LocationTransferController@locationfrom')->name('locationtransfer.locationfrom');
     route::get('location_transfer/{location}/to', 'LocationTransferController@locationto')->name('locationtransfer.locationto');
+
+  //Sales Return
+  Route::resource('salesReturn', 'SalesReturnController');
    
 });

@@ -46,14 +46,15 @@
                                                     <td>{{$receipt->purchase_qty}}</td>
                                                     <td>{{$receipt->inventory->category->name}}</td>
                                                     <td>{{$receipt->inventory->short_description}}</td>
-                                                    <td>₱ {{$receipt->inventory->price}}</td>
-                                                    <td>₱ {{$receipt->total}}</td>
+                                                    <td>₱ {{ number_format($receipt->inventory->price ?? '' , 2, '.', ',') }}</td>
+                                                    <td>₱ {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
+                                                    
                                                 </tr>
                                             @empty
                                             <tr>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>No Data Availalbe</td>
+                                                    <td>No Data Available</td>
                                                     <td></td>
                                                     <td></td>
                                             </tr>
@@ -72,21 +73,21 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td>Sub Total:</td>
-                                                <td>₱ {{ number_format($orders->sum->total ?? '' , 0, ',', ',') }}</td>
+                                                <td>₱ {{ number_format($orders->sum->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td>Discounted:</td>
-                                                <td> ₱ <span id="rdiscount">0</span></td>
+                                                <td>₱ {{ number_format($orders->sum->discounted ?? '' , 2, '.', ',') }}</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td>Total:</td>
-                                                <td>  ₱ <span id="rtotal">{{ number_format($orders->sum->total ?? '' , 0, ',', ',') }}</span></td>
+                                                <td>  ₱ <span id="rtotal">{{ number_format($orders->sum->total ?? '' , 2, '.', ',') }}</span></td>
                                             </tr>
                                         </tfoot>
                             </table>
@@ -125,35 +126,25 @@
                         <p class="font-weight-bold text-uppercase">SubTotal: </p>
                     </div>
                     <div class="col-6">
-                    <large class="text-success font-weight-bold mr-1">₱</large><span id="subtotal" class="h2 font-weight-bold mb-0">{{ $orders->sum->total ?? '' }}  </span>
+                    <large class="text-success font-weight-bold mr-1">₱</large><span id="subtotal" class="h2 font-weight-bold mb-0">{{ number_format($orders->sum->total_amount_receipt ?? '' , 2, '.', ',') }}</span>
                     </div>
                     <div class="col-6">
                         <p class="font-weight-bold text-uppercase">Discount: </p>
                     </div>
                     <div class="col-6">
-                    <large class="text-success font-weight-bold mr-1">₱</large><span id="discount" class="h2 font-weight-bold mb-0">0</span>
+                    <large class="text-success font-weight-bold mr-1">₱</large><span id="discount" class="h2 font-weight-bold mb-0">{{ number_format($orders->sum->discounted ?? '' , 2, '.', ',') }}</span>
                     </div>
                     <div class="col-6">
                         <p class="font-weight-bold text-uppercase">Total: </p>
                     </div>
                     <div class="col-6">
-                    <large class="text-success font-weight-bold mr-1">₱</large><span id="total" class="h2 font-weight-bold mb-0">{{ $orders->sum->total ?? ''  }} </span>
+                    <large class="text-success font-weight-bold mr-1">₱</large><span id="total" class="h2 font-weight-bold mb-0">{{ number_format($orders->sum->total ?? '' , 2, '.', ',') }}</span>
                     </div>
                 </div>
-
-              
-                
             </div>
             <div class="col mb-2 mt-2">      
                    
                 <div class="form-group">
-                    <small class="text-white">Select A Price Type</small>
-                    <select name="select_pricetype" id="select_pricetype" class="form-control select2" required>
-                        <option value="" disabled selected>Filter By Price Type</option>
-                        @foreach ($pricetypes as $pricetype)
-                        <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / Discount: {{$pricetype->discount}}</option>
-                        @endforeach
-                    </select>
                     <small class="text-white">Select A Customer</small>
                     <select name="select_customer" id="select_customer" class="form-control select2" required>
                         <option value="" disabled selected>Filter By Customer</option>
@@ -178,7 +169,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0">{{$order->inventory->long_description}} </h5>
-                                    <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->total ?? '' , 0, ',', ',') }} </span>
+                                    <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->total ?? '' , 2, '.', ',') }} </span>
                                 </div>
                                 <div class="col-auto">
                                 
@@ -189,10 +180,12 @@
                                 </div> 
                             </div>
                             <p class="mt-3 mb-0 text-sm">
-                                 <span class="text-nowrap font-weight-bold ">Size: <span class="text-success mr-2 font-weight-bold" >{{$order->inventory->size->title}} {{$order->inventory->size->size}}</span></span>
-                                <span class="text-nowrap font-weight-bold ">Price: <span class="text-success mr-2 font-weight-bold" >{{$order->inventory->price}}</span></span>
+                                <span class="text-nowrap font-weight-bold ">Size: <span class="text-success mr-2 font-weight-bold" >{{$order->inventory->size->title}} {{$order->inventory->size->size}}</span></span>
+                                <span class="text-nowrap font-weight-bold ">Price: <span class="text-success mr-2 font-weight-bold" >₱ {{ number_format($order->inventory->price ?? '' , 2, '.', ',') }}</span></span>
+                                
                                 <span class="text-nowrap font-weight-bold ">QTY: <span class="text-success mr-2 font-weight-bold" >{{$order->purchase_qty}}</span></span>
-                                <span class="text-nowrap font-weight-bold ">Date: <span class="text-success mr-2 font-weight-bold" > {{ $order->created_at->format('l, j \\/ F / Y h:i:s A') }}</span></span>
+                                <span class="text-nowrap font-weight-bold ">Price Type / Discount: <span class="text-success mr-2 font-weight-bold" >{{$order->pricetype->id}} / ₱ {{ number_format($order->pricetype->discount ?? '' , 2, '.', ',') }}</span></span>
+                                <span class="text-nowrap font-weight-bold ">Date: <span class="text-success mr-2 font-weight-bold" > {{ $order->created_at->format('F d,Y h:i A') }}</span></span>
                             </p>
                         
                         </div>
@@ -210,6 +203,7 @@
 
 <script>
 $(document).ready(function () {
+
   $('#current_balance').hide();
   $('.select2').select2()
 
@@ -224,6 +218,7 @@ $(document).ready(function () {
       $(this).addClass('active')
     }
   })
+
 })
 
 
@@ -258,35 +253,5 @@ $('select[name="select_customer"]').on("change", function(event){
         }
 });
 
-//select pricetype
-$('select[name="select_pricetype"]').on("change", function(event){
-  var pricetype = $('#select_pricetype').val();
-  if(pricetype != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"ordering/" +pricetype+ "/pricetype",
-          method:"GET",
-          dataType:"json",
-          success:function(data){
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).html(value)
-                }
-            })
-            var subtotal = parseFloat($('#subtotal').text());
-            var discount = parseFloat($('#discount').text());
-            var total;
-
-            total = subtotal - discount;
-
-            $('#rdiscount').text(discount);
-            $('#total').text(total);
-            $('#rtotal').text(total);
-            
-          }
-         });
-        }
-});
 
 </script>

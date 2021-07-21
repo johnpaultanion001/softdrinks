@@ -22,4 +22,15 @@ class LocationTransfer extends Model
         'remarks',
         'isRemove',
     ];
+
+
+    public function locationfrom()
+    {
+        return $this->belongsTo(Location::class, 'location_from');
+    }
+
+    public function locationto()
+    {
+        return $this->belongsTo(Location::class, 'location_to');
+    }
 }

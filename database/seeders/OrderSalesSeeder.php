@@ -21,7 +21,6 @@ class OrderSalesSeeder extends Seeder
                 'total_profit' => '5340',
                 'total_sales' => '46750',
                 'total_cost' => '31410',
-                'pricetype_id' => '1',
                 'customer_id' => '1',
                 'total_qty' => '65',
                 'subtotal' => '46750',

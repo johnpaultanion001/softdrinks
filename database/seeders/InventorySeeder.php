@@ -115,6 +115,74 @@ class InventorySeeder extends Seeder
                 'updated_at' => date("Y-m-d H:i:s"),
                 'supplier_id' => '1',
             ],
+
+            [
+                'id'    => '4',
+                'category_id'    => '1',
+                'purchase_order_number_id' => '1',
+
+                'product_code' => 'RCXL',
+                'long_description' => 'RC 1.5 L',
+                'short_description' => 'RC 1.5 L',
+
+                'stock' => '20',
+                'qty' => '20',
+                'sold' => '0',
+
+                'size_id' => '2',
+                
+                'expiration' => '2021-07-24',
+                'location_id' => 1,
+                'purchase_amount' => '500',
+                'profit' => '100',
+                'price' => '600',
+
+                'total_amount_purchase' => '10000',
+                'total_profit' => '2000',
+                'total_price' => '12000',
+
+                'product_remarks' => 'sample',
+                'isRemove' => '0',
+                'product_id' => '1221124',
+                
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+                'supplier_id' => '1',
+            ],
+
+            [
+                'id'    => '5',
+                'category_id'    => '1',
+                'purchase_order_number_id' => '1',
+
+                'product_code' => 'PXL',
+                'long_description' => 'PEPSI 1.5 L',
+                'short_description' => 'PEPSI 1.5 L',
+
+                'stock' => '20',
+                'qty' => '20',
+                'sold' => '0',
+
+                'size_id' => '2',
+                
+                'expiration' => '2021-07-24',
+                'location_id' => 1,
+                'purchase_amount' => '500',
+                'profit' => '100',
+                'price' => '600',
+
+                'total_amount_purchase' => '10000',
+                'total_profit' => '2000',
+                'total_price' => '12000',
+
+                'product_remarks' => 'sample',
+                'isRemove' => '0',
+                'product_id' => '1221126',
+                
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+                'supplier_id' => '1',
+            ],
            
         ];
 

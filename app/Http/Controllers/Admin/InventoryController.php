@@ -10,6 +10,7 @@ use App\Models\Size;
 use App\Models\Supplier;
 use App\Models\UCS;
 use App\Models\Location;
+use App\Models\PriceType;
 use Illuminate\Http\Request;
 use Validator;
 use Gate;
@@ -154,7 +155,8 @@ class InventoryController extends Controller
 
     public function show(Inventory $inventory)
     {
-        return view('admin.ordering.viewmodal', compact('inventory'));
+        $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
+        return view('admin.ordering.viewmodal', compact('inventory','pricetypes'));
     }
 
   

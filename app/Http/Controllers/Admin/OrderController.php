@@ -8,6 +8,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Inventory;
 use App\Models\Category;
+use App\Models\PriceType;
 use Validator;
 
 class OrderController extends Controller
@@ -51,7 +52,8 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return view('admin.ordering.editmodal', compact('order'));
+        $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
+        return view('admin.ordering.editmodal', compact('order', 'pricetypes'));
     }
 
     /**
@@ -119,15 +121,22 @@ class OrderController extends Controller
             Inventory::where('id', $order->inventory->id)->decrement('orders', $changeqty);
          }
 
+        $discounted = PriceType::where('id', $request->select_pricetype_edit)->firstorfail();
+        
+        $totalwd = $request->purchase_qty_edit * $order->inventory->price - $discounted->discount;
+        $profitwd = $request->purchase_qty_edit * $order->inventory->profit - $discounted->discount;
+
         $total = $request->purchase_qty_edit * $order->inventory->price;
-        $profit = $request->purchase_qty_edit * $order->inventory->profit;
+     
         
 
         $order->inventory_id = $order->inventory->id;
         $order->purchase_qty = $request->purchase_qty_edit;
-        $order->total = $total;
+        $order->total = $totalwd;
         $order->total_amount_receipt = $total;
-        $order->profit = $profit;
+        $order->profit = $profitwd;
+        $order->pricetype_id = $request->select_pricetype_edit;
+        $order->discounted = $discounted->discount;
         
         $order->save();
 

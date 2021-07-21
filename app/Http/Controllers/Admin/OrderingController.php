@@ -34,7 +34,7 @@ class OrderingController extends Controller
     public function loadproduct()
     {
         date_default_timezone_set('Asia/Manila');
-        $inventories = Inventory::where('isRemove', 0)->where('stock' , '>' , 0)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
+        $inventories = Inventory::where('isRemove', 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
         $categories = Category::all();
         $orders = Order::where('status', '0')->get();
         return view('admin.ordering.loadproduct', compact('categories','inventories', 'orders'));
@@ -63,7 +63,7 @@ class OrderingController extends Controller
         $categories = Category::all();
         $orders = Order::where('status', '0')->latest()->get();
         $receipts = Order::where('status', '0')->latest()->get();
-        $date = date("Y-m-d H:i:s");
+        $date = date("F d,Y h:i A");
         $customers = Customer::where('isRemove', '0')->latest()->get();
         $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
@@ -79,36 +79,27 @@ class OrderingController extends Controller
             return response()->json(['nodata' => 'No data available']);
         }
 
-        $orders1 = Order::all()->count();
-        $discount =  PriceType::find($request->get('pricetype'));
-        $discounted = $discount->discount / $orders1;
-
         Order::latest()->update([
             'customer_id' => $request->get('customer'),
-            'pricetype_id' => $request->get('pricetype'),
-            'discounted' => $discounted,
         ]);
-        Order::latest()->decrement('profit', $discounted);
-        Order::latest()->decrement('total', $discounted);
 
-        
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
         $id = $ordernumber->order_number;
         $total_profit = Order::sum('profit');
         $total_sales = Order::sum('total');
         $total_cost = Order::sum('total_cost');
         $total_qty = Order::sum('purchase_qty');
+        $subtotal = Order::sum('total_amount_receipt');
 
         OrderSales::create([
             'order_number_id' => $id,
             'total_profit' => $total_profit,
             'total_sales' => $total_sales,
             'total_cost' => $total_cost,
-            'pricetype_id' => $request->get('pricetype'),
             'customer_id' => $request->get('customer'),
             'total_qty' => $total_qty,
-            'subtotal' => $request->get('subtotal'),
-            'total' => $request->get('total'),
+            'subtotal' => $subtotal,
+            'total' => $total_sales,
         ]);
 
         $ids = Order::pluck('inventory_id');
@@ -187,21 +178,27 @@ class OrderingController extends Controller
             return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$inventory->stock]);
         }
 
+        $discounted = PriceType::where('id', $request->select_pricetype)->firstorfail();
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
         $id = $ordernumber->order_number;
 
+        $totalwd = $request->purchase_qty * $inventory->price - $discounted->discount;
+        $profitwd = $request->purchase_qty * $inventory->profit - $discounted->discount;
+
         $total = $request->purchase_qty * $inventory->price;
-        $profit = $request->purchase_qty * $inventory->profit;
+
         $total_cost = $request->purchase_qty * $inventory->purchase_amount;
 
         $userid = auth()->user()->id;
 
         $order = new Order();
         $order->inventory_id = $inventory->id;
+        $order->pricetype_id = $request->select_pricetype;
+        $order->discounted = $discounted->discount;
         $order->purchase_qty = $request->purchase_qty;
-        $order->total = $total;
+        $order->total = $totalwd;
         $order->total_amount_receipt = $total;
-        $order->profit = $profit;
+        $order->profit = $profitwd;
         $order->user_id = $userid;
         $order->order_number = $id;
         $order->total_cost = $total_cost;

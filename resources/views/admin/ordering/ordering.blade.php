@@ -12,11 +12,13 @@
     <div class="container-fluid">
         <div class="header-body">
             <div class="row align-items-center py-4">
-                <div class="col-lg-6 col-7">
+                <div class="col-lg-6 col-6">
                 <h6 class="h2 text-white d-inline-block mb-0">Choose Products</h6>
                
                 </div>
-                <div class="col-lg-6 col-5 text-right" id="cartsbutton">
+                
+             
+                <div class="col-lg-6 col-6 text-right" id="cartsbutton">
 
                  
                     
@@ -136,6 +138,115 @@
         
              
         
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- return modal -->
+<div class="modal " id="returnModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary">
+                <p class="modal-title-return font-weight-bold text-uppercase text-white">Modal Heading</p>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="loading-salesreturmodal" class="loading-container">
+                            <div class="loading"></div>
+                            <div id="loading-text">loading</div>
+                        </div>
+
+                        <div id="salesreturn">
+                        
+                        </div>
+                    </div>
+                </div>
+                   
+            </div>
+
+            
+
+        </div>
+    </div>
+</div>
+
+<!-- modal for return add and edit -->
+<form method="post" id="frm_return_cu" class="form-horizontal ">
+    @csrf
+    <div class="modal fade" id="modal_return_cu" tabindex="-1" role="dialog"  data-keyboard="false" data-backdrop="static" >
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title modal_return_cu_title text-white" >Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="text-white" aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div id="loading-containermodal" class="loading-container">
+                        <div class="loading"></div>
+                        <div id="loading-text">loading</div>
+                    </div> 
+                    
+                    <div id="modalbody" class="modalbody row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Product Code: </label>
+                                <input type="text" name="product_code" id="product_code" class="form-control" />
+                                <div id="productCodeList"></div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-product_code"></strong>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                             <label class="control-label text-uppercase" >Select Price Type: </label>
+                            <select name="pricetype_id" id="pricetype_id" class="form-control select2" required>
+                                @foreach ($pricetypes as $pricetype)
+                                <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / Discount: {{$pricetype->discount}}</option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-pricetype_id"></strong>
+                            </span>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Return QTY: </label>
+                                <input type="number" name="return_qty" id="return_qty" class="return_qty form-control"/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-return_qty"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Unit Price: </label>
+                                <input type="number" name="unit_price" id="unit_price" class="unit_price form-control"/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-unit_price"></strong>
+                                </span>
+                            </div>
+                        </div>
+                    
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="return_action" id="return_action" value="Add" />
+                <input type="hidden" name="return_hidden_id" id="return_hidden_id" />
+                <input type="hidden" name="inventory_id" id="inventory_id"/>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input type="submit" name="btn_submit_return" id="btn_submit_return" class="text-uppercase btn btn-default" value="Submit" />
+            </div>
             </div>
         </div>
     </div>
@@ -453,9 +564,7 @@ $('#myCheckoutForm').on('submit', function(event){
     var action_url = "{{ route('admin.ordering.checkout_order') }}";
     var  method = "POST";
     var customer = $('#select_customer').val();
-    var pricetype = $('#select_pricetype').val();
-    var subtotal = $('#subtotal').text();
-    var total = $('#total').text();
+
 
     $.confirm({
         title: 'Confirmation',
@@ -471,7 +580,7 @@ $('#myCheckoutForm').on('submit', function(event){
                     url: action_url,
                     method: method,
                     data: {
-                        customer:customer,pricetype:pricetype,subtotal:subtotal,total:total, _token: '{!! csrf_token() !!}',
+                        customer:customer, _token: '{!! csrf_token() !!}',
                     },
                     dataType:"json",
                     beforeSend: function(){
@@ -489,13 +598,6 @@ $('#myCheckoutForm').on('submit', function(event){
                                 });
                             }
                             if(data.success){
-
-                                $('#success-checkout').addClass('bg-primary');
-                                $('#success-checkout').html('<strong>' + data.success + '</strong> <br>' + 'Click <a href="/admin/sales" class="btn-white btn btn-sm">HERE</a> To view your reports' );
-                                $("#success-checkout").fadeTo(10000, 500).slideUp(500, function(){
-                                    $("#success-checkout").slideUp(500);
-                                });
-                                $('#formCheckoutModal').modal('hide');
 
                                 $('#receipt-body').removeClass('receipt-body');
                                 $('#receipt-body').removeClass('receipt-body');
@@ -526,6 +628,15 @@ $('#myCheckoutForm').on('submit', function(event){
                                 frame1.remove();
                                 }, 500);
                                 $('#receipt-body').addClass('receipt-body');
+
+                                $('#success-checkout').addClass('bg-primary');
+                                $('#success-checkout').html('<strong>' + data.success + '</strong> <br>' + 'Click <a href="/admin/sales" class="btn-white btn btn-sm">HERE</a> To view your reports' );
+                                $("#success-checkout").fadeTo(10000, 500).slideUp(500, function(){
+                                    $("#success-checkout").slideUp(500);
+                                });
+                                $('#formCheckoutModal').modal('hide');
+
+                                
 
                                 return loadProduct(), cartsButton() ;
                             }
@@ -595,36 +706,293 @@ $(document).on('click', '.delete', function(){
 
 //print cart
 $(document).on('click', '.print', function(){
-        $('#receipt-body').removeClass('receipt-body');
-        var contents = $("#receiptreport").html();
-        var frame1 = $('<iframe />');
-        frame1[0].name = "frame1";
-        frame1.css({ "position": "absolute", "top": "-1000000px" });
-        $("body").append(frame1);
-        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
-        frameDoc.document.open();
-        //Create a new HTML document.
-        frameDoc.document.write('<html><head><title>Title</title>');
-        frameDoc.document.write('</head><body>');
-        //Append the external CSS file.
-        frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
-        frameDoc.document.write('<style>size: A4 portrait;</style>');
-        var source = 'bootstrap.min.js';
-        var script = document.createElement('script');
-        script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', source);
-        //Append the DIV contents.
-        frameDoc.document.write(contents);
-        frameDoc.document.write('</body></html>');
-        frameDoc.document.close();
-        setTimeout(function () {
-        window.frames["frame1"].focus();
-        window.frames["frame1"].print();
-        frame1.remove();
-        }, 500);
-        $('#receipt-body').addClass('receipt-body');
-       
+    $('#receipt-body').removeClass('receipt-body');
+    var contents = $("#receiptreport").html();
+    var frame1 = $('<iframe />');
+    frame1[0].name = "frame1";
+    frame1.css({ "position": "absolute", "top": "-1000000px" });
+    $("body").append(frame1);
+    var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+    frameDoc.document.open();
+    //Create a new HTML document.
+    frameDoc.document.write('<html><head><title>Title</title>');
+    frameDoc.document.write('</head><body>');
+    //Append the external CSS file.
+    frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+    frameDoc.document.write('<style>size: A4 portrait;</style>');
+    var source = 'bootstrap.min.js';
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', source);
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+    frameDoc.document.close();
+    setTimeout(function () {
+    window.frames["frame1"].focus();
+    window.frames["frame1"].print();
+    frame1.remove();
+    }, 500);
+    $('#receipt-body').addClass('receipt-body');
+    
+});
+
+//show return modal
+
+function loadReturnList(){
+    $('#returnModal').modal('show');
+    $('.modal-title-return').text('Return List');
+
+    $.ajax({
+        url: "salesReturn", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $("#salesreturn").hide();
+            $('#loading-salesreturmodal').show();
+        },
+        success: function(response){
+            $('#loading-salesreturmodal').hide();
+            $("#salesreturn").show();
+            $("#salesreturn").html(response);
+        }	
+    })
+}
+
+
+$(document).on('click', '#btn_return', function(){
+    return loadReturnList();
+});
+
+
+//Insert Modal Return
+$(document).on('click', '#btn_add_return' ,function(){
+    $('#modal_return_cu').modal('show');
+    $('.modal_return_cu_title').text('Insert Return');
+
+
+    $('#frm_return_cu')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+
+    $('#pricetype_id').select2({
+       placeholder: 'Select Price Type'
+    })
+    $('#btn_submit_return').val('Submit');
+    $('#return_action').val('Add');
+    $('#loading-containermodal').hide();
+});
+
+//product Code Function
+$('#product_code').keyup(function(){ 
+    var query = $(this).val();
+    if(query != '')
+    {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+        url:"{{ route('admin.pending-product.autocomplete') }}",
+        method:"POST",
+        data:{query:query, _token:_token},
+        success:function(data){
+            if (data == undefined){
+                $('#productCodeList').fadeOut();
+            }
+            $('#productCodeList').fadeIn();  
+            $('#productCodeList').html(data);
+            }
+        });
+    }
+    if(query == ''){
+        $('#productCodeList').fadeOut();
+        }
+});
+
+$(document).on('click', 'li', function(){  
+    var query = $(this).text();
+    if(query != '')
+    {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+        url:"{{ route('admin.pending-product.autocompleteresult') }}",
+        method:"POST",
+        dataType:"json",
+        data:{query:query, _token:_token},
+        success:function(data){
+
+        $.each(data.result, function(key,value){
+            if(key == $('#'+key).attr('id')){
+                $('#'+key).val(value)
+            }
+        })
+        $('#inventory_id').val(data.inventory_id);
+        $('#productCodeList').fadeOut(); 
+        }
+        });
+    }
+});  
+
+
+//Store Return
+$('#frm_return_cu').on('submit', function(event){
+    event.preventDefault();
+    $('.form-control').removeClass('is-invalid')
+    var action_url = "{{ route('admin.salesReturn.store') }}";
+    var type = "POST";
+
+    if($('#return_action').val() == 'Edit'){
+        var id = $('#return_hidden_id').val();
+        action_url = "salesReturn/" + id;
+        type = "PUT";
+    }
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $("#btn_submit_return").attr("disabled", true);
+            $("#btn_submit_return").attr("value", "Loading..");
+            $('#loading-containermodal').show();
+            $('#modalbody').hide();
+        },
+        success:function(data){
+            $('#loading-containermodal').hide();
+            $('#modalbody').show();
+
+            if($('#return_action').val() == 'Edit'){
+                $("#btn_submit_return").attr("disabled", false);
+                $("#btn_submit_return").attr("value", "Update");
+            }else{
+                $("#btn_submit_return").attr("disabled", false);
+                $("#btn_submit_return").attr("value", "Submit");
+            }
+
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.success){
+                
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
+                });
+                $('.form-control').removeClass('is-invalid')
+                $('#frm_return_cu')[0].reset();
+                
+                $('#pricetype_id').select2({
+                    placeholder: 'Select Price Type'
+                });
+                $('#modal_return_cu').modal('hide');
+                return loadReturnList();
+                
+            }
+           
+        }
     });
+});
+
+
+$(document).on('click', '.editreturn', function(){
+
+    $('#modal_return_cu').modal('show');
+    $('.modal_return_cu_title').text('Edit Return');
+
+    
+    $('#frm_return_cu')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+
+    var id = $(this).attr('editreturn');
+
+    $.ajax({
+        url :"/admin/salesReturn/"+id+"/edit",
+        dataType:"json",
+        beforeSend:function(){
+            $("#btn_submit_return").attr("disabled", true);
+            $("#btn_submit_return").attr("value", "Loading..");
+            $('#loading-containermodal').show();
+            $('#modalbody').hide();
+            
+        },
+        success:function(data){
+            $('#loading-containermodal').hide();
+            $('#modalbody').show();
+            if($('#return_action').val() == 'Edit'){
+                $("#btn_submit_return").attr("disabled", false);
+                $("#btn_submit_return").attr("value", "Update");
+            }else{
+                $("#btn_submit_return").attr("disabled", false);
+                $("#btn_submit_return").attr("value", "Submit");
+            }
+            
+            $.each(data.result, function(key,value){
+                if(key == $('#'+key).attr('id')){
+                    $('#'+key).val(value)
+                    if(key == 'pricetype_id'){
+                        $("#pricetype_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+                }
+            })
+            $('#product_code').val(data.productcode);
+            $('#return_hidden_id').val(id);
+            $('#btn_submit_return').val('Update');
+            $('#return_action').val('Edit');
+        }
+    })
+});
+
+
+$(document).on('click', '.removereturn', function(){
+  var id = $(this).attr('removereturn');
+  $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this Record?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/salesReturn/"+id,
+                      method:'DELETE',
+                      data: {
+                          _token: '{!! csrf_token() !!}',
+                      },
+                      dataType:"json",
+                      beforeSend:function(){
+                        $('.modal_return_cu_title').text('Loading...');
+                      },
+                      success:function(data){
+                          if(data.success){
+                            $('#success-alert').addClass('bg-primary');
+                            $('#success-alert').html('<strong>' + data.success + '</strong>');
+                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                            });
+                            return loadReturnList();
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
+
+});
 
 
 </script>

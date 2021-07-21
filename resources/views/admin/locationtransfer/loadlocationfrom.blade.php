@@ -1,10 +1,18 @@
 
+
+<div class="card-header border-0">
+    <div class="row align-items-center">
+    <div class="col">
+        <h3 class="mb-0 text-uppercase" id="titletable">Location From <small>Filter By: {{$location_title}}</small></h3>
+    </div>
+    </div>
+</div>
 <div class="table-responsive">
       <!-- Projects table -->
       <table class="table align-items-center table-flush datatable-location_from display" cellspacing="0" width="100%">
         <thead class="thead-light">
           <tr>
-            <th scope="col"></th>
+          
             <th scope="col">Product ID</th>
             <th scope="col">Product Code</th>
             <th scope="col">Description</th>
@@ -13,8 +21,8 @@
             <th scope="col">Sold</th>
 
             <th scope="col">Category</th>
-            <th scope="col">Retail Price</th>
-            <th scope="col">Total Amount Price</th>
+            <th scope="col">Unit Sales</th>
+            <th scope="col">Total Sales</th>
 
           </tr>
         </thead>
@@ -22,9 +30,6 @@
           @foreach($location_from as $key => $inventory)
                 <tr data-entry-id="{{ $inventory->id ?? '' }}">
                 
-                  <td>
-                      
-                  </td>
 
                   <td>
                       {{  $inventory->product_id ?? '' }}
@@ -67,24 +72,8 @@
 
 <script>
 $(function () {
- 
-  let dtButtons = $.extend(true, [], $.fn.dataTable.test)
-  $.extend(true, $.fn.dataTable.withoutbuttons, {
-    columnDefs: [{
-        orderable: false,
-        className: 'select-checkbox',
-        targets: 0
-    }, {
-        orderable: false,
-        searchable: false,
-        targets: -1
-    }],
-    select: {
-      style:    'multi+shift',
-      selector: 'td:first-child'
-    },
-    order: [],
-  });
+
+  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
   $('.datatable-location_from:not(.ajaxTable)').DataTable({ buttons: dtButtons })
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){

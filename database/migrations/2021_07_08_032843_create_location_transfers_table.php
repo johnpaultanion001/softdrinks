@@ -16,13 +16,13 @@ class CreateLocationTransfersTable extends Migration
         Schema::create('location_transfers', function (Blueprint $table) {
             $table->id();
             $table->date('entry_date');
-            $table->string('reference');
-            $table->date('reference_date');
+            $table->string('reference')->nullable();
+            $table->date('reference_date')->nullable();
             $table->string('location_from');
             $table->string('location_to');
-            $table->string('transfer_count');
-            $table->string('prepared_by');
-            $table->longText('remarks');
+            $table->string('transfer_count')->nullable();
+            $table->string('prepared_by')->nullable();
+            $table->longText('remarks')->nullable();
             $table->integer('isRemove')->default(0);
             
 

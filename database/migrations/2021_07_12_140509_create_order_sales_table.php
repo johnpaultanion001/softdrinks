@@ -19,7 +19,6 @@ class CreateOrderSalesTable extends Migration
             $table->float('total_profit');
             $table->float('total_sales');
             $table->float('total_cost');
-            $table->string('pricetype_id');
             $table->string('customer_id');
             $table->integer('total_qty');
             $table->float('subtotal');

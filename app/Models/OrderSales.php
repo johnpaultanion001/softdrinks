@@ -15,7 +15,6 @@ class OrderSales extends Model
         'total_profit',
         'total_sales',
         'total_cost',
-        'pricetype_id',
         'customer_id',
         'total_qty',
         'subtotal',
@@ -27,8 +26,5 @@ class OrderSales extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
-    public function pricetype()
-    {
-        return $this->belongsTo(PriceType::class, 'pricetype_id');
-    }
+    
 }

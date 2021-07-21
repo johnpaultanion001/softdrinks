@@ -48,7 +48,7 @@ class PendingProductController extends Controller
            
             foreach($data as $row)
             {
-                return response()->json(['result' => $row]);
+                return response()->json(['result' => $row , 'inventory_id' => $row->id]);
             }
         
         }

@@ -5,7 +5,7 @@
         <div class="row">
         <div class="col">
             <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$inventory->name}}</h3>
-            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 0, ',', ',') }}</span> <small>/ {{$inventory->category->name}}</small>
+            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 2, '.', ',') }}</span> <small>/ {{$inventory->category->name}}</small>
         </div>
         <div class="col-auto">
             <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -45,9 +45,20 @@
         </p>
     </div>
 </div>
+
 <div class="card card-stats" style="border-bottom: 1px solid #111">
 <!-- Card body -->
     <div class="card-body">
+      
+        <div class="form-group">
+            <label class="control-label text-success" >Select Price Type: </label>
+            <select name="select_pricetype" id="select_pricetype" class="form-control select2" required>
+                @foreach ($pricetypes as $pricetype)
+                <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / Discount: {{$pricetype->discount}}</option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="form-group">
             <label class="control-label text-success" >QTY: </label>
             <input type="number" name="purchase_qty" id="purchase_qty" class="purchase_qty form-control"  autofocus/>
@@ -57,3 +68,25 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#current_balance').hide();
+        $('.select2').select2()
+        $('.treeview').each(function () {
+        var shouldExpand = false
+        $(this).find('li').each(function () {
+            if ($(this).hasClass('active')) {
+                shouldExpand = true
+            }
+        })
+            if (shouldExpand) {
+                $(this).addClass('active')
+            }
+        })
+
+    });
+</script>

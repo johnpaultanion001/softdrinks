@@ -6,7 +6,7 @@
         <div class="col">
            
             <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$order->inventory->long_description}}</h3>
-            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->inventory->price , 0, ',', ',') }}</span> <small>/ {{$order->inventory->category->name}}</small>
+            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->inventory->price , 2, '.', ',') }}</span> <small>/ {{$order->inventory->category->name}}</small>
 
 
         </div>
@@ -37,14 +37,17 @@
                     <span class="text-uppercase">Expiration: <span class="text-success font-weight-bold"> {{$order->inventory->expiration}}</span> </span>
                 </div>
                 <div class="col-6">
-                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$order->inventory->sales}}</span></span>
+                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$order->inventory->sold}}</span></span>
                 </div>
                 <div class="col-12">
                     <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$order->inventory->purchase_order->supplier->name}}</span></span>
                 </div>
                 <br>
-                <div class="col-12">
-                    <span class="text-uppercase">Total Amount: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->total , 0, ',', ',') }}</span></span>
+                <div class="col-6">
+                    <span class="text-uppercase">Total Amount: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->total , 2, '.', ',') }}</span></span>
+                </div>
+                <div class="col-6">
+                    <span class="text-uppercase">Discounted: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->discounted , 2, '.', ',') }}</span></span>
                 </div>
             </div>
         </p>
@@ -54,6 +57,16 @@
 <!-- Card body -->
     <div class="card-body">
         <div class="form-group">
+            <label class="control-label text-success" >Select Price Type: </label>
+            <select name="select_pricetype_edit" id="select_pricetype_edit" class="form-control select2" required>
+                @foreach ($pricetypes as $pricetype)
+                <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / Discount: {{$pricetype->discount}}</option>
+                @endforeach
+            </select>
+            <input type="hidden" name="pricetype_id" id="pricetype_id" value="{{$order->pricetype_id}}" />
+
+        </div>
+        <div class="form-group">
             <label class="control-label text-success" >QTY: </label> 
             <input type="number" name="purchase_qty_edit" id="purchase_qty_edit" value="{{$order->purchase_qty}}" class="form-control"/>
             <span class="invalid-feedback" role="alert">
@@ -62,3 +75,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#current_balance').hide();
+        $('.select2').select2()
+        $('.treeview').each(function () {
+        var shouldExpand = false
+        $(this).find('li').each(function () {
+            if ($(this).hasClass('active')) {
+                shouldExpand = true
+            }
+        })
+            if (shouldExpand) {
+                $(this).addClass('active')
+            }
+        })
+
+        var pricetype = $('#pricetype_id').val();
+
+        $("#select_pricetype_edit").select2("trigger", "select", {
+            data: { id: pricetype }
+        });
+
+    });
+</script>
