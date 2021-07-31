@@ -12,5 +12,6 @@ class OrderNumber extends Model
 
     protected $fillable = [
         'order_number',
+        'salesinvoice_id',
     ];
 }

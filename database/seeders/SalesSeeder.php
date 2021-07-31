@@ -17,6 +17,7 @@ class SalesSeeder extends Seeder
         $sales = [
             [
                 'id'    => '1',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -35,6 +36,7 @@ class SalesSeeder extends Seeder
             ],   
             [
                 'id'    => '2',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -52,6 +54,7 @@ class SalesSeeder extends Seeder
             ], 
             [
                 'id'    => '3',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -70,6 +73,7 @@ class SalesSeeder extends Seeder
             ],
             [
                 'id'    => '4',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -87,6 +91,7 @@ class SalesSeeder extends Seeder
             ], 
             [
                 'id'    => '5',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -104,6 +109,7 @@ class SalesSeeder extends Seeder
             ],     
             [
                 'id'    => '6',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -121,6 +127,7 @@ class SalesSeeder extends Seeder
             ],     
             [
                 'id'    => '7',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -138,6 +145,7 @@ class SalesSeeder extends Seeder
             ],     
             [
                 'id'    => '8',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -155,6 +163,7 @@ class SalesSeeder extends Seeder
             ],     
             [
                 'id'    => '9',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -172,6 +181,7 @@ class SalesSeeder extends Seeder
             ],     
             [
                 'id'    => '10',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -189,6 +199,7 @@ class SalesSeeder extends Seeder
             ],
             [
                 'id'    => '11',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '0',
                 'total' => '0',
@@ -206,6 +217,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '12',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '3500',
@@ -223,6 +235,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '13',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '0',
                 'total' => '0',
@@ -240,6 +253,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '14',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '1750',
@@ -257,6 +271,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '15',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '0',
                 'total' => '4000',
@@ -274,6 +289,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '16',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '0',
                 'total' => '4000',
@@ -291,6 +307,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '17',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '0',
                 'total' => '4000',
@@ -308,6 +325,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '18',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '0',
                 'total' => '4000',
@@ -325,6 +343,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '19',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '0',
                 'total' => '4000',
@@ -343,6 +362,7 @@ class SalesSeeder extends Seeder
             ],  
             [
                 'id'    => '20',
+                'salesinvoice_id' => '100001',
                 'inventory_id' => '1',
                 'purchase_qty' => '5',
                 'total' => '4000',

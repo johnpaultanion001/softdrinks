@@ -127,7 +127,7 @@ class OrderController extends Controller
         $profitwd = $request->purchase_qty_edit * $order->inventory->profit - $discounted->discount;
 
         $total = $request->purchase_qty_edit * $order->inventory->price;
-     
+        $total_cost = $request->purchase_qty_edit * $order->inventory->purchase_amount;
         
 
         $order->inventory_id = $order->inventory->id;
@@ -137,6 +137,7 @@ class OrderController extends Controller
         $order->profit = $profitwd;
         $order->pricetype_id = $request->select_pricetype_edit;
         $order->discounted = $discounted->discount;
+        $order->total_cost = $total_cost;
         
         $order->save();
 

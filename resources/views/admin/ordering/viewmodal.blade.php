@@ -4,7 +4,7 @@
     <div class="card-body">
         <div class="row">
         <div class="col">
-            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$inventory->name}}</h3>
+            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$inventory->short_description}} - {{$inventory->product_code}}</h3>
             <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 2, '.', ',') }}</span> <small>/ {{$inventory->category->name}}</small>
         </div>
         <div class="col-auto">
@@ -73,8 +73,6 @@
 
 <script>
     $(document).ready(function () {
-
-        $('#current_balance').hide();
         $('.select2').select2()
         $('.treeview').each(function () {
         var shouldExpand = false

@@ -15,6 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('salesinvoice_id');
             $table->string('order_number');
             $table->string('inventory_id');
             $table->string('user_id');

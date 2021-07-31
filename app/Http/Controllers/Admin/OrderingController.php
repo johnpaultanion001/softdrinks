@@ -202,6 +202,7 @@ class OrderingController extends Controller
         $order->user_id = $userid;
         $order->order_number = $id;
         $order->total_cost = $total_cost;
+        $order->salesinvoice_id = $request->salesinvoice_id;
 
         $order->save();
 

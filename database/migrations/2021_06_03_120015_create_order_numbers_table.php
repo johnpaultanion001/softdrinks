@@ -16,6 +16,7 @@ class CreateOrderNumbersTable extends Migration
         Schema::create('order_numbers', function (Blueprint $table) {
             $table->id();
             $table->string('order_number');
+            $table->string('salesinvoice_id');
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ class InventorySeeder extends Seeder
      */
     public function run()
     {
+        date_default_timezone_set('Asia/Manila');
         $invs = [
             [
                 'id'    => '1',
@@ -30,7 +31,7 @@ class InventorySeeder extends Seeder
                 'sold' => '0',
 
                 'size_id' => '3',
-                'expiration' => '2021-07-24',
+                'expiration' => '2021-08-24',
                 'purchase_amount' => '400',
                 'profit' => '50',
                 'price' => '450',
@@ -62,7 +63,7 @@ class InventorySeeder extends Seeder
 
 
                 'size_id' => '3',
-                'expiration' => '2021-07-24',
+                'expiration' => '2021-08-24',
 
                 'purchase_amount' => '20',
                 'profit' => '5',
@@ -97,7 +98,7 @@ class InventorySeeder extends Seeder
 
                 'size_id' => '2',
                 
-                'expiration' => '2021-07-24',
+                'expiration' => '2021-08-24',
                 'location_id' => 2,
                 'purchase_amount' => '500',
                 'profit' => '100',
@@ -131,7 +132,7 @@ class InventorySeeder extends Seeder
 
                 'size_id' => '2',
                 
-                'expiration' => '2021-07-24',
+                'expiration' => '2021-08-24',
                 'location_id' => 1,
                 'purchase_amount' => '500',
                 'profit' => '100',
@@ -165,7 +166,7 @@ class InventorySeeder extends Seeder
 
                 'size_id' => '2',
                 
-                'expiration' => '2021-07-24',
+                'expiration' => '2021-08-24',
                 'location_id' => 1,
                 'purchase_amount' => '500',
                 'profit' => '100',

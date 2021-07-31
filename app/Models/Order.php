@@ -11,6 +11,7 @@ class Order extends Model
     public $table = 'orders';
 
     protected $fillable = [
+        'salesinvoice_id',
         'order_number',
         'inventory_id',
         'user_id',
@@ -24,6 +25,10 @@ class Order extends Model
         'total_cost',
         'total_amount_receipt',
     ];
+    public function salesinvoice()
+    {
+       return $this->belongsTo(SalesInvoice::class, 'salesinvoice_id', 'salesinvoice_id');
+    }
     public function inventory()
     {
         return $this->belongsTo(Inventory::class, 'inventory_id');
@@ -35,7 +40,7 @@ class Order extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Custommer::class, 'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
     public function pricetype()
     {

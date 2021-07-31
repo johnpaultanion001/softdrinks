@@ -29,7 +29,7 @@ class SalesReturnController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'product_code' => ['required', 'string', 'max:255'],
+            'inventory_id' => ['required'],
             'pricetype_id' => ['required'],
             'unit_price' => ['required' ,'integer','min:1'],
             'return_qty' => ['required' ,'integer','min:1'],
@@ -45,6 +45,7 @@ class SalesReturnController extends Controller
             'pricetype_id' => $request->input('pricetype_id'),
             'unit_price' => $request->input('unit_price'),
             'return_qty' => $request->input('return_qty'),
+            'salesinvoice_id' => $request->input('salesinvoice_id_return'),
             'amount' => $amount,
             
         ]);
@@ -62,7 +63,7 @@ class SalesReturnController extends Controller
     public function edit(SalesReturn $salesReturn)
     {
         if (request()->ajax()) {
-            return response()->json(['result' => $salesReturn , 'productcode' => $salesReturn->inventory->product_code]);
+            return response()->json(['result' => $salesReturn ]);
         }
     }
 
@@ -71,10 +72,10 @@ class SalesReturnController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'product_code' => ['required', 'string', 'max:255'],
             'pricetype_id' => ['required'],
             'unit_price' => ['required' ,'integer','min:1'],
             'return_qty' => ['required' ,'integer','min:1'],
+            'inventory_id' => ['required'],
         ]);
 
         if ($validated->fails()) {

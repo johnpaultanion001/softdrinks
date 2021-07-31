@@ -41,6 +41,9 @@
                   Location Transfer
                 @elseif(request()->is('admin/price_type') || request()->is('admin/price_type/*'))
                   Price Type
+                @elseif(request()->is('admin/salesInvoice') || request()->is('admin/salesInvoice/*'))
+                  Sales Invoice
+                
                 @endif
                 
                  

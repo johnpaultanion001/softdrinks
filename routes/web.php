@@ -147,7 +147,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('location_transfer/{location}/from', 'LocationTransferController@locationfrom')->name('locationtransfer.locationfrom');
     route::get('location_transfer/{location}/to', 'LocationTransferController@locationto')->name('locationtransfer.locationto');
 
-  //Sales Return
-  Route::resource('salesReturn', 'SalesReturnController');
+    //Sales Return
+    Route::resource('salesReturn', 'SalesReturnController');
+
+    //Sales Invoice
+    Route::resource('salesInvoice', 'SalesInvoiceController');
+    Route::post('salesInvoice-sales/storeandcheckout','SalesInvoiceController@storeandcheckout')->name('salesInvoice.storeandcheckout');
+    Route::get('salesInvoice-sales','SalesInvoiceController@sales')->name('salesInvoice.sales');
+    Route::get('salesInvoice-return','SalesInvoiceController@return')->name('salesInvoice.return');
+    Route::get('salesInvoice-productlist','SalesInvoiceController@productlist')->name('salesInvoice.productlist');
+    Route::get('salesInvoice-receipt','SalesInvoiceController@receipt')->name('salesInvoice.receipt');
+    Route::get('salesInvoice-alltotal','SalesInvoiceController@alltotal')->name('salesInvoice.alltotal');
+    Route::get('salesInvoice-change','SalesInvoiceController@change')->name('salesInvoice.change');
+    Route::get('salesInvoice-allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
+    
    
 });

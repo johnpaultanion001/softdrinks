@@ -79,7 +79,6 @@
 <script>
     $(document).ready(function () {
 
-        $('#current_balance').hide();
         $('.select2').select2()
         $('.treeview').each(function () {
         var shouldExpand = false

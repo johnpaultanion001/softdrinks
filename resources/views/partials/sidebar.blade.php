@@ -45,13 +45,21 @@
                 </a>
               </li>
             @endcan
-            @can('ordering_access')
+            <!-- @can('ordering_access')
               <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/ordering') || request()->is('admin/ordering/*') ? 'active' : '' }}" href="{{ route("admin.getproducts") }}">
                   <i class="ni ni-cart"></i>
                   <span class="nav-link-text text-uppercase">Sales Invoice</span>
                 </a>
               </li>
+            @endcan -->
+            @can('ordering_access')
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('admin/salesInvoice') || request()->is('admin/salesInvoice/*') ? 'active' : '' }}" href="{{ route("admin.salesInvoice.index") }}">
+                <i class="ni ni-cart"></i>
+                <span class="nav-link-text text-uppercase">Sales Invoice</span>
+              </a>
+            </li>
             @endcan
             @can('returned_access')
               <li class="nav-item">

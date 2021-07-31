@@ -89,11 +89,11 @@
                         <div id="loading-text">loading</div>
                     </div> 
                     <div id="modalbody-edit">
-                    
                     </div>
+                    
                     <div id="modalbody-view">
-                    
                     </div>
+
                     <input type="hidden" name="action" id="action" value="Add" />
                     <input type="hidden" name="hidden_id" id="hidden_id" />
                 </div>

@@ -15,6 +15,7 @@ class CreateSalesReturnsTable extends Migration
     {
         Schema::create('sales_returns', function (Blueprint $table) {
             $table->id();
+            $table->string('salesinvoice_id');
             $table->string('inventory_id');
             $table->integer('return_qty');
             $table->string('pricetype_id');

@@ -18,6 +18,7 @@ class OrderNumberSeeder extends Seeder
             [
                 'id'    => '1',
                 'order_number' => '100002',
+                'salesinvoice_id' => '100002',
             ],
            
         ];
