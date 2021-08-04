@@ -18,11 +18,11 @@ class SalesController extends Controller
     public function loadsales()
     {
         $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
+        $title_filter  = 'All Sales';
         if($userid == '2'){
             $sales = Sales::where('user_id', $userid)->where('isRemove', 0)->latest()->get();
-            return view('admin.sales.loadsales', compact('sales'));
+            return view('admin.sales.loadsales', compact('sales', 'title_filter'));
         }
-        $title_filter  = 'All Sales';
         $sales = Sales::where('isRemove', 0)->latest()->get();
         return view('admin.sales.loadsales', compact('sales', 'title_filter'));
     }

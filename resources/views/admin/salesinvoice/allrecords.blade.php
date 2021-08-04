@@ -14,6 +14,7 @@
             <th>Total Amount</th>
             <th>Total Return</th>
             <th>Cash</th>
+            <th>Created By</th>
             <th>Date</th>
          
         </tr>
@@ -22,7 +23,8 @@
         @foreach($allrecords as $key => $allrecord)
             <tr data-entry-id="{{ $allrecord->id ?? '' }}">
                 <td>
-                    <button type="button" name="receipt" receipt="{{  $allrecord->salesinvoice_id ?? '' }}" class="text-uppercase receipt btn btn-info btn-sm">RECEIPT</button>
+                    <button type="button" name="sales_receipt"  sales_receipt="{{  $allrecord->salesinvoice_id ?? '' }}" class="text-uppercase sales_receipt btn btn-info btn-sm">RECEIPT</button>
+                    <button type="button" name="viewsales"  viewsales="{{  $allrecord->id ?? '' }}" class="text-uppercase viewsales btn btn-success btn-sm">View Sales</button>
                    
                 </td>
                 <td>
@@ -55,6 +57,9 @@
                 </td>
                 <td>
                     <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->cash , 2, '.', ',') }}
+                </td>
+                <td>
+                    {{  $allrecord->user->name ?? '' }}
                 </td>
                 <td>
                     {{ $allrecord->created_at->format('F d,Y h:i A') }}

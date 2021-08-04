@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SalesInvoice;
+use App\Models\Sales;
 use App\Models\Order;
 use App\Models\OrderSales;
 use App\Models\SalesReturn;
@@ -23,7 +24,7 @@ class SalesInvoiceController extends Controller
    
     public function index()
     {
-        abort_if(Gate::denies('ordering_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('salesinvoice_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         date_default_timezone_set('Asia/Manila');
 
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
@@ -65,6 +66,12 @@ class SalesInvoiceController extends Controller
 
         $returned = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->latest()->get();
         return view('admin.salesinvoice.return', compact('returned'));
+    }
+
+    public function allreturn()
+    {
+        $returned = SalesReturn::where('isRemove', 0)->latest()->get();
+        return view('admin.salesinvoice.allrecordsreturn', compact('returned'));
     }
 
     public function productlist(){
@@ -128,6 +135,7 @@ class SalesInvoiceController extends Controller
         $subtotal = Order::sum('total_amount_receipt');
         $total_discounted = Order::sum('discounted');
         $total_return = SalesReturn::where('isRemove', 0)->sum('amount');
+        $userid = auth()->user()->id;
 
         SalesInvoice::create([
             'salesinvoice_id' =>  $salesinvoice_id,
@@ -145,6 +153,7 @@ class SalesInvoiceController extends Controller
             'total_inv_amt' => $total_amount,
             'cash' => $request->get('cash'),
             'new_bal' => $total_amount,
+            'user_id' => $userid,
         ]);
 
         $order_number_id = $ordernumber->order_number;
@@ -203,15 +212,27 @@ class SalesInvoiceController extends Controller
     }
     public function allrecords(){
         date_default_timezone_set('Asia/Manila');
-
-        $allrecords = SalesInvoice::latest()->get();
+        $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
+        if($userid == '2'){
+            $allrecords = SalesInvoice::where('isVoid' , 0)->where('user_id', $userid)->latest()->get();
+            return view('admin.salesinvoice.allrecords', compact('allrecords'));
+        }
+        $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->get();
         return view('admin.salesinvoice.allrecords', compact('allrecords'));
+    }
+
+    public function sales_receipt($sales_reciept){
+        date_default_timezone_set('Asia/Manila');
+        $receipts = Sales::where('isRemove', 0)->where('salesinvoice_id', $sales_reciept)->latest()->get();
+        $ordernumber = SalesInvoice::where('salesinvoice_id', $sales_reciept)->first();
+        return view('admin.salesinvoice.receiptmodalsales', compact('receipts', 'ordernumber'));
     }
 
     
     public function show(SalesInvoice $salesInvoice)
     {
-       
+        $sales = Sales::where('isRemove' , 0)->where('salesinvoice_id', $salesInvoice->salesinvoice_id)->latest()->get();
+        return view('admin.salesinvoice.viewsales', compact('sales'));
     }
 
     
@@ -229,5 +250,16 @@ class SalesInvoiceController extends Controller
     public function destroy(SalesInvoice $salesInvoice)
     {
     
+    }
+
+    public function void(SalesInvoice $salesInvoice)
+    {
+        SalesInvoice::find($salesInvoice->id)->update([
+            'isVoid' => '1',
+        ]);
+        Sales::where('salesinvoice_id' ,$salesInvoice->salesinvoice_id)->update([
+            'isRemove' => '1',
+        ]);
+        return response()->json(['success' => 'Transaction Successfully Void.']);
     }
 }

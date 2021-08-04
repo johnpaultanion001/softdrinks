@@ -111,9 +111,8 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         
-        User::find($user->id)->update([
-            'isRemove' => '1',
-        ]);
+        User::find($user->id)->delete();
+           
         return response()->json(['success' => 'User Removed Successfully.']);
     }
 

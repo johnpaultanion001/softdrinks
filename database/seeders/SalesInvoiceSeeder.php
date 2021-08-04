@@ -28,6 +28,7 @@ class SalesInvoiceSeeder extends Seeder
                 'total_inv_amt' => '46750',
                 'cash' => '46750',
                 'new_bal' => '46750',
+                'user_id' => '1',
         
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),

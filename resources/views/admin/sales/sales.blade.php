@@ -98,7 +98,7 @@
         
                 <!-- Modal footer -->
                 <div class="modal-footer bg-white">
-                    <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Print Reciept" />
+                    <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Print Receipt"/>
                 </div>
         
             </div>
@@ -235,14 +235,12 @@ function fetch_data(from_date = '', to_date = '')
         }
     });
 
-    $(document).on('click', '.receipt', function(){
+$(document).on('click', '.receipt', function(){
     $('#formModal').modal('show');
     $('.modal-title').text('Print Receipt');
     $('#myForm')[0].reset();
     $('.form-control').removeClass('is-invalid')
     var id = $(this).attr('receipt');
-
-    
 
     $.ajax({
         url :"/admin/sales/"+id,

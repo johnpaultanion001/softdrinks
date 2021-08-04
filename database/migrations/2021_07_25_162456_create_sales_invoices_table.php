@@ -16,6 +16,7 @@ class CreateSalesInvoicesTable extends Migration
         Schema::create('sales_invoices', function (Blueprint $table) {
             $table->id();
             $table->string('salesinvoice_id');
+            $table->string('user_id');
             $table->string('doc_no');
             $table->date('entry_date');
             $table->longText('remarks')->nullable();
@@ -28,6 +29,7 @@ class CreateSalesInvoicesTable extends Migration
             $table->float('total_inv_amt');
             $table->float('cash');
             $table->float('new_bal');
+            $table->integer('isVoid')->default(0);
 
 
             $table->timestamps();

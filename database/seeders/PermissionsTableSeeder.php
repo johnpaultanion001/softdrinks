@@ -37,7 +37,7 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => '7',
-                'title' => 'ordering_access',
+                'title' => 'salesinvoice_access',
             ],
             [
                 'id'    => '8',

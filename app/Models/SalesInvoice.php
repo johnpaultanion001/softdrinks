@@ -24,11 +24,17 @@ class SalesInvoice extends Model
         'total_inv_amt',
         'cash',
         'new_bal',
+        'user_id',
+        'isVoid',
        
     ];
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     

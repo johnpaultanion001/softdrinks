@@ -155,11 +155,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('salesInvoice-sales/storeandcheckout','SalesInvoiceController@storeandcheckout')->name('salesInvoice.storeandcheckout');
     Route::get('salesInvoice-sales','SalesInvoiceController@sales')->name('salesInvoice.sales');
     Route::get('salesInvoice-return','SalesInvoiceController@return')->name('salesInvoice.return');
+    Route::get('salesInvoice-allreturn','SalesInvoiceController@allreturn')->name('salesInvoice.allreturn');
     Route::get('salesInvoice-productlist','SalesInvoiceController@productlist')->name('salesInvoice.productlist');
     Route::get('salesInvoice-receipt','SalesInvoiceController@receipt')->name('salesInvoice.receipt');
     Route::get('salesInvoice-alltotal','SalesInvoiceController@alltotal')->name('salesInvoice.alltotal');
     Route::get('salesInvoice-change','SalesInvoiceController@change')->name('salesInvoice.change');
     Route::get('salesInvoice-allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
+    Route::get('salesInvoice-sales_receipt/{sales_receipt}', 'SalesInvoiceController@sales_receipt')->name('salesInvoice.sales_receipt');
+    Route::delete('salesInvoice-void/{salesInvoice}','SalesInvoiceController@void')->name('salesInvoice.void');
+
     
-   
+    
 });

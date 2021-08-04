@@ -289,7 +289,7 @@
                     <div id="modalbody" class="modalbody row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <small class="text-dark">Select Product:</small>
+                            <label class="control-label text-uppercase" >Select Product:</label>
                                 <select name="inventory_id" id="inventory_id" class="form-control select2">
                                     <option value="" disabled selected>Select Product</option>
                                     @foreach ($product_codes as $product_code)
@@ -376,9 +376,102 @@
 
         </div>
     </div>
+</div>
+
+<!-- modal for View Sales -->
+<div class="modal" id="viewsalesModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-centered ">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary">
+                <p class="modal-title-viewsales font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                    <div id="viewsales">
+                    
+                    </div>
+               
+                <!-- <input type="hidden" name="action" id="action" value="Add" />
+                <input type="hidden" name="hidden_id" id="hidden_id" /> -->
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer bg-white">
+                <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
     </div>
+</div>
 
+<!-- modal for Sales Receipt -->
+<form method="post" id="frm_sales_receipt" class="form-horizontal ">
+    @csrf
+    <div class="modal" id="modal_sales_receipt" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered ">
+            <div class="modal-content">
+        
+                <!-- Modal Header -->
+                <div class="modal-header bg-primary">
+                    <p class="modal-title-sales-receipt font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+        
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div id="loading-sales-receipt" class="loading-container">
+                        <div class="loading"></div>
+                        <div id="loading-text">loading</div>
+                    </div> 
+                    <div id="sales_receipt">
+                    
+                    </div>
+                </div>
+        
+                <!-- Modal footer -->
+                <div class="modal-footer bg-white">
+                    <input type="submit" name="action_sales_receipt" id="action_sales_receipt" class="text-uppercase btn btn-default" value="Print Receipt" />
+                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+</form>
 
+<!-- modal for All Records For return -->
+<div class="modal" id="allrecordsreturnModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-centered ">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary">
+                <p class="modal-title-allrecordsreturn font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                    <div id="allrecordsreturn">
+                    
+                    </div>
+               
+                <!-- <input type="hidden" name="action" id="action" value="Add" />
+                <input type="hidden" name="hidden_id" id="hidden_id" /> -->
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer bg-white">
+                <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 
@@ -470,8 +563,7 @@ $(document).on('click', '#create_sales', function(){
     return loadProductList();
 });
 
-$(document).on('click', '#all_records_btn', function(){
-    $('#allrecordsModal').modal('show');
+function loadAllRecords(){
     $.ajax({
         url: "salesInvoice-allrecords", 
         type: "get",
@@ -485,6 +577,11 @@ $(document).on('click', '#all_records_btn', function(){
             $("#allrecords").html(response);
         }	
     })
+}
+
+$(document).on('click', '#all_records_btn', function(){
+    $('#allrecordsModal').modal('show');
+    return loadAllRecords();
 });
 
 
@@ -566,7 +663,7 @@ $('#frm_return_cu').on('submit', function(event){
                     placeholder: 'Select Price Type'
                 });
                 $('#modal_return_cu').modal('hide');
-                return loadReturn();
+                return loadReturn() , loadAllTotal();
                 
             }
            
@@ -730,7 +827,7 @@ $(document).on('click', '#print_button', function(){
 
 
 $(document).on('click', '.editreturn', function(){
-
+    $('#allrecordsreturnModal').modal('hide');
     $('#modal_return_cu').modal('show');
     $('.modal_return_cu_title').text('Edit Return');
 
@@ -816,7 +913,7 @@ $(document).on('click', '.removereturn', function(){
                             $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
                                 $("#success-alert").slideUp(500);
                             });
-                            return loadReturn();
+                            return loadReturn() , loadAllRecordReturn() , loadAllTotal();;
                             }
                       }
                   })
@@ -946,7 +1043,7 @@ $('#orderForm').on('submit', function(event){
                 });
 
                
-                return loadProductList() , loadSales() , loadAllTotal();;
+                return loadProductList() , loadSales() , loadAllTotal();
                
 
             }
@@ -1071,7 +1168,157 @@ $('select[name="customer_id"]').on("change", function(event){
         }
 });
 
+/// Sales Receipt
+//frm_sales_receipt
+$(document).on('click', '.sales_receipt', function(){
+    $('#modal_sales_receipt').modal('show');
+    $('.modal-title-sales-receipt').text('Print Receipt');
+    var id = $(this).attr('sales_receipt');
 
+    $.ajax({
+        url :"/admin/salesInvoice-sales_receipt/"+id,
+        type: "get",
+        dataType: "HTMl",
+        beforeSend:function(){
+            $("#action_sales_receipt").attr("disabled", true);
+            $("#action_sales_receipt").attr("value", "Loading..");
+            $('#loading-sales-receipt').show();
+            $('#sales_receipt').hide();
+            
+        },
+        success:function(response){
+            $('#sales_receipt').show();
+            $("#action_sales_receipt").attr("disabled", false);
+            $("#action_sales_receipt").attr("value", "Print Receipt");
+            $('#loading-sales-receipt').hide();
+            $("#sales_receipt").html(response);
+        }
+    })
+}); 
+
+
+$('#frm_sales_receipt').on('submit', function(event){
+    event.preventDefault();
+    $('#receipt-body-sales').removeClass('receipt-body');
+        var contents = $("#receiptreportsales").html();
+        var frame1 = $('<iframe />');
+        frame1[0].name = "frame1";
+        frame1.css({ "position": "absolute", "top": "-1000000px" });
+        $("body").append(frame1);
+        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+        frameDoc.document.open();
+        //Create a new HTML document.
+        frameDoc.document.write('<html><head><title>Title</title>');
+        frameDoc.document.write('</head><body>');
+        //Append the external CSS file.
+        frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+        frameDoc.document.write('<style>size: A4 portrait;</style>');
+        var source = 'bootstrap.min.js';
+        var script = document.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', source);
+        //Append the DIV contents.
+        frameDoc.document.write(contents);
+        frameDoc.document.write('</body></html>');
+        frameDoc.document.close();
+        setTimeout(function () {
+        window.frames["frame1"].focus();
+        window.frames["frame1"].print();
+        frame1.remove();
+        }, 500);
+        $('#receipt-body-sales').addClass('receipt-body');
+});
+
+// load all records for returned
+function loadAllRecordReturn(){
+    $.ajax({
+        url: "salesInvoice-allreturn", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('.modal-title-allrecordsreturn').text('Loading Records...');
+         
+        },
+        success: function(response){
+            $('.modal-title-allrecordsreturn').text('All Returned Records');
+            $("#allrecordsreturn").html(response);
+        }	
+    })
+}
+
+
+/// All Records Return
+$(document).on('click', '#all_record_return', function(){
+    $('#allrecordsreturnModal').modal('show');
+    return loadAllRecordReturn();
+});
+
+
+//View Sales
+$(document).on('click', '.viewsales', function(){
+    var id = $(this).attr('viewsales');
+    $('#viewsalesModal').modal('show');
+    $.ajax({
+        url: "salesInvoice/" + id, 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('.modal-title-viewsales').text('Loading Sales...');
+         
+        },
+        success: function(response){
+            $('.modal-title-viewsales').text('All Sales');
+            $("#viewsales").html(response);
+        }	
+    })
+});
+
+// //void sales invoice
+// $(document).on('click', '.void', function(){
+//     var id = $(this).attr('void');
+//     $.confirm({
+//         title: 'Confirmation',
+//         content: 'You really want to void this transaction?',
+//         type: 'red',
+//         buttons: {
+//             confirm: {
+//                 text: 'confirm',
+//                 btnClass: 'btn-blue',
+//                 keys: ['enter', 'shift'],
+//                 action: function(){
+//                     return $.ajax({
+//                         url:"/admin/salesInvoice-void/"+id,
+//                         method:'DELETE',
+//                         data: {
+//                             _token: '{!! csrf_token() !!}',
+//                         },
+//                         dataType:"json",
+//                         beforeSend:function(){
+//                             $('.modal-title-allrecords').text('Loading Records...');
+//                         },
+//                         success:function(data){
+//                             if(data.success){
+//                                 $('.modal-title-allrecords').text('All Sales Invoice Records');
+                                
+//                                 $('#success-alert').addClass('bg-primary');
+//                                 $('#success-alert').html('<strong>' + data.success + '</strong>');
+//                                 $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+//                                     $("#success-alert").slideUp(500);
+//                                 });
+//                                 return loadAllRecords();
+//                             }
+//                         }
+//                     })
+//                 }
+//             },
+//             cancel:  {
+//                 text: 'cancel',
+//                 btnClass: 'btn-red',
+//                 keys: ['enter', 'shift'],
+//             }
+//         }
+//     });
+// });
 
 </script>
 @endsection

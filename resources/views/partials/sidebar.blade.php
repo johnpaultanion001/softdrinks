@@ -53,7 +53,7 @@
                 </a>
               </li>
             @endcan -->
-            @can('ordering_access')
+            @can('salesinvoice_access')
             <li class="nav-item">
               <a class="nav-link {{ request()->is('admin/salesInvoice') || request()->is('admin/salesInvoice/*') ? 'active' : '' }}" href="{{ route("admin.salesInvoice.index") }}">
                 <i class="ni ni-cart"></i>

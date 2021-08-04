@@ -42,7 +42,7 @@
         <table class="table align-items-center table-flush datatable-sales display" cellspacing="0" width="100%">
         <thead class="thead-white">
             <tr>
-            <th scope="col">Actions</th> 
+          
             <th scope="col">Order Number</th>
             <th scope="col">Product Code</th>
             <th scope="col">Description</th>
@@ -62,9 +62,6 @@
         <tbody class="text-uppercase font-weight-bold">
             @foreach($sales as $key => $sale)
                 <tr data-entry-id="{{ $sale->id ?? '' }}">
-                    <td>
-                        <button type="button" name="receipt" receipt="{{  $sale->id ?? '' }}" class="text-uppercase receipt btn btn-success btn-sm">Receipt</button>  
-                    </td>
                     <td>
                         {{  $sale->order_number ?? '' }}
                     </td>
@@ -236,7 +233,6 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
 
