@@ -15,6 +15,7 @@ use App\Models\PendingProduct;
 use Validator;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
+use DB;
 
 class PurchaseOrderController extends Controller
 {
@@ -48,7 +49,7 @@ class PurchaseOrderController extends Controller
     }
     public function edit(PurchaseOrder $purchasenumber)
     {
-        $orders = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        $orders = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
         $locations = Location::where('isRemove', 0)->latest()->get();
@@ -58,7 +59,7 @@ class PurchaseOrderController extends Controller
     }
     public function loadedit(PurchaseOrder $purchasenumber)
     {
-        $orders = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        $orders = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
         $purchaseorder = PurchaseOrder::latest()->get();
@@ -128,6 +129,16 @@ class PurchaseOrderController extends Controller
         PendingProduct::latest()->update([
             'location_id' => $request->input('location_id'),
             'supplier_id' => $request->input('supplier_id'),
+        ]);
+
+        $pcode = PendingProduct::pluck('product_code');
+        Inventory::whereIn('product_code' , $pcode)->update([
+            'stock' => DB::raw ('stock + add_qty'),
+            'qty' => DB::raw ('qty + add_qty'),
+            'total_amount_purchase' => DB::raw ('purchase_amount * qty'),
+            'total_profit' => DB::raw ('profit * qty'),
+            'total_price' => DB::raw ('price * qty'),
+            'add_qty' => 0,
         ]);
         
         PendingProduct::query()

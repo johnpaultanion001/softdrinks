@@ -12,13 +12,13 @@
             <th scope="col">Category</th>
             <th scope="col">Expiration</th>
 
-            <th scope="col">Purchase QTY</th>
-            <th scope="col">Purchase Amount</th>
-            <th scope="col">Profit</th>
-            <th scope="col">Price</th>
-            <th scope="col">Total Amount Purchase</th>
-            <th scope="col">Total Amount Profit</th>
-            <th scope="col">Total Amount Price</th>
+            <th scope="col">QTY</th>
+            <th scope="col">Unit Cost</th>
+            <th scope="col">Unit Profit</th>
+            <th scope="col">Unit Sales</th>
+            <th scope="col">Total Cost</th>
+            <th scope="col">Total Profit</th>
+            <th scope="col">Total Sales</th>
             <th scope="col">Remarks</th>
             <th scope="col">Date</th>
         </tr>
@@ -55,23 +55,23 @@
                         {{  $product->qty ?? '' }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->purchase_amount , 0, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->purchase_amount , 2, '.', ',') }}
            
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->profit , 0, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->profit , 2, '.', ',') }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->price , 0, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->price , 2, '.', ',') }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->total_amount_purchase , 0, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->total_amount_purchase , 2, '.', ',') }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->total_profit , 0, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->total_profit , 2, '.', ',') }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->total_price , 0, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->total_price , 2, '.', ',') }}
 
                     </td>
                     <td>

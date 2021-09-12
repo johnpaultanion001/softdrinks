@@ -16,6 +16,7 @@ use Validator;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use datetime;
+use DB;
 
 
 class InventoryController extends Controller
@@ -35,7 +36,7 @@ class InventoryController extends Controller
     }
     public function loadinventories()
     {
-        $inventories = Inventory::where('isRemove', 0)->latest()->get();
+        $inventories = Inventory::where('isRemove', 0)->where('isSame', 0)->latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
         $locations = Location::where('isRemove', 0)->latest()->get();
         return view('admin.inventories.loadinventories', compact('categories','inventories' ,'locations'));
@@ -81,7 +82,7 @@ class InventoryController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'purchase_order_number_id' => ['required'],
+            'purchase_id' => ['required'],
             'category_id' => ['required'],
             'long_description' => ['required'],
             'short_description' => ['required'],
@@ -89,8 +90,8 @@ class InventoryController extends Controller
             'stock' => ['required' ,'integer','min:1'],
             'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
-            'purchase_amount' => ['required' ,'integer','min:1'],
-            'profit' => ['required' ,'integer','min:1'],
+            'purchase_amount' => ['required' ,'numeric','min:1'],
+            'profit' => ['required' ,'numeric','min:1'],
             'product_remarks' => ['nullable'],  
            
         ]);
@@ -105,9 +106,72 @@ class InventoryController extends Controller
         $total_price = $total_amount_purchase + $total_profit;
 
         $userid = auth()->user()->id;
-        $po = PurchaseOrder::where('purchase_order_number', $request->input('purchase_order_number_id'))->firstorfail();
+
+        $existingcode = Inventory::select(['product_code'])->get()->toArray();
+        if (in_array(array('product_code' => $request->input('product_code')), $existingcode))
+        {
+            $po = PurchaseOrder::where('purchase_order_number', $request->input('purchase_id'))->firstorfail();
+            $product = Inventory::create([
+                'purchase_order_number_id' => $request->input('purchase_id'),
+                'category_id' => $request->input('category_id'),
+                'long_description' => $request->input('long_description'),
+                'short_description' => $request->input('short_description'),
+                'product_code' => $request->input('product_code'),
+                'stock' => $request->input('stock'),
+                'qty' => $request->input('stock'),
+                'size_id' => $request->input('size_id'),
+                'expiration' => $request->input('expiration'),
+                'purchase_amount' => $request->input('purchase_amount'),
+                'profit' => $request->input('profit'),
+                'price' => $price,
+                'total_amount_purchase' => $total_amount_purchase,
+                'total_profit' => $total_profit,
+                'total_price' => $total_price,
+                'product_remarks' => $request->input('product_remarks'),
+                'product_id' => time().$userid,
+                'location_id' => $po->location_id,
+                'supplier_id' => $po->supplier_id,
+                'isSame' => '1',
+            ]);
+
+
+            Inventory::where('product_code' , $request->input('product_code'))
+                        ->where('isSame', '0')
+                        ->where('isRemove', '0')
+                        ->update([
+                            'stock' => DB::raw ('stock +'. $request->input('stock')),
+                            'qty' => DB::raw ('qty +'. $request->input('stock')),
+                            'total_amount_purchase' => DB::raw ('purchase_amount * qty'),
+                            'total_profit' => DB::raw ('profit * qty'),
+                            'total_price' => DB::raw ('price * qty'),
+                        ]);
+
+            $totalpurchasedorder = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_amount_purchase');
+            $totalprofit = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_profit');
+            $totalprice = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_price');
+            $products = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->count();
+
+            PurchaseOrder::where('purchase_order_number',$request->input('purchase_id'))->update([
+                'total_purchased_order' => $totalpurchasedorder,
+                'total_profit' => $totalprofit,
+                'total_price' => $totalprice,
+                'total_orders' => $products,
+            ]);
+            $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+            $ucs_percase = $ucs->ucs * $request->input('stock');
+            UCS::create([
+                'purchase_order_number_id' => $request->input('purchase_id'),
+                'inventory_id' => $product->product_id,
+                'ucs' => $ucs_percase,
+                'case' => $product->qty,
+                'isPurchase' => 1,
+            ]);
+
+        return response()->json(['success' => 'Product Added Successfully.']);
+        }
+        $po = PurchaseOrder::where('purchase_order_number', $request->input('purchase_id'))->firstorfail();
         $product = Inventory::create([
-            'purchase_order_number_id' => $request->input('purchase_order_number_id'),
+            'purchase_order_number_id' => $request->input('purchase_id'),
             'category_id' => $request->input('category_id'),
             'long_description' => $request->input('long_description'),
             'short_description' => $request->input('short_description'),
@@ -128,12 +192,12 @@ class InventoryController extends Controller
             'supplier_id' => $po->supplier_id,
         ]);
 
-        $totalpurchasedorder = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_amount_purchase');
-        $totalprofit = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_profit');
-        $totalprice = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_price');
-        $products = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->count();
+        $totalpurchasedorder = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_amount_purchase');
+        $totalprofit = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_profit');
+        $totalprice = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_price');
+        $products = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->count();
 
-        PurchaseOrder::where('purchase_order_number',$request->input('purchase_order_number_id'))->update([
+        PurchaseOrder::where('purchase_order_number',$request->input('purchase_id'))->update([
             'total_purchased_order' => $totalpurchasedorder,
             'total_profit' => $totalprofit,
             'total_price' => $totalprice,
@@ -142,7 +206,7 @@ class InventoryController extends Controller
         $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
         $ucs_percase = $ucs->ucs * $request->input('stock');
         UCS::create([
-            'purchase_order_number_id' => $request->input('purchase_order_number_id'),
+            'purchase_order_number_id' => $request->input('purchase_id'),
             'inventory_id' => $product->product_id,
             'ucs' => $ucs_percase,
             'case' => $product->qty,
@@ -179,8 +243,8 @@ class InventoryController extends Controller
             'stock' => ['required' ,'integer','min:1'],
             'size_id' => ['required'],
             'expiration' => ['required' ,'date','after:today'],
-            'purchase_amount' => ['required' ,'integer','min:1'],
-            'profit' => ['required' ,'integer','min:1'],
+            'purchase_amount' => ['required' ,'numeric','min:1'],
+            'profit' => ['required' ,'numeric','min:1'],
             'product_remarks' => ['nullable'],  
            
         ]);
@@ -213,12 +277,12 @@ class InventoryController extends Controller
             'product_remarks' => $request->input('product_remarks'),
         ]);
 
-        $totalpurchasedorder = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_amount_purchase');
-        $totalprofit = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_profit');
-        $totalprice = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('total_price');
-        $products = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->count();
+        $totalpurchasedorder = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_amount_purchase');
+        $totalprofit = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_profit');
+        $totalprice = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->sum('total_price');
+        $products = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $request->input('purchase_id'))->count();
         
-        PurchaseOrder::where('purchase_order_number',$request->input('purchase_order_number_id'))->update([
+        PurchaseOrder::where('purchase_order_number',$request->input('purchase_id'))->update([
             'total_purchased_order' => $totalpurchasedorder,
             'total_profit' => $totalprofit,
             'total_price' => $totalprice,
@@ -241,10 +305,10 @@ class InventoryController extends Controller
             'isRemove' => '1',
         ]);
         
-        $totalpurchasedorder = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->sum('total_amount_purchase');
-        $totalprofit = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->sum('total_profit');
-        $totalprice = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->sum('total_price');
-        $products = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->count();
+        $totalpurchasedorder = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->sum('total_amount_purchase');
+        $totalprofit = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->sum('total_profit');
+        $totalprice = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->sum('total_price');
+        $products = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $inventory->purchase_order_number_id)->count();
 
         PurchaseOrder::where('purchase_order_number',$inventory->purchase_order_number_id)->update([
             'total_purchased_order' => $totalpurchasedorder,

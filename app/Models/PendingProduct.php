@@ -39,6 +39,8 @@ class PendingProduct extends Model
         'location_id',
         'product_id',
         'supplier_id',
+        'isSame',
+        'add_qty',
     ];
     public function category()
     {

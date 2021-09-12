@@ -179,19 +179,19 @@
 
                                 <div class="col-sm-3">
                                         <div class="form-group">
-                                                <label class="control-label text-uppercase" >Total Cost:</label>
+                                                <label class="control-label text-uppercase" >Total Overall Cost:</label>
                                                 <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_purchased_order , 2, '.', ',') }}"/>
                                         </div>
                                 </div>
                                 <div class="col-sm-3">
                                         <div class="form-group">
-                                                <label class="control-label text-uppercase" >Total Profit:</label>
+                                                <label class="control-label text-uppercase" >Total Overall Profit:</label>
                                                 <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_profit , 2, '.', ',') }}"/>
                                         </div>
                                 </div>
                                 <div class="col-sm-3">
                                         <div class="form-group">
-                                                <label class="control-label text-uppercase" >Total Sales:</label>
+                                                <label class="control-label text-uppercase" >Total Overall Sales:</label>
                                                 <input type="text"  class="form-control" readonly value="₱ {{  number_format($purchasenumber->total_price , 2, '.', ',') }}"/>
                                         </div>
                                 </div>
@@ -353,7 +353,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label" >Unit Cost:</label>
-                            <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
+                            <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" step="any" />
                             <span class="invalid-feedback" role="alert">
                                 <strong id="error-purchase_amount"></strong>
                             </span>
@@ -362,7 +362,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label" >Unit Profit:</label>
-                            <input type="number" name="profit" id="profit" class="form-control" />
+                            <input type="number" name="profit" id="profit" class="form-control" step="any" />
                             <span class="invalid-feedback" role="alert">
                                 <strong id="error-profit"></strong>
                             </span>
@@ -381,7 +381,7 @@
                 </div>
                     <input type="hidden" name="product_action" id="product_action" value="Add" />
                     <input type="hidden" name="product_hidden_id" id="product_hidden_id" />
-                    <input type="hidden" name="purchase_order_number_id" id="purchase_order_number_id" value="{{$purchasenumber->purchase_order_number}}" />
+                    <input type="text"   name="purchase_id" id="purchase_id" value="{{$purchasenumber->purchase_order_number}}" />
 
                 </div>
 

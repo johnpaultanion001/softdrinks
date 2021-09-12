@@ -110,23 +110,23 @@
                       </td>
 
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->purchase_amount , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->purchase_amount , 2, '.', ',') }}
             
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->profit , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->profit , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($inventory->price , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($inventory->price , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($inventory->total_amount_purchase , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($inventory->total_amount_purchase , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->total_profit , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->total_profit , 2, '.', ',') }}
                       </td>
                       <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->total_price , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->total_price , 2, '.', ',') }}
 
                       </td>
                       <td>

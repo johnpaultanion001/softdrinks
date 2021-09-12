@@ -55,7 +55,7 @@
                              {{ $customer->contact_number ?? '' }}
                         </td>
                         <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($customer->current_balance , 0, ',', ',') }}
+                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($customer->current_balance , 2, '.', ',') }}
                         </td>
                         <td>
                             {{ $customer->created_at->format('F d,Y h:i A') }}

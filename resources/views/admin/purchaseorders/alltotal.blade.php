@@ -10,20 +10,20 @@
 
         <div class="col-sm-3">
                 <div class="form-group">
-                        <label class="control-label text-uppercase" >Total Cost:</label>
-                        <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_amount_purchase') ?? '' , 0, ',', ',') }}"/>
+                        <label class="control-label text-uppercase" >Total Overall Cost:</label>
+                        <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_amount_purchase') ?? '' , 2, '.', ',') }}"/>
                 </div>
         </div>
         <div class="col-sm-3">
                 <div class="form-group">
-                        <label class="control-label text-uppercase" >Total Profit:</label>
-                        <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_profit') ?? '' , 0, ',', ',') }}"/>
+                        <label class="control-label text-uppercase" >Total Overall Profit:</label>
+                        <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_profit') ?? '' , 2, '.', ',') }}"/>
                 </div>
         </div>
         <div class="col-sm-3">
                 <div class="form-group">
-                        <label class="control-label text-uppercase" >Total Sales:</label>
-                        <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_price') ?? '' , 0, ',', ',') }}"/>
+                        <label class="control-label text-uppercase" >Total Overall Sales:</label>
+                        <input type="text"  class="form-control" readonly value="₱ {{ number_format($products->sum('total_price') ?? '' , 2, '.', ',') }}"/>
                 </div>
         </div>
         <div class="col-sm-3">

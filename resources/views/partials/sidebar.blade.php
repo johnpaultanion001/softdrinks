@@ -65,7 +65,7 @@
               <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/returned') || request()->is('admin/returned/*') ? 'active' : '' }}" href="{{ route("admin.returned.index") }}">
                   <i class="ni ni-bullet-list-67"></i>
-                  <span class="nav-link-text text-uppercase">Returned Products</span>
+                  <span class="nav-link-text text-uppercase">Returned Inventries</span>
                 </a>
               </li>
             @endcan

@@ -23,7 +23,7 @@ class PurchaseOrderSeeder extends Seeder
                 'total_purchased_order' => '93200',
                 'total_profit' => '12900',
                 'total_price' => '106100',
-                'total_orders' => '3',
+                'total_orders' => '5',
                 'remarks' => 'Sample',
                 'name_of_a_driver' => 'John Paul Tanion',
                 'plate_number' => 'ABC 123',

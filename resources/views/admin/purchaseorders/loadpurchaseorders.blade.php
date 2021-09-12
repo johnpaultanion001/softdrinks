@@ -41,9 +41,9 @@
                 <th scope="col">Reference</th>
 
                 <th scope="col">Product Count</th>
-                <th scope="col">Total Cost</th>
-                <th scope="col">Total Profit</th>
-                <th scope="col">Total Sales</th>
+                <th scope="col">Total Overall Cost</th>
+                <th scope="col">Total Overall Profit</th>
+                <th scope="col">Total Overall Sales</th>
                 <th scope="col">Vat Amount</th>
 
                 <th scope="col">Created By</th>

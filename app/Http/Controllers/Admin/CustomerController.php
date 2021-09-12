@@ -33,7 +33,7 @@ class CustomerController extends Controller
             'customer_code' => ['required', 'string', 'max:255' , 'unique:customers'],
             'customer_name' => ['required', 'string', 'max:255'],
             'area' => ['required'],
-            'contact_number' => ['numeric' , 'digits:11'],
+            'contact_number' => ['numeric' , 'digits:8'],
             'current_balance' => ['required' ,'integer','min:0'],
 
         ]);
@@ -71,7 +71,7 @@ class CustomerController extends Controller
             'customer_code' => ['required', 'string', 'max:255' , 'unique:customers,customer_code,'.$customer->id ],
             'customer_name' => ['required', 'string', 'max:255'],
             'area' => ['required'],
-            'contact_number' => ['numeric' , 'digits:11'],
+            'contact_number' => ['numeric' , 'digits:8'],
             'current_balance' => ['required' ,'integer','min:0'],
            
         ]);

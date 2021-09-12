@@ -40,6 +40,8 @@ class Inventory extends Model
         'product_id',
         'supplier_id',
         'isRemove',
+        'isSame',
+        'add_qty',
        
     ];
     public function category()

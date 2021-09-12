@@ -15,6 +15,18 @@
             <div class="col">
               <h3 class="mb-0 text-uppercase" id="titletable">UCS</h3>
             </div>
+            <div class="col text-right">
+             
+                <div class="col-sm-4">
+                    <small class="text-dark">Total Overall UCS:</small>
+                    <div class="input-group ">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">₱</div>
+                    </div>
+                    <input type="text" class="form-control" name="subtotal" id="subtotal" value="000" readonly>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
         <div class="table-responsive">

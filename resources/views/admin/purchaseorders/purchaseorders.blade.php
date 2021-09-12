@@ -336,7 +336,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Purchase QTY: </label>
+                                <label class="control-label" >QTY: </label>
                                 <input type="number" name="stock" id="stock" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-stock"></strong>
@@ -345,8 +345,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Purchase Amount:</label>
-                                <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" />
+                                <label class="control-label" >Unit Cost:</label>
+                                <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" step="any" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-purchase_amount"></strong>
                                 </span>
@@ -354,8 +354,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Profit Amount:</label>
-                                <input type="number" name="profit" id="profit" class="form-control" />
+                                <label class="control-label" >Unit Profit:</label>
+                                <input type="number" name="profit" id="profit" class="form-control" step="any"/>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-profit"></strong>
                                 </span>
@@ -716,6 +716,8 @@ $('#productForm').on('submit', function(event){
                 alltotal();
                 
             }
+          
+            
            
         }
     });

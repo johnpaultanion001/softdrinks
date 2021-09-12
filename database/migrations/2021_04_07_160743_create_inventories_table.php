@@ -26,6 +26,7 @@ class CreateInventoriesTable extends Migration
             $table->integer('qty');
             $table->integer('sold')->default(0);
             $table->integer('orders')->default(0);
+            $table->integer('add_qty')->default(0);
             
             $table->string('size_id');
             
@@ -45,6 +46,8 @@ class CreateInventoriesTable extends Migration
 
             $table->string('location_id')->default(1);
             $table->integer('isRemove')->default(0);
+            $table->integer('isSame')->default(0);
+            
             $table->string('product_id')->unique();
             $table->string('supplier_id');
 
