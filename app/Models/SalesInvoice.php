@@ -26,6 +26,7 @@ class SalesInvoice extends Model
         'new_bal',
         'user_id',
         'isVoid',
+        'change',
        
     ];
     public function customer()

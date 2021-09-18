@@ -46,4 +46,5 @@ class Order extends Model
     {
         return $this->belongsTo(PriceType::class, 'pricetype_id');
     }
+   
 }

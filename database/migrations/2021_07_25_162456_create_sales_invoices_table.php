@@ -28,8 +28,10 @@ class CreateSalesInvoicesTable extends Migration
             $table->float('prev_bal');
             $table->float('total_inv_amt');
             $table->float('cash');
+            $table->float('change');
             $table->float('new_bal');
             $table->integer('isVoid')->default(0);
+            
 
 
             $table->timestamps();

@@ -18,7 +18,7 @@
                                             <td>{{$receipt->inventory->category->name}}</td>
                                             <td>{{$receipt->inventory->short_description}}</td>
                                             <td>₱ {{ number_format($receipt->inventory->price ?? '' , 2, '.', ',') }}</td>
-                                            <td>₱  {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
+                                            <td>₱ {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                         </tr>
                                     @empty
                                     <tr>
@@ -42,22 +42,40 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td>Sub Total:</td>
-                                        <td> ₱ {{ number_format($receipts->sum->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
+                                        <td>
+                                            Sub Total:
+                                            <br>
+                                            Return:
+                                            <br>
+                                            Discounted:
+                                            
+                                        </td>
+                                        <td> 
+                                            ₱ {{ number_format($receipts->sum->total_amount_receipt ?? '' , 2, '.', ',') }}
+                                            <br>
+                                            ₱ ( {{ number_format($totalsalesreturn ?? '' , 2, '.', ',') }} )
+                                            <br>
+                                            ₱ ( {{ number_format($receipts->sum->discounted ?? '' , 2, '.', ',') }} )
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td>Discounted:</td>
-                                        <td> ₱ {{ number_format($receipts->sum->discounted ?? '' , 2, '.', ',') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Total:</td>
-                                        <td> ₱ {{ number_format($receipts->sum->total ?? '' , 2, '.', ',') }}</td>
+                                        <td>
+                                            Total: 
+                                            <br>
+                                            Cash:
+                                            <br>
+                                            Change:
+                                        </td>
+                                        <td> 
+                                            ₱ {{ number_format($total ?? '' , 2, '.', ',') }}
+                                            <br>
+                                            <span id="cashreceipt"></span>
+                                            <br>
+                                            <span id="changereceipt"></span>
+                                        </td>
                                     </tr>
                                     
                                 </tfoot>
@@ -92,6 +110,25 @@
                         </div>
                     </div>
                 </div>
+
+
+<script>
+    
+    $(function () {
+
+        let formatNumber = Intl.NumberFormat('en-US', {
+            style: "currency",
+            currency: "PHP",
+        });
+
+        var cash = $('#cash').val();
+        var change = $('#change').text();
+
+        $('#cashreceipt').text(formatNumber.format(cash));
+        $('#changereceipt').text('₱ ' + change);
+    });
+</script>
+
 
                 
                 

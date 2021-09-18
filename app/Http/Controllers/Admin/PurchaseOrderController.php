@@ -11,7 +11,9 @@ use App\Models\Category;
 use App\Models\Size;
 use App\Models\UCS;
 use App\Models\Location;
+use App\Models\StatusReturn;
 use App\Models\PendingProduct;
+use App\Models\PendingReturnedProduct;
 use Validator;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +29,10 @@ class PurchaseOrderController extends Controller
         $products = PendingProduct::latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
         $sizes = Size::where('isRemove', 0)->latest()->get();
-        return view('admin.purchaseorders.purchaseorders', compact('suppliers','products','categories','sizes','locations'));
+        $status = StatusReturn::where('isRemove', 0)->latest()->get();
+        $product_code = Inventory::where('isSame' , 0)->where('isRemove' , 0)->latest()->get();
+        
+        return view('admin.purchaseorders.purchaseorders', compact('suppliers','products','categories','sizes','locations','status','product_code'));
     }
     public function total()
     {
@@ -43,27 +48,33 @@ class PurchaseOrderController extends Controller
 
     public function view(PurchaseOrder $purchasenumber)
     {
-        $orders = Inventory::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        $products = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        $updatedproduct = Inventory::where('isRemove', 0)->where('isSame', 1)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
-        return view('admin.purchaseorders.viewmodal', compact('orders', 'suppliers', 'purchasenumber'));
+        $returnproduct = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        return view('admin.purchaseorders.viewmodal', compact('products', 'suppliers', 'purchasenumber', 'updatedproduct' , 'returnproduct'));
     }
     public function edit(PurchaseOrder $purchasenumber)
     {
         $orders = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
         $categories = Category::where('isRemove', 0)->latest()->get();
         $locations = Location::where('isRemove', 0)->latest()->get();
         $purchaseorder = PurchaseOrder::latest()->get();
         $sizes = Size::where('isRemove', 0)->latest()->get();
-        return view('admin.purchaseorders.editpurchase.edit', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber' , 'sizes' , 'locations'));
+
+        $status = StatusReturn::where('isRemove', 0)->latest()->get();
+        $product_code = Inventory::where('isSame' , 0)->where('isRemove' , 0)->latest()->get();
+        return view('admin.purchaseorders.editpurchase.edit', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber' , 'sizes' , 'locations', 'status', 'product_code'));
     }
     public function loadedit(PurchaseOrder $purchasenumber)
     {
-        $orders = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
-        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
-        $categories = Category::where('isRemove', 0)->latest()->get();
-        $purchaseorder = PurchaseOrder::latest()->get();
-        return view('admin.purchaseorders.editpurchase.load', compact('orders', 'suppliers' , 'categories' , 'purchaseorder', 'purchasenumber'));
+        $products = Inventory::where('isRemove', 0)->where('isSame', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        $updatedproduct = Inventory::where('isRemove', 0)->where('isSame', 1)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+        $returnproduct = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $purchasenumber->purchase_order_number)->get();
+
+        return view('admin.purchaseorders.editpurchase.load', compact('products', 'updatedproduct', 'returnproduct' , 'purchasenumber'));
     }
     public function store(Request $request)
     {
@@ -81,8 +92,8 @@ class PurchaseOrderController extends Controller
             'location_id' => ['required'],
             'reference' => ['nullable'],
 
-            'trade_discount' => ['nullable'],
-            'terms_discount' => ['nullable'],
+            'trade_discount' => ['nullable' ,'numeric','min:0'],
+            'terms_discount' => ['nullable' ,'numeric','min:0'],
         ]);
 
         
@@ -132,15 +143,17 @@ class PurchaseOrderController extends Controller
         ]);
 
         $pcode = PendingProduct::pluck('product_code');
-        Inventory::whereIn('product_code' , $pcode)->update([
-            'stock' => DB::raw ('stock + add_qty'),
-            'qty' => DB::raw ('qty + add_qty'),
-            'total_amount_purchase' => DB::raw ('purchase_amount * qty'),
-            'total_profit' => DB::raw ('profit * qty'),
-            'total_price' => DB::raw ('price * qty'),
-            'add_qty' => 0,
-        ]);
-        
+        Inventory::whereIn('product_code' , $pcode)
+                    ->where('isSame', 0)
+                    ->update([
+                        'stock' => DB::raw ('stock + add_qty'),
+                        'qty' => DB::raw ('qty + add_qty'),
+                        'total_amount_purchase' => DB::raw ('purchase_amount * qty'),
+                        'total_profit' => DB::raw ('profit * qty'),
+                        'total_price' => DB::raw ('price * qty'),
+                        'add_qty' => 0,
+                    ]);
+
         PendingProduct::query()
         ->latest()
         ->each(function ($oldRecord) {
@@ -149,7 +162,6 @@ class PurchaseOrderController extends Controller
             $newPost->save();
         });
         PendingProduct::latest()->delete();
-
 
 
         return response()->json(['success' => 'Added Purchased Order Successfully.']);
@@ -210,5 +222,74 @@ class PurchaseOrderController extends Controller
         ]);
 
         return response()->json(['success' => 'Purchased Order Updated Successfully.']);
+    }
+  
+    public function reuseproduct(Request $request){
+        // $userid = auth()->user()->id;
+        $query = Inventory::query();
+
+        if($request->get('supplier'))
+        {
+            $countproducts = Inventory::where('supplier_id' ,$request->get('supplier'))
+                                        ->where('isSame', 0)
+                                        ->where('isRemove', 0)
+                                        ->count();
+            if($countproducts < 1){   
+                return response()->json([
+                   'nodata' => 'No product available in this supplier',
+                ]);
+            }elseif($countproducts > 0){
+                $purchaseorderid = PurchaseOrder::orderby('id', 'desc')->firstorfail();
+                $id = $purchaseorderid->purchase_order_number + 1;
+
+                PendingProduct::latest()->delete();
+                UCS::where('purchase_order_number_id' , $id)->delete();
+
+                $query->where('supplier_id', $request->get('supplier'));
+                $po = PurchaseOrder::where('supplier_id', $request->get('supplier'))->latest()->firstorfail();
+    
+                $query->where('isRemove', 0)->where('isSame', 0)->latest()
+                ->each(function ($oldRecord) {
+                    $newPost = $oldRecord->replicate();
+                    $newPost->setTable('pending_products');
+                    $newPost->save();
+                });
+    
+                
+    
+                PendingProduct::latest()->update([
+                    'product_id' => DB::raw ('product_id -'. sprintf("%06d", mt_rand(1900, 2000))),
+                    'purchase_order_number_id' => $id,
+                    'qty' =>  DB::raw ('pqty'),
+                    'stock' =>  DB::raw ('pqty'),
+                    'isSame' => 1,
+                    'add_qty' => 0,
+                ]);
+    
+                Inventory::where('supplier_id', $request->get('supplier'))
+                            ->where('isSame', '0')
+                            ->update([
+                                'add_qty' => DB::raw ('add_qty + pqty'),
+                            ]);
+
+                //UCS Mutli Insert
+                $data = PendingProduct::select('purchase_order_number_id', 'product_id', 'qty', 'ucs_size')->get()->toarray();
+                UCS::insert($data);
+
+                UCS::where('purchase_order_number_id', $id)
+                ->update([
+                        'ucs' => DB::raw ('qty * ucs_size'),
+                    ]);
+
+
+                return response()->json([
+                    'result' =>  $po,
+                    'success' =>  'Successfully Inserted',
+                ]);
+
+            }
+        }
+
+      
     }
 }

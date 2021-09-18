@@ -11,19 +11,15 @@ class PendingReturnedProduct extends Model
     public $table = 'pending_returned_products';
 
     protected $fillable = [
-        'return_id',
         'purchase_order_number_id',
-        'name',
-        'case',
+        'product_id',
+        'qty',
+        'unit_price',
+        'amount',
         'status_id',
-        'deposit',
-        'note',
+        'remarks',
         'isRemove',
     ];
-    public function return()
-    {
-        return $this->belongsTo(Returned::class, 'return_id');
-    }
     public function status()
     {
         return $this->belongsTo(StatusReturn::class, 'status_id');
@@ -31,6 +27,10 @@ class PendingReturnedProduct extends Model
     public function purchase_order()
     {
         return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id', 'purchase_order_number');
+    }
+    public function inventory()
+    {
+        return $this->belongsTo(Inventory::class, 'product_id', 'product_id');
     }
    
 }

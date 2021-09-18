@@ -13,6 +13,7 @@ use App\Models\OrderNumber;
 use App\Models\Customer;
 use App\Models\PriceType;
 use App\Models\OrderSales;
+use App\Models\SalesReturn;
 use Gate;
 use DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class OrderingController extends Controller
     public function getproducts()
     {
         abort_if(Gate::denies('ordering_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $inventories = Inventory::latest()->get();
+        $inventories = Inventory::where('isRemove', 0)->where('isSame', 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
         $categories = Category::all();
         $orders = Order::where('status', '0')->get();
         $customers = Customer::where('isRemove', '0')->latest()->get();
@@ -34,7 +35,7 @@ class OrderingController extends Controller
     public function loadproduct()
     {
         date_default_timezone_set('Asia/Manila');
-        $inventories = Inventory::where('isRemove', 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
+        $inventories = Inventory::where('isRemove', 0)->where('isSame', 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
         $categories = Category::all();
         $orders = Order::where('status', '0')->get();
         return view('admin.ordering.loadproduct', compact('categories','inventories', 'orders'));
@@ -59,7 +60,8 @@ class OrderingController extends Controller
     public function checkout()
     {
         date_default_timezone_set('Asia/Manila');
-        $inventories = Inventory::latest()->get();
+        // $inventories = Inventory::latest()->get();
+        $inventories = Inventory::where('isRemove', 0)->where('isSame', 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
         $categories = Category::all();
         $orders = Order::where('status', '0')->latest()->get();
         $receipts = Order::where('status', '0')->latest()->get();
@@ -129,7 +131,8 @@ class OrderingController extends Controller
     }
     public function loadcart()
     {
-        $inventories = Inventory::latest()->get();
+        // $inventories = Inventory::latest()->get();
+        $inventories = Inventory::where('isRemove', 0)->where('isSame', 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
         $categories = Category::all();
         $orders = Order::where('status', '0')->get();
         return view('admin.ordering.loadcart', compact('categories','inventories', 'orders'));
@@ -142,6 +145,8 @@ class OrderingController extends Controller
                                     ->Orwhere('short_description','LIKE','%'.$request->search."%")
                                     ->Orwhere('price','LIKE','%'.$request->search."%")
                                     ->Orwhere('product_code','LIKE','%'.$request->search."%")
+                                    ->where('isRemove', 0)
+                                    ->where('isSame', 0)
                                     ->latest()
                                     ->get();
             return view('admin.ordering.loadproduct', compact('inventories'));
@@ -169,20 +174,22 @@ class OrderingController extends Controller
             return response()->json(['expirationtoday' => 'This product has expired today. Expiration Date:'.$inventory->expiration]);
         }
         if($inventory->orders > $inventory->stock){
-            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$inventory->stock]);
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of this product']);
         }
         if($inventory->orders == $inventory->stock){
-            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$inventory->stock]);
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of this product']);
         }
         if( $inventory->orders + $request->purchase_qty > $inventory->stock){
-            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$inventory->stock]);
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$inventory->orders.' has reach maximum stock of this product']);
         }
 
         $discounted = PriceType::where('id', $request->select_pricetype)->firstorfail();
+        
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
         $id = $ordernumber->order_number;
-
+    
         $totalwd = $request->purchase_qty * $inventory->price - $discounted->discount;
+
         $profitwd = $request->purchase_qty * $inventory->profit - $discounted->discount;
 
         $total = $request->purchase_qty * $inventory->price;

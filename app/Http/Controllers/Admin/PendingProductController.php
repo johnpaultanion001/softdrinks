@@ -93,8 +93,9 @@ class PendingProductController extends Controller
         $purchaseorderid = PurchaseOrder::orderby('id', 'desc')->firstorfail();
         $id = $purchaseorderid->purchase_order_number + 1;
         $userid = auth()->user()->id;
+        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
 
-        $existingcode = Inventory::select(['product_code'])->get()->toArray();
+        $existingcode = Inventory::select(['product_code'])->where('isSame', 0)->where('isRemove', 0)->get()->toArray();
         if (in_array(array('product_code' => $request->input('product_code')), $existingcode))
         {
             $product = PendingProduct::create([
@@ -102,10 +103,11 @@ class PendingProductController extends Controller
                 'category_id' => $request->input('category_id'),
                 'long_description' => $request->input('long_description'),
                 'short_description' => $request->input('short_description'),
-                'product_code' => $request->input('product_code'),
+                'product_code' => trim(strtoupper($request->input('product_code'))),
     
                 'stock' => $request->input('stock'),
                 'qty' => $request->input('stock'),
+                'pqty' => $request->input('stock'),
                 'size_id' => $request->input('size_id'),
                 'expiration' => $request->input('expiration'),
                 'purchase_amount' => $request->input('purchase_amount'),
@@ -117,19 +119,22 @@ class PendingProductController extends Controller
                 'product_remarks' => $request->input('product_remarks'),
                 'product_id' => time().$userid,
                 'isSame' => '1',
+                'ucs_size' => $ucs->ucs,
             ]);
             Inventory::where('product_code', $request->input('product_code'))
                         ->where('isSame', '0')
+                        ->where('isRemove', '0')
                         ->increment('add_qty', $request->input('stock'));
 
-            $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+            
             $ucs_percase = $ucs->ucs * $request->input('stock');
     
             UCS::create([
                 'purchase_order_number_id' => $id,
-                'inventory_id' => $product->product_id,
+                'product_id' => $product->product_id,
                 'ucs' => $ucs_percase,
-                'case' => $product->stock,
+                'qty' => $product->stock,
+                'ucs_size' => $ucs->ucs,
             ]);
             return response()->json(['success' => 'Product Added Successfully.']);
         }
@@ -138,10 +143,11 @@ class PendingProductController extends Controller
             'category_id' => $request->input('category_id'),
             'long_description' => $request->input('long_description'),
             'short_description' => $request->input('short_description'),
-            'product_code' => $request->input('product_code'),
+            'product_code' => trim(strtoupper($request->input('product_code'))),
 
             'stock' => $request->input('stock'),
             'qty' => $request->input('stock'),
+            'pqty' => $request->input('stock'),
             'size_id' => $request->input('size_id'),
             'expiration' => $request->input('expiration'),
             'purchase_amount' => $request->input('purchase_amount'),
@@ -152,16 +158,18 @@ class PendingProductController extends Controller
             'total_price' => $total_price,
             'product_remarks' => $request->input('product_remarks'),
             'product_id' => time().$userid,
+            'ucs_size' => $ucs->ucs,
         ]);
     
-        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+      
         $ucs_percase = $ucs->ucs * $request->input('stock');
 
         UCS::create([
             'purchase_order_number_id' => $id,
-            'inventory_id' => $product->product_id,
+            'product_id' => $product->product_id,
             'ucs' => $ucs_percase,
-            'case' => $product->stock,
+            'qty' => $product->stock,
+            'ucs_size' => $ucs->ucs,
         ]);
         return response()->json(['success' => 'Product Added Successfully.']);
 
@@ -212,18 +220,66 @@ class PendingProductController extends Controller
         $purchaseorderid = PurchaseOrder::orderby('id', 'desc')->firstorfail();
         $id = $purchaseorderid->purchase_order_number + 1;
 
-        $existingcode = Inventory::select(['product_code'])->get()->toArray();
-        if (in_array(array('product_code' => $request->input('product_code')), $existingcode))
-        {
+        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
+
+        $existingcode = Inventory::select(['product_code'])->where('isSame', 0)->where('isRemove', 0)->get()->toArray();
+       
+
+        if($pending_product->isSame == 0){
+            if (in_array(array('product_code' => $request->input('product_code')), $existingcode))
+                {
+
+                    PendingProduct::find($pending_product->id)->update([
+                        'category_id' => $request->input('category_id'),
+                        'purchase_order_number_id' => $id,
+                        'long_description' => $request->input('long_description'),
+                        'short_description' => $request->input('short_description'),
+                        'product_code' => trim(strtoupper($request->input('product_code'))),
+            
+                        'stock' => $request->input('stock'),
+                        'qty' => $request->input('stock'),
+                        'pqty' => $request->input('stock'),
+                        'size_id' => $request->input('size_id'),
+                        'expiration' => $request->input('expiration'),
+                        'purchase_amount' => $request->input('purchase_amount'),
+                        'profit' => $request->input('profit'),
+                        'price' => $price,
+                        'total_amount_purchase' => $total_amount_purchase,
+                        'total_profit' => $total_profit,
+                        'total_price' => $total_price,
+                        'product_remarks' => $request->input('product_remarks'),
+                        'ucs_size' => $ucs->ucs,
+                        'isSame' => 1,
+                    ]);
+        
+                   
+        
+                    $ucs_percase = $ucs->ucs * $request->input('stock');
+                  
+                    UCS::where('product_id',$pending_product->product_id)->update([
+                        'ucs' => $ucs_percase,
+                        'qty' =>  $request->input('stock'),
+                        'ucs_size' => $ucs->ucs,
+                    ]);
+                    
+                    Inventory::where('product_code', $request->input('product_code'))
+                                ->where('isSame', '0')
+                                ->where('isRemove', '0')
+                                ->increment('add_qty', $request->input('stock'));
+        
+                    return response()->json(['success' => 'Product Updated Successfully.']);
+                }
+
             PendingProduct::find($pending_product->id)->update([
                 'category_id' => $request->input('category_id'),
                 'purchase_order_number_id' => $id,
                 'long_description' => $request->input('long_description'),
                 'short_description' => $request->input('short_description'),
-                'product_code' => $request->input('product_code'),
+                'product_code' =>  trim(strtoupper($request->input('product_code'))),
     
                 'stock' => $request->input('stock'),
                 'qty' => $request->input('stock'),
+                'pqty' => $request->input('stock'),
                 'size_id' => $request->input('size_id'),
                 'expiration' => $request->input('expiration'),
                 'purchase_amount' => $request->input('purchase_amount'),
@@ -233,67 +289,112 @@ class PendingProductController extends Controller
                 'total_profit' => $total_profit,
                 'total_price' => $total_price,
                 'product_remarks' => $request->input('product_remarks'),
+                'ucs_size' => $ucs->ucs,
+                'isSame' => 0,
             ]);
-            Inventory::where('product_code', $request->input('product_code'))
-                        ->where('isSame', '0')
-                        ->decrement('add_qty', $pending_product->stock);
-
-           
-
-            $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
             $ucs_percase = $ucs->ucs * $request->input('stock');
-          
-            UCS::where('inventory_id',$pending_product->product_number)->update([
+
+            UCS::where('product_id',$pending_product->product_id)->update([
                 'ucs' => $ucs_percase,
-                'case' =>  $request->input('stock'),
+                'qty' =>  $request->input('stock'),
+                'ucs_size' => $ucs->ucs,
             ]);
             
-            Inventory::where('product_code', $request->input('product_code'))
-                ->where('isSame', '0')
-                ->increment('add_qty', $request->input('stock'));
-
             return response()->json(['success' => 'Product Updated Successfully.']);
         }
+        elseif($pending_product->isSame == 1){
+               if (in_array(array('product_code' => $request->input('product_code')), $existingcode))
+                {
+                    Inventory::where('product_code', $request->input('product_code'))
+                                ->where('isSame', '0')
+                                ->where('isRemove', '0')
+                                ->decrement('add_qty', $pending_product->stock);
 
-        PendingProduct::find($pending_product->id)->update([
-            'category_id' => $request->input('category_id'),
-            'purchase_order_number_id' => $id,
-            'long_description' => $request->input('long_description'),
-            'short_description' => $request->input('short_description'),
-            'product_code' => $request->input('product_code'),
-
-            'stock' => $request->input('stock'),
-            'qty' => $request->input('stock'),
-            'size_id' => $request->input('size_id'),
-            'expiration' => $request->input('expiration'),
-            'purchase_amount' => $request->input('purchase_amount'),
-            'profit' => $request->input('profit'),
-            'price' => $price,
-            'total_amount_purchase' => $total_amount_purchase,
-            'total_profit' => $total_profit,
-            'total_price' => $total_price,
-            'product_remarks' => $request->input('product_remarks'),
-        ]);
-
-        $ucs = Size::where('id', $request->input('size_id'))->firstorfail();
-        $ucs_percase = $ucs->ucs * $request->input('stock');
-      
-        UCS::where('inventory_id',$pending_product->product_number)->update([
-            'ucs' => $ucs_percase,
-            'case' =>  $request->input('stock'),
-        ]);
+                    PendingProduct::find($pending_product->id)->update([
+                        'category_id' => $request->input('category_id'),
+                        'purchase_order_number_id' => $id,
+                        'long_description' => $request->input('long_description'),
+                        'short_description' => $request->input('short_description'),
+                        'product_code' => trim(strtoupper($request->input('product_code'))),
+            
+                        'stock' => $request->input('stock'),
+                        'qty' => $request->input('stock'),
+                        'pqty' => $request->input('stock'),
+                        'size_id' => $request->input('size_id'),
+                        'expiration' => $request->input('expiration'),
+                        'purchase_amount' => $request->input('purchase_amount'),
+                        'profit' => $request->input('profit'),
+                        'price' => $price,
+                        'total_amount_purchase' => $total_amount_purchase,
+                        'total_profit' => $total_profit,
+                        'total_price' => $total_price,
+                        'product_remarks' => $request->input('product_remarks'),
+                        'ucs_size' => $ucs->ucs,
+                        'isSame' => 1,
+                    ]);
         
-        return response()->json(['success' => 'Product Updated Successfully.']);
-       
-       
+                    $ucs_percase = $ucs->ucs * $request->input('stock');
+                  
+                    UCS::where('product_id',$pending_product->product_id)->update([
+                        'ucs' => $ucs_percase,
+                        'qty' =>  $request->input('stock'),
+                        'ucs_size' => $ucs->ucs,
+                    ]);
+                    
+                    Inventory::where('product_code', $request->input('product_code'))
+                        ->where('isSame', '0')
+                        ->where('isRemove', '0')
+                        ->increment('add_qty', $request->input('stock'));
+        
+                    return response()->json(['success' => 'Product Updated Successfully.']);
+                }
+            
+
+            Inventory::where('product_code', $pending_product->product_code)
+                        ->where('isSame', '0')
+                        ->where('isRemove', '0')
+                        ->decrement('add_qty', $pending_product->stock);    
+
+            PendingProduct::find($pending_product->id)->update([
+                'category_id' => $request->input('category_id'),
+                'purchase_order_number_id' => $id,
+                'long_description' => $request->input('long_description'),
+                'short_description' => $request->input('short_description'),
+                'product_code' => trim(strtoupper($request->input('product_code'))),
+                'stock' => $request->input('stock'),
+                'qty' => $request->input('stock'),
+                'pqty' => $request->input('stock'),
+                'size_id' => $request->input('size_id'),
+                'expiration' => $request->input('expiration'),
+                'purchase_amount' => $request->input('purchase_amount'),
+                'profit' => $request->input('profit'),
+                'price' => $price,
+                'total_amount_purchase' => $total_amount_purchase,
+                'total_profit' => $total_profit,
+                'total_price' => $total_price,
+                'product_remarks' => $request->input('product_remarks'),
+                'ucs_size' => $ucs->ucs,
+                'isSame' => 0,
+            ]);
+            $ucs_percase = $ucs->ucs * $request->input('stock');
+          
+            UCS::where('product_id',$pending_product->product_id)->update([
+                'ucs' => $ucs_percase,
+                'qty' =>  $request->input('stock'),
+                'ucs_size' => $ucs->ucs,
+            ]);
+            
+            return response()->json(['success' => 'Product Updated Successfully.']);
+        }
     }
 
     public function destroy(PendingProduct $pending_product)
     {
         Inventory::where('product_code', $pending_product->product_code)
                         ->where('isSame', '0')
-                        ->decrement('add_qty', $pending_product->stock);
-
+                        ->where('isRemove', '0')
+                        ->decrement('add_qty', $pending_product->qty);
+        UCS::where('product_id', $pending_product->product_id)->delete();
         return response()->json(['success' => 'Product Removed Successfully.' , $pending_product->delete()]);
     
     }

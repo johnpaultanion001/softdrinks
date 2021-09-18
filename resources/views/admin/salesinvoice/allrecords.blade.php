@@ -7,14 +7,15 @@
             <th>ID</th>
             <th>Doc No.</th>
             <th>Entry Date</th>
-            <th>Remarks</th>
             <th>Customer Name / Area</th>
             <th>Sub Total</th>
             <th>Total Discount</th>
-            <th>Total Amount</th>
             <th>Total Return</th>
+            <th>Total Amount</th>
             <th>Cash</th>
+            <th>Change</th>
             <th>Created By</th>
+            <th>Remarks</th>
             <th>Date</th>
          
         </tr>
@@ -37,9 +38,6 @@
                     {{ $allrecord->entry_date ?? '' }}
                 </td>
                 <td>
-                    {{ $allrecord->remarks  ?? '' }}
-                </td>
-                <td>
                     {{ $allrecord->customer->customer_name  ?? '' }} /  {{ $allrecord->customer->area  ?? '' }}
                 </td>
 
@@ -50,16 +48,22 @@
                     <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->total_discount , 2, '.', ',') }}
                 </td>
                 <td>
-                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->total_amount , 2, '.', ',') }}
+                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->total_return , 2, '.', ',') }}
                 </td>
                 <td>
-                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->total_return , 2, '.', ',') }}
+                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->total_amount , 2, '.', ',') }}
                 </td>
                 <td>
                     <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->cash , 2, '.', ',') }}
                 </td>
                 <td>
+                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->change , 2, '.', ',') }}
+                </td>
+                <td>
                     {{  $allrecord->user->name ?? '' }}
+                </td>
+                <td>
+                    {{ $allrecord->remarks  ?? '' }}
                 </td>
                 <td>
                     {{ $allrecord->created_at->format('F d,Y h:i A') }}

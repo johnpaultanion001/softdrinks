@@ -5,7 +5,9 @@
       <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{{ route("admin.dashboard") }}">
           <!-- <img src="../assets/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
-          <h2>LOGO</h2>
+
+          <h3 class="text-primary">JEWEL & NICKEL STORE</h3>
+          <hr class="my-1 bg-primary">
         </a>
       </div>
       <div class="navbar-inner">
@@ -61,14 +63,7 @@
               </a>
             </li>
             @endcan
-            @can('returned_access')
-              <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/returned') || request()->is('admin/returned/*') ? 'active' : '' }}" href="{{ route("admin.returned.index") }}">
-                  <i class="ni ni-bullet-list-67"></i>
-                  <span class="nav-link-text text-uppercase">Returned Inventries</span>
-                </a>
-              </li>
-            @endcan
+         
 
             @can('location_transfer_access')
               <li class="nav-item">
@@ -149,7 +144,7 @@
                   <li class="nav-item">
                     <a class="nav-link {{ request()->is('admin/ucs') || request()->is('admin/ucs/*') ? 'active' : '' }}" href="{{ route("admin.ucs.index") }}">
                     <i class="text-info fas fa-file-invoice-dollar"></i>
-                      <span class="nav-link-text  text-uppercase">UCS</span>
+                      <span class="nav-link-text  text-uppercase">UCS Report</span>
                     </a>
                   </li>
                 @endcan

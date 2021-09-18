@@ -14,169 +14,105 @@ use Symfony\Component\HttpFoundation\Response;
 class PendingReturnedProductController extends Controller
 {
    
-    public function index()
-    {
-        //
-    }
+    public function loadreturningproduct(){
+        $purchaseorderid = PurchaseOrder::orderby('id', 'desc')->firstorfail();
+        $id = $purchaseorderid->purchase_order_number + 1;
 
-    public function create()
-    {
-        //
+        $returnedproducts = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $id)->latest()->get();
+        return view('admin.purchaseorders.returningproducts', compact('returnedproducts'));
+        
     }
 
     public function store(Request $request)
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'status_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
-            'deposit' => ['required' ,'integer','min:1'],
-            'case' => ['required' ,'integer','min:1'],
-            'note' => ['nullable'],
+            'product_id' => ['required'],
+            'qty' => ['required','integer','min:1'],
+            'unit_price' => ['required' ,'numeric','min:1'],
+            'status_id' => ['required' ],
+            'remarks' => ['nullable'],
         ]);
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
-        PendingReturnedProduct::create([
-            'return_id' => '1',
-            'purchase_order_number_id' => $request->input('purchase_order_number_id'),
-            'status_id' => $request->input('status_id'),
-            'name' => $request->input('name'),
-            'case' => $request->input('case'),
-            'deposit' => $request->input('deposit'),
-            'note' => $request->input('note'),
-        ]);
-        return response()->json(['success' => 'Returned Product Added Successfully.']);
-    }
-    public function storeedit(Request $request)
-    {
-        date_default_timezone_set('Asia/Manila');
-        $validated =  Validator::make($request->all(), [
-            'status_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
-            'deposit' => ['required' ,'integer','min:1'],
-            'case' => ['required' ,'integer','min:1'],
-            'note' => ['nullable'],
-        ]);
 
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
+        $amount = $request->input('qty') * $request->input('unit_price');
+
+        if($request->input('existing_purchase') == 'yes'){
+            $purchaseid = $request->input('purchase_id_return');
+
+            PendingReturnedProduct::create([
+                'purchase_order_number_id' => $purchaseid,
+                'product_id' => $request->input('product_id'),
+                'qty' => $request->input('qty'),
+                'unit_price' => $request->input('unit_price'),
+                'amount' => $amount,
+                'status_id' => $request->input('status_id'),
+                'remarks' => $request->input('remarks'),
+            ]);
+            return response()->json(['success' => 'Returned Product Added Successfully.']);
         }
-        PendingReturnedProduct::create([
-            'return_id' => '1',
-            'purchase_order_number_id' => $request->input('purchase_order_number_id'),
-            'status_id' => $request->input('status_id'),
-            'name' => $request->input('name'),
-            'case' => $request->input('case'),
-            'deposit' => $request->input('deposit'),
-            'note' => $request->input('note'),
-        ]);
-        $totalcase = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('case');
-        $totaldeposit = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('deposit');
-        $totalproduct = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->count();
-       
-        Returned::find($request->input('hidden_id'))->update([
-            'total_case_return' => $totalcase,
-            'total_deposit' => $totaldeposit,
-            'total_orders_returned' => $totalproduct,
-        ]);
+        elseif($request->input('existing_purchase') == 'no'){
+                $purchaseorderid = PurchaseOrder::orderby('id', 'desc')->firstorfail();
+                $id = $purchaseorderid->purchase_order_number + 1;
+                
+                PendingReturnedProduct::create([
+                    'purchase_order_number_id' => $id,
+                    'product_id' => $request->input('product_id'),
+                    'qty' => $request->input('qty'),
+                    'unit_price' => $request->input('unit_price'),
+                    'amount' => $amount,
+                    'status_id' => $request->input('status_id'),
+                    'remarks' => $request->input('remarks'),
+                ]);
+                return response()->json(['success' => 'Returned Product Added Successfully.']);
 
-        return response()->json(['success' => 'Returned Product Added Successfully.']);
+        }
     }
 
-    public function show(PendingReturnedProduct $pendingreturnedproduct)
-    {
-        //
-    }
-     public function edit(PendingReturnedProduct $pendingreturnedproduct)
+    public function edit(PendingReturnedProduct $returningproduct)
     {
         if (request()->ajax()) {
-            return response()->json(['result' => $pendingreturnedproduct]);
+            return response()->json(['result' => $returningproduct]);
         }
     }
 
-    public function update(Request $request, PendingReturnedProduct $pendingreturnedproduct)
+    public function update(Request $request, PendingReturnedProduct $returningproduct)
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'status_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
-            'deposit' => ['required' ,'integer','min:1'],
-            'case' => ['required' ,'integer','min:1'],
-            'note' => ['nullable'],
+            'product_id' => ['required'],
+            'qty' => ['required','integer','min:1'],
+            'unit_price' => ['required' ,'numeric','min:1'],
+            'status_id' => ['required' ],
+            'remarks' => ['nullable'],
         ]);
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
-        PendingReturnedProduct::find($pendingreturnedproduct->id)->update([
-            'return_id' => '1',
-            'purchase_order_number_id' => $request->input('purchase_order_number_id'),
-            'status_id' => $request->input('status_id'),
-            'name' => $request->input('name'),
-            'case' => $request->input('case'),
-            'deposit' => $request->input('deposit'),
-            'note' => $request->input('note'),
-        ]);
-        return response()->json(['success' => 'Returned Product Updated Successfully.']);
-    }
-    public function updateedit(Request $request, PendingReturnedProduct $pendingreturnedproduct)
-    {
-        date_default_timezone_set('Asia/Manila');
-        $validated =  Validator::make($request->all(), [
-            'status_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
-            'deposit' => ['required' ,'integer','min:1'],
-            'case' => ['required' ,'integer','min:1'],
-            'note' => ['nullable'],
-        ]);
 
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
-        }
-        PendingReturnedProduct::find($pendingreturnedproduct->id)->update([
-            'return_id' => '1',
-            'purchase_order_number_id' => $request->input('purchase_order_number_id'),
+        $amount = $request->input('qty') * $request->input('unit_price');
+        PendingReturnedProduct::find($returningproduct->id)->update([
+            'product_id' => $request->input('product_id'),
+            'qty' => $request->input('qty'),
+            'unit_price' => $request->input('unit_price'),
+            'amount' => $amount,
             'status_id' => $request->input('status_id'),
-            'name' => $request->input('name'),
-            'case' => $request->input('case'),
-            'deposit' => $request->input('deposit'),
-            'note' => $request->input('note'),
-        ]);
-        $totalcase = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('case');
-        $totaldeposit = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->sum('deposit');
-        $totalproduct = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $request->input('purchase_order_number_id'))->count();
-       
-        Returned::find($request->input('hidden_id'))->update([
-            'total_case_return' => $totalcase,
-            'total_deposit' => $totaldeposit,
-            'total_orders_returned' => $totalproduct,
+            'remarks' => $request->input('remarks'),
         ]);
         return response()->json(['success' => 'Returned Product Updated Successfully.']);
     }
-    public function destroy(PendingReturnedProduct $pendingreturnedproduct)
+
+    public function destroy(PendingReturnedProduct $returningproduct)
     {
-        PendingReturnedProduct::find($pendingreturnedproduct->id)->update([
+        PendingReturnedProduct::find($returningproduct->id)->update([
             'isRemove' => '1',
         ]);
         return response()->json(['success' => 'Returned Product Removed Successfully.']);
     }
-    public function destroyedit(PendingReturnedProduct $pendingreturnedproduct)
-    {
-        PendingReturnedProduct::find($pendingreturnedproduct->id)->update([
-            'isRemove' => '1',
-        ]);
 
-        $totalcase = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $pendingreturnedproduct->purchase_order_number_id)->sum('case');
-        $totaldeposit = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $pendingreturnedproduct->purchase_order_number_id)->sum('deposit');
-        $totalproduct = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $pendingreturnedproduct->purchase_order_number_id)->count();
-       
-        Returned::where('purchase_order_number_id',$pendingreturnedproduct->purchase_order_number_id)->update([
-            'total_case_return' => $totalcase,
-            'total_deposit' => $totaldeposit,
-            'total_orders_returned' => $totalproduct,
-        ]);
-        return response()->json(['success' => 'Returned Product Removed Successfully.']);
-    }
+ 
 }

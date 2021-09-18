@@ -59,7 +59,7 @@
                             
                             @if ($order->isReturn == 0)
                             <a href="{{ route('admin.purchase-order.edit', $order->id) }}"  class="text-uppercase btn btn-info btn-sm">Edit</a>
-                            <a href="{{ route('admin.returned.show', $order->id) }}" class="return text-uppercase btn btn-success btn-sm">Return</button>
+                         
                             @elseif ($order->isReturn == 1)
 
                             @endif

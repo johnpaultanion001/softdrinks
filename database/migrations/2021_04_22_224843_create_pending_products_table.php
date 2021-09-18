@@ -25,6 +25,7 @@ class CreatePendingProductsTable extends Migration
 
             $table->integer('stock');
             $table->integer('qty');
+            $table->integer('pqty');
             $table->integer('sold')->default(0);
             $table->integer('orders')->default(0);
             $table->integer('add_qty')->default(0);
@@ -45,9 +46,11 @@ class CreatePendingProductsTable extends Migration
             $table->longText('product_remarks')->nullable();
             $table->integer('isSame')->default(0);
            
-            $table->string('location_id')->default(1);
+            $table->string('location_id')->default(2);
             $table->string('product_id')->unique();
             $table->string('supplier_id')->default(1);
+            $table->integer('isRemove')->default(0);
+            $table->float('ucs_size', 8, 2);
 
             $table->timestamps();
         });

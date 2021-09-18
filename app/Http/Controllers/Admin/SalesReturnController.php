@@ -31,7 +31,7 @@ class SalesReturnController extends Controller
         $validated =  Validator::make($request->all(), [
             'inventory_id' => ['required'],
             'pricetype_id' => ['required'],
-            'unit_price' => ['required' ,'integer','min:1'],
+            'unit_price' => ['required' ,'numeric','min:1'],
             'return_qty' => ['required' ,'integer','min:1'],
         ]);
 
@@ -73,7 +73,7 @@ class SalesReturnController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'pricetype_id' => ['required'],
-            'unit_price' => ['required' ,'integer','min:1'],
+            'unit_price' => ['required' ,'numeric','min:1'],
             'return_qty' => ['required' ,'integer','min:1'],
             'inventory_id' => ['required'],
         ]);

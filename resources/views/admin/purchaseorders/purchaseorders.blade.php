@@ -57,45 +57,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >DOC NO.</label>
-                                    <input type="text" name="doc_no" id="doc_no" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-doc_no"></strong>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Entry Date:</label>
-                                    <input type="date" name="entry_date" id="entry_date" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-entry_date"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >PO NO.</label>
-                                    <input type="text" name="po_no" id="po_no" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-po_no"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >PO Date.</label>
-                                    <input type="date" name="po_date" id="po_date" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-po_date"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
+                    <div class="col-sm-6">
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col"><label class="control-label text-uppercase" >Supplier: </label></div>
@@ -139,7 +101,46 @@
                                    
                                 </div>
                                
+                            </div>        
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >DOC NO.</label>
+                                    <input type="text" name="doc_no" id="doc_no" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-doc_no"></strong>
+                                    </span>
+                                </div>
                             </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Entry Date:</label>
+                                    <input type="date" name="entry_date" id="entry_date" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-entry_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO NO.</label>
+                                    <input type="text" name="po_no" id="po_no" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_no"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >PO Date.</label>
+                                    <input type="date" name="po_date" id="po_date" class="form-control"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-po_date"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                          
 
                             <div class="col-sm-3">
                                 <div class="form-group">
@@ -222,6 +223,21 @@
                    
                     </div>
 
+                    <br>
+
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0 text-uppercase" id="titletablereturn">Returning Products</h3>
+                        </div>
+                        
+                        <div class="col text-right">
+                            <button type="button" name="create_return" id="create_return" class="text-uppercase btn btn-sm btn-default">New Return</button>
+                        </div>
+                    </div>
+                    <div id="return-product" class="return-product col mt-4">
+                   
+                    </div>
+
                    
 
                     <input type="hidden" name="purchase_action" id="purchase_action" value="Add" />
@@ -259,7 +275,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label" >Product Code: </label>
-                                <input type="text" name="product_code" id="product_code" class="form-control" autocomplete="off"/>
+                                <input type="text" name="product_code"  id="product_code" class="form-control" autocomplete="off" style="text-transform: uppercase;"/>
                                 <div id="productCodeList"></div>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-product_code"></strong>
@@ -386,7 +402,103 @@
     </div>
 </form>
 
+<!-- Create Return Product -->
+<form method="post" id="returnForm" class="form-horizontal">
+    @csrf
+    <div class="modal" id="returnModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-default">
+                    <p class="modal-title-return font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="loading-returnmodal" class="loading-container">
+                    <div class="loading"></div>
+                    <div id="loading-text">loading</div>
+                </div> 
+                <div id="modal-body-return" class="modal-body">
+                    <div class="row">
 
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Product Code: </label>
+                                <select name="product_id" id="product_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Product Code</option>
+                                    @foreach ($product_code as $product)
+                                        <option value="{{$product->product_id}}" class="text-uppercase"> {{$product->product_code}} - {{$product->short_description}}  </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-product_id"></strong>
+                                </span>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Status: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/status-return">New Status?</a>
+                                    </div>
+                                </div>
+                                <select name="status_id" id="status_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Status</option>
+                                    @foreach ($status as $sp)
+                                        <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-status_id"></strong>
+                                </span>
+                            </div>
+                            
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >QTY: </label>
+                                <input type="number" name="qty" id="qty" class="form-control" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-qty"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Unit Price:</label>
+                                <input type="number" name="unit_price" id="unit_price" class="form-control" step="any" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-unit_price"></strong>
+                                </span>
+                            </div>
+                        </div>
+                       
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label" >Remarks: </label>
+                                <textarea name="remarks" id="remarks" class="form-control"></textarea>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-remarks"></strong>
+                                </span>
+                            </div>
+                        </div>
+                              
+                    </div>
+                    <input type="hidden" name="return_action" id="return_action" value="Add" />
+                    <input type="hidden" name="return_hidden_id" id="return_hidden_id" />
+                    <input type="hidden" name="existing_purchase" id="existing_purchase" value="no" />
+                </div>
+
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-white text-uppercase"  id="back-button" >Back</button>
+                    <input type="submit" name="return_button" id="return_button" class="text-uppercase btn btn-default" value="Submit" />
+                </div>
+        
+            </div>
+        </div>
+    </div>
+</form>
 
 
 @endsection
@@ -450,6 +562,24 @@ function loadPendingProduct(){
     })
 }
 
+//Return Products
+function loadReturnProduct(){
+  
+    $.ajax({
+        url: "loadreturningproduct", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('#loading-containermodal').show();
+            $("#return-product").hide();
+        },
+        success: function(response){
+            $('#loading-containermodal').hide();
+            $("#return-product").show();
+            $("#return-product").html(response);
+        }	
+    })
+}
 //view purchase order modal
 $(document).on('click', '.view', function(){
     $('#viewModal').modal('show');
@@ -474,6 +604,7 @@ $(document).on('click', '.view', function(){
 // back button
 $(document).on('click', '#back-button', function(){
     $('#productModal').modal('hide');
+    $('#returnModal').modal('hide');
     purchaseModal();
 });
 
@@ -489,6 +620,7 @@ function purchaseModal(){
     $('#purchase_action').val('Add');
 
     loadPendingProduct();
+    loadReturnProduct();
     alltotal();
 }
 //store and update purchase order
@@ -594,6 +726,19 @@ $(document).on('click', '#create_product', function(){
     $('#product_action').val('Add');
     $('#loading-productmodal').hide();
 });
+
+//create return product
+$(document).on('click', '#create_return', function(){
+    $('#purchaseorderModal').modal('hide');
+    $('#returnModal').modal('show');
+    $('#returnForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    $('.modal-title-return').text('Add New Return Product');
+    $('#return_button').val('Submit');
+    $('#return_action').val('Add');
+    $('#loading-returnmodal').hide();
+});
+
 
 //edit product
 $(document).on('click', '.edit', function(){
@@ -723,6 +868,177 @@ $('#productForm').on('submit', function(event){
     });
 });
 
+// store and update return product
+$('#returnForm').on('submit', function(event){
+    event.preventDefault();
+    $('.form-control').removeClass('is-invalid')
+    var action_url = "{{ route('admin.returningproduct.store') }}";
+    var type = "POST";
+
+    if($('#return_action').val() == 'Edit'){
+        var id = $('#return_hidden_id').val();
+        action_url = "/admin/returningproduct/" + id;
+        type = "PUT";
+    }
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $("#return_button").attr("disabled", true);
+            $("#return_button").attr("value", "Loading..");
+            $('#loading-returnmodal').show();
+            $('#modal-body-return').hide();
+        },
+        success:function(data){
+            
+            $('#loading-returnmodal').hide();
+            $('#modal-body-return').show();
+
+            if($('#return_action').val() == 'Edit'){
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Update");
+            }else{
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Submit");
+            }
+
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.success){
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
+                });
+                $('.form-control').removeClass('is-invalid')
+
+                $('#returnForm')[0].reset();
+                $('#product_id').select2({
+                    placeholder: 'Select Product Code'
+                });
+                $('#status_id').select2({
+                    placeholder: 'Select Status'
+                });
+                $('#returnModal').modal('hide');
+                purchaseModal();
+                
+            }
+          
+            
+           
+        }
+    });
+});
+
+//edit return
+$(document).on('click', '.editreturn', function(){
+    $('#purchaseorderModal').modal('hide');
+    $('#returnModal').modal('show');
+    $('.modal-title-return').text('Edit Return Product');
+    $('#returnForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+
+    var id = $(this).attr('editreturn');
+
+    $.ajax({
+        url :"/admin/returningproduct/"+id+"/edit",
+        dataType:"json",
+        beforeSend:function(){
+            $("#return_button").attr("disabled", true);
+            $("#return_button").attr("value", "Loading..");
+            $('#loading-returnmodal').show();
+            $('#modal-body-return').hide();
+        },
+        success:function(data){
+            $('#loading-returnmodal').hide();
+            $('#modal-body-return').show();
+            if($('#return_action').val() == 'Edit'){
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Update");
+            }else{
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Submit");
+            }
+            $.each(data.result, function(key,value){
+                if(key == $('#'+key).attr('id')){
+                    $('#'+key).val(value)
+                    if(key == 'product_id'){
+                        $("#product_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+                    if(key == 'status_id'){
+                        $("#status_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+                }
+            })
+            $('#return_hidden_id').val(id);
+            $('#return_button').val('Update');
+            $('#return_action').val('Edit');
+        }
+    })
+});
+
+//remove return
+$(document).on('click', '.removereturn', function(){
+  var id = $(this).attr('removereturn');
+  $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this data?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/returningproduct/"+id,
+                      method:'DELETE',
+                      data: {
+                          _token: '{!! csrf_token() !!}',
+                      },
+                      dataType:"json",
+                      beforeSend:function(){
+                        $('#loading-containermodal').show();
+                        $("#return-product").hide();
+                      },
+                      success:function(data){
+                          if(data.success){
+                            $('#success-alert').addClass('bg-primary');
+                            $('#success-alert').html('<strong>' + data.success + '</strong>');
+                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                            });
+                            purchaseModal();
+                            $('#loading-containermodal').hide();
+                            $("#return-product").show();
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
+
+});
+
 //remove product
 $(document).on('click', '.remove', function(){
   var id = $(this).attr('remove');
@@ -778,66 +1094,142 @@ $(document).on('click', '.remove', function(){
 
 $('#product_code').keyup(function(){ 
        
-        if($('#product_action').val() == 'Edit'){
-            $('#productCodeList').fadeOut();
-        }else{
-        var query = $(this).val();
-        if(query != '')
-        {
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-            url:"{{ route('admin.pending-product.autocomplete') }}",
-            method:"POST",
-            data:{query:query, _token:_token},
-            success:function(data){
-                if (data == undefined){
-                    $('#productCodeList').fadeOut();
-                }
-                $('#productCodeList').fadeIn();  
-                $('#productCodeList').html(data);
-              }
-            });
-        }
-        if(query == ''){
-            $('#productCodeList').fadeOut();
+    if($('#product_action').val() == 'Edit'){
+        $('#productCodeList').fadeOut();
+    }else{
+    var query = $(this).val();
+    if(query != '')
+    {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+        url:"{{ route('admin.pending-product.autocomplete') }}",
+        method:"POST",
+        data:{query:query, _token:_token},
+        success:function(data){
+            if (data == undefined){
+                $('#productCodeList').fadeOut();
             }
-        
+            $('#productCodeList').fadeIn();  
+            $('#productCodeList').html(data);
+            }
+        });
+    }
+    if(query == ''){
+        $('#productCodeList').fadeOut();
+        }
+    
+    }
+});
+
+$(document).on('click', 'li', function(){  
+    var query = $(this).text();
+    if(query != '')
+    {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+        url:"{{ route('admin.pending-product.autocompleteresult') }}",
+        method:"POST",
+        dataType:"json",
+        data:{query:query, _token:_token},
+        success:function(data){
+
+        $.each(data.result, function(key,value){
+            if(key == $('#'+key).attr('id')){
+                $('#'+key).val(value)
+            }
+            if(key == 'category_id'){
+                    $("#category_id").select2("trigger", "select", {
+                        data: { id: value }
+                    });
+                }
+                if(key == 'size_id'){
+                    $("#size_id").select2("trigger", "select", {
+                        data: { id: value }
+                    });
+                }
+        })
+        $('#productCodeList').fadeOut(); 
+        }
+        });
+    }
+});  
+
+
+$('select[name="supplier_id"]').on("change", function(event){
+        var supplier = $('#supplier_id').val();
+        var _token = $('input[name="_token"]').val();
+        $.confirm({
+        title: 'Confirmation',
+        content: 'Do you want to reuse Product & Data of this supplier?',
+        type: 'green',
+        buttons: {
+            confirm: {
+                text: 'Yes',
+                btnClass: 'btn-blue',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    if(supplier != '')
+                    {
+                        return $.ajax({
+                            url:"purchase-order/reuseproduct",
+                            method:"POST",
+                            data: {
+                                supplier:supplier, _token:_token,
+                            },
+                            dataType: "json",
+                            beforeSend:function(){
+                                $('#loading-productmodal').show();
+                                $('#modal-body-product').hide();
+                            },
+                            success:function(data){
+                                $.each(data.result, function(key,value){
+                                    if(key == $('#'+key).attr('id')){
+                                        $('#'+key).val(value)
+                                        if(key == 'location_id'){
+                                            $("#location_id").select2("trigger", "select", {
+                                                data: { id: value }
+                                            });
+                                        }
+                                    }
+                                })
+
+                                if(data.success){
+                                    $('#success-alert').addClass('bg-primary');
+                                    $('#success-alert').html('<strong>' + data.success + '</strong>');
+                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-alert").slideUp(500);
+                                    });
+                                    purchaseModal();
+                                    alltotal();
+                                    $('#loading-productmodal').hide();
+                                    $('#modal-body-product').show();
+                                }
+                                if(data.nodata){
+                                    $('#success-alert').addClass('bg-danger');
+                                    $('#success-alert').html('<strong>' + data.nodata + '</strong>');
+                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-alert").slideUp(500);
+                                    });
+                                    purchaseModal();
+                                    alltotal();
+                                    $('#loading-productmodal').hide();
+                                    $('#modal-body-product').show();
+                                }
+                               
+                            }
+                        })
+                    }
+                }
+            },
+            cancel:  {
+                text: 'No',
+                btnClass: 'btn-red',
+                keys: ['enter', 'shift'],
+            }
         }
     });
-
-    $(document).on('click', 'li', function(){  
-        var query = $(this).text();
-        if(query != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"{{ route('admin.pending-product.autocompleteresult') }}",
-          method:"POST",
-          dataType:"json",
-          data:{query:query, _token:_token},
-          success:function(data){
-
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).val(value)
-                }
-                if(key == 'category_id'){
-                        $("#category_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-                    if(key == 'size_id'){
-                        $("#size_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-            })
-            $('#productCodeList').fadeOut(); 
-          }
-         });
-        }
-    });  
-
+        
+});
   
 
 </script>

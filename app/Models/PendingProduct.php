@@ -21,6 +21,7 @@ class PendingProduct extends Model
         
         'stock',
         'qty',
+        'pqty',
         'sold',
         'orders',
 
@@ -41,6 +42,8 @@ class PendingProduct extends Model
         'supplier_id',
         'isSame',
         'add_qty',
+        'isRemove',
+        'ucs_size'
     ];
     public function category()
     {

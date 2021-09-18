@@ -21,6 +21,7 @@ class Inventory extends Model
         
         'stock',
         'qty',
+        'pqty',
         'sold',
         'orders',
 
@@ -42,6 +43,7 @@ class Inventory extends Model
         'isRemove',
         'isSame',
         'add_qty',
+        'ucs_size'
        
     ];
     public function category()

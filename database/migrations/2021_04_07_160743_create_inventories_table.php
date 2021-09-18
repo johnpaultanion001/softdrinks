@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 class CreateInventoriesTable extends Migration
 {
     /**
@@ -11,6 +12,8 @@ class CreateInventoriesTable extends Migration
      *
      * @return void
      */
+ 
+
     public function up()
     {
         Schema::create('inventories', function (Blueprint $table) {
@@ -24,6 +27,7 @@ class CreateInventoriesTable extends Migration
 
             $table->integer('stock');
             $table->integer('qty');
+            $table->integer('pqty');
             $table->integer('sold')->default(0);
             $table->integer('orders')->default(0);
             $table->integer('add_qty')->default(0);
@@ -44,14 +48,16 @@ class CreateInventoriesTable extends Migration
             $table->longText('product_remarks')->nullable();
             
 
-            $table->string('location_id')->default(1);
+            $table->string('location_id')->default(2);
             $table->integer('isRemove')->default(0);
             $table->integer('isSame')->default(0);
             
             $table->string('product_id')->unique();
             $table->string('supplier_id');
+            $table->float('ucs_size', 8, 2);
 
             $table->timestamps();
+          
         });
     }
 

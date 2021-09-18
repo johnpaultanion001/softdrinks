@@ -33,7 +33,7 @@ class SupplierController extends Controller
         $validated =  Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required'],
-            'contact_number' => ['required', 'numeric' , 'digits:11'],
+            'contact_number' => ['numeric' , 'required'],
             'remarks' => ['nullable'],
            
         ]);
@@ -73,7 +73,7 @@ class SupplierController extends Controller
         $validated =  Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required'],
-            'contact_number' => ['required', 'numeric' , 'digits:11'],
+            'contact_number' => ['numeric' , 'required'],
             'remarks' => ['nullable'],
            
         ]);

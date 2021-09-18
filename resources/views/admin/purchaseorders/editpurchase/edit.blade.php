@@ -215,6 +215,7 @@
                         <div class="col text-right mb-3">
                             <button type="button" name="create_record" id="create_record" class="create_record text-uppercase btn btn-sm btn-primary">New Product</button>
                         </div>
+                        
                         <div id="loadeditpuchase">
                             
                             <div id="loading-container" class="loading-container">
@@ -268,7 +269,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label" >Product Code: </label>
-                            <input type="text" name="product_code" id="product_code" class="form-control" autocomplete="off"/>
+                            <input type="text" name="product_code" id="product_code" class="form-control" autocomplete="off" style="text-transform: uppercase;"/>
                             <div id="productCodeList"></div>
                             <span class="invalid-feedback" role="alert">
                                 <strong id="error-product_code"></strong>
@@ -381,14 +382,112 @@
                 </div>
                     <input type="hidden" name="product_action" id="product_action" value="Add" />
                     <input type="hidden" name="product_hidden_id" id="product_hidden_id" />
-                    <input type="text"   name="purchase_id" id="purchase_id" value="{{$purchasenumber->purchase_order_number}}" />
-
+                    <input type="hidden" name="purchase_id" id="purchase_id" value="{{$purchasenumber->purchase_order_number}}" />
                 </div>
 
                 <div class="modal-footer bg-white">
                     <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
                     <input type="submit" name="product_button" id="product_button" class="text-uppercase btn btn-default" value="Submit" />
                 </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Create Return Product -->
+<form method="post" id="returnForm" class="form-horizontal">
+    @csrf
+    <div class="modal" id="returnModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-default">
+                    <p class="modal-title-return font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="loading-returnmodal" class="loading-container">
+                    <div class="loading"></div>
+                    <div id="loading-text">loading</div>
+                </div> 
+                <div id="modal-body-return" class="modal-body">
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Product Code: </label>
+                                <select name="product_id" id="product_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Product Code</option>
+                                    @foreach ($product_code as $product)
+                                        <option value="{{$product->product_id}}" class="text-uppercase"> {{$product->product_code}} - {{$product->short_description}}  </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-product_id"></strong>
+                                </span>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col"><label class="control-label text-uppercase" >Status: </label></div>
+                                    <div class="col text-right">
+                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/status-return">New Status?</a>
+                                    </div>
+                                </div>
+                                <select name="status_id" id="status_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Status</option>
+                                    @foreach ($status as $sp)
+                                        <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-status_id"></strong>
+                                </span>
+                            </div>
+                            
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >QTY: </label>
+                                <input type="number" name="qty" id="qty" class="form-control" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-qty"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" >Unit Price:</label>
+                                <input type="number" name="unit_price" id="unit_price" class="form-control" step="any" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-unit_price"></strong>
+                                </span>
+                            </div>
+                        </div>
+                       
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label" >Remarks: </label>
+                                <textarea name="remarks" id="remarks" class="form-control"></textarea>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-remarks"></strong>
+                                </span>
+                            </div>
+                        </div>
+                              
+                    </div>
+                    <input type="hidden" name="return_action" id="return_action" value="Add" />
+                    <input type="hidden" name="return_hidden_id" id="return_hidden_id" />
+                    <input type="hidden" name="existing_purchase" id="existing_purchase" value="yes" />
+                    <input type="hidden" name="purchase_id_return" id="purchase_id_return" value="{{$purchasenumber->purchase_order_number}}" />
+                </div>
+
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-white text-uppercase"  id="back-button" >Back</button>
+                    <input type="submit" name="return_button" id="return_button" class="text-uppercase btn btn-default" value="Submit" />
+                </div>
+        
             </div>
         </div>
     </div>
@@ -692,40 +791,223 @@ $('#product_code').keyup(function(){
            }
        
        }
-   });
+});
 
-   $(document).on('click', 'li', function(){  
-       var query = $(this).text();
-       if(query != '')
-       {
-        var _token = $('input[name="_token"]').val();
-        $.ajax({
-         url:"{{ route('admin.pending-product.autocompleteresult') }}",
-         method:"POST",
-         dataType:"json",
-         data:{query:query, _token:_token},
-         success:function(data){
+$(document).on('click', 'li', function(){  
+    var query = $(this).text();
+    if(query != '')
+    {
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+        url:"{{ route('admin.pending-product.autocompleteresult') }}",
+        method:"POST",
+        dataType:"json",
+        data:{query:query, _token:_token},
+        success:function(data){
 
-           $.each(data.result, function(key,value){
-               if(key == $('#'+key).attr('id')){
-                   $('#'+key).val(value)
-               }
-               if(key == 'category_id'){
-                       $("#category_id").select2("trigger", "select", {
-                           data: { id: value }
-                       });
-                   }
-                   if(key == 'size_id'){
-                       $("#size_id").select2("trigger", "select", {
-                           data: { id: value }
-                       });
-                   }
-           })
-           $('#productCodeList').fadeOut(); 
-         }
-        });
-       }
-   });  
+        $.each(data.result, function(key,value){
+            if(key == $('#'+key).attr('id')){
+                $('#'+key).val(value)
+            }
+            if(key == 'category_id'){
+                    $("#category_id").select2("trigger", "select", {
+                        data: { id: value }
+                    });
+                }
+                if(key == 'size_id'){
+                    $("#size_id").select2("trigger", "select", {
+                        data: { id: value }
+                    });
+                }
+        })
+        $('#productCodeList').fadeOut(); 
+        }
+    });
+    }
+});
+
+//create return product
+$(document).on('click', '#create_return', function(){
+    $('#returnModal').modal('show');
+    $('#returnForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    $('.modal-title-return').text('Add New Return Product');
+    $('#return_button').val('Submit');
+    $('#return_action').val('Add');
+    $('#loading-returnmodal').hide();
+});
+
+
+// store and update return product
+$('#returnForm').on('submit', function(event){
+    event.preventDefault();
+    $('.form-control').removeClass('is-invalid')
+    var action_url = "{{ route('admin.returningproduct.store') }}";
+    var type = "POST";
+
+    if($('#return_action').val() == 'Edit'){
+        var id = $('#return_hidden_id').val();
+        action_url = "/admin/returningproduct/" + id;
+        type = "PUT";
+    }
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $("#return_button").attr("disabled", true);
+            $("#return_button").attr("value", "Loading..");
+            $('#loading-returnmodal').show();
+            $('#modal-body-return').hide();
+        },
+        success:function(data){
+            
+            $('#loading-returnmodal').hide();
+            $('#modal-body-return').show();
+
+            if($('#return_action').val() == 'Edit'){
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Update");
+            }else{
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Submit");
+            }
+
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.success){
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
+                });
+                $('.form-control').removeClass('is-invalid')
+
+                $('#returnForm')[0].reset();
+                $('#product_id').select2({
+                    placeholder: 'Select Product Code'
+                });
+                $('#status_id').select2({
+                    placeholder: 'Select Status'
+                });
+                $('#returnModal').modal('hide');
+                return loadEditPurchase();
+                
+            }
+          
+            
+           
+        }
+    });
+});
+
+//edit return
+$(document).on('click', '.editreturn', function(){
+    $('#returnModal').modal('show');
+    $('.modal-title-return').text('Edit Return Product');
+    $('#returnForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    var id = $(this).attr('editreturn');
+
+    $.ajax({
+        url :"/admin/returningproduct/"+id+"/edit",
+        dataType:"json",
+        beforeSend:function(){
+            $("#return_button").attr("disabled", true);
+            $("#return_button").attr("value", "Loading..");
+            $('#loading-returnmodal').show();
+            $('#modal-body-return').hide();
+        },
+        success:function(data){
+            $('#loading-returnmodal').hide();
+            $('#modal-body-return').show();
+            if($('#return_action').val() == 'Edit'){
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Update");
+            }else{
+                $("#return_button").attr("disabled", false);
+                $("#return_button").attr("value", "Submit");
+            }
+            $.each(data.result, function(key,value){
+                if(key == $('#'+key).attr('id')){
+                    $('#'+key).val(value)
+                    if(key == 'product_id'){
+                        $("#product_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+                    if(key == 'status_id'){
+                        $("#status_id").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
+                }
+            })
+            $('#return_hidden_id').val(id);
+            $('#return_button').val('Update');
+            $('#return_action').val('Edit');
+        }
+    })
+});
+
+//remove return
+$(document).on('click', '.removereturn', function(){
+  var id = $(this).attr('removereturn');
+  $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this data?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/returningproduct/"+id,
+                      method:'DELETE',
+                      data: {
+                          _token: '{!! csrf_token() !!}',
+                      },
+                      dataType:"json",
+                      beforeSend:function(){
+                        $('#loading-containermodal').show();
+                        $("#return-product").hide();
+                      },
+                      success:function(data){
+                          if(data.success){
+                            $('#success-alert').addClass('bg-primary');
+                            $('#success-alert').html('<strong>' + data.success + '</strong>');
+                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                $("#success-alert").slideUp(500);
+                            });
+                            return loadEditPurchase();
+                            $('#loading-containermodal').hide();
+                            $("#return-product").show();
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
+
+});
+
+
 
 </script>
 @endsection

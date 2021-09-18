@@ -28,6 +28,7 @@ class InventorySeeder extends Seeder
 
                 'stock' => '200',
                 'qty' => '200',
+                'pqty' => '200',
                 'sold' => '0',
 
                 'size_id' => '3',
@@ -47,6 +48,7 @@ class InventorySeeder extends Seeder
                 'updated_at' => date("Y-m-d H:i:s"),
 
                 'supplier_id' => '1',
+                'ucs_size' => 3.10,
             ],
             [
                 'id'    => '2',
@@ -59,6 +61,7 @@ class InventorySeeder extends Seeder
 
                 'stock' => '200',
                 'qty' => '200',
+                'pqty' => '200',
                 'sold' => '0',
 
 
@@ -80,6 +83,7 @@ class InventorySeeder extends Seeder
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
                 'supplier_id' => '1',
+                'ucs_size' => 3.10,
             ],
 
 
@@ -94,6 +98,7 @@ class InventorySeeder extends Seeder
 
                 'stock' => '20',
                 'qty' => '20',
+                'pqty' => '20',
                 'sold' => '0',
 
                 'size_id' => '2',
@@ -115,6 +120,7 @@ class InventorySeeder extends Seeder
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
                 'supplier_id' => '1',
+                'ucs_size' => 1.50,
             ],
 
             [
@@ -128,6 +134,7 @@ class InventorySeeder extends Seeder
 
                 'stock' => '20',
                 'qty' => '20',
+                'pqty' => '20',
                 'sold' => '0',
 
                 'size_id' => '2',
@@ -149,6 +156,7 @@ class InventorySeeder extends Seeder
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
                 'supplier_id' => '1',
+                'ucs_size' => 1.50,
             ],
 
             [
@@ -162,6 +170,7 @@ class InventorySeeder extends Seeder
 
                 'stock' => '20',
                 'qty' => '20',
+                'pqty' => '20',
                 'sold' => '0',
 
                 'size_id' => '2',
@@ -183,6 +192,7 @@ class InventorySeeder extends Seeder
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
                 'supplier_id' => '1',
+                'ucs_size' => 1.50,
             ],
            
         ];

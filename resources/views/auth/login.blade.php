@@ -25,7 +25,7 @@
     <div class="container">
       <a class="navbar-brand" href="dashboard.html">
         <!-- <img src="../assets/img/brand/white.png"> -->
-       <h2 class="text-white">LOGO</h2>
+       <h2 class="text-white">JEWEL & NICKEL STORE</h2>
       </a>
      
     </div>

@@ -33,7 +33,7 @@ class SalesInvoiceController extends Controller
         $customers = Customer::where('isRemove', '0')->latest()->get();
         $orders = Order::where('status', '0')->latest()->get();
         $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
-        $product_codes = Inventory::latest()->get();
+        $product_codes = Inventory::where('isSame' , 0)->where('isRemove' , 0)->latest()->get();
 
         $returned = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->latest()->get();
         $date = date("F d,Y h:i A");
@@ -46,10 +46,15 @@ class SalesInvoiceController extends Controller
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
         $salesinvoice_id = $ordernumber->salesinvoice_id;
 
+
         $orders = Order::where('status', '0')->latest()->get();
         $returned = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->latest()->get();
 
-        return view('admin.salesinvoice.alltotal', compact('orders', 'returned'));
+        $total_order_amount = Order::sum('total');
+        $total_return_amount = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->sum('amount');
+        $total_amount = $total_order_amount - $total_return_amount;
+
+        return view('admin.salesinvoice.alltotal', compact('orders', 'returned','total_amount'));
     }
 
     public function sales()
@@ -76,7 +81,7 @@ class SalesInvoiceController extends Controller
 
     public function productlist(){
         date_default_timezone_set('Asia/Manila');
-        $inventories = Inventory::where('isRemove', 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
+        $inventories = Inventory::where('isRemove', 0)->where('isSame' , 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
         return view('admin.salesinvoice.productlist', compact('inventories'));
     }
 
@@ -86,9 +91,11 @@ class SalesInvoiceController extends Controller
         $receipts = Order::where('status', '0')->latest()->get();
 
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
-        $salesinvoice_id = $ordernumber->salesinvoice_id ;
+        $salesinvoice_id = $ordernumber->salesinvoice_id;
+        $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+        $total = $receipts->sum('total') - $totalsalesreturn;
 
-        return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id'));
+        return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id', 'totalsalesreturn','total'));
     }
    
    
@@ -100,7 +107,7 @@ class SalesInvoiceController extends Controller
             'entry_date' => ['required' ,'date','after:yesterday'],
             'remarks' => ['nullable'],
             'customer_id' => ['required'],
-            'cash' => ['required' ,'integer','min:1'],
+            'cash' => ['required' ,'numeric','min:1'],
         ]);
 
         if ($validated->fails()) {
@@ -112,10 +119,17 @@ class SalesInvoiceController extends Controller
             return response()->json(['nodata' => 'NO DATA AVAILABLE IN SALES TABLE']);
         }
 
-        $total_sales = Order::sum('total');
-        if($request->input('cash') < $total_sales)
+        $totalsales = Order::sum('total');
+        $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+        $salesinvoice_id = $ordernumber->salesinvoice_id;
+        $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+    
+        $payment = $totalsales - $totalsalesreturn;
+
+
+        if($request->input('cash') < $payment)
         {
-            return response()->json(['invalidcash' => 'CASH FIELD MUST BE GREATER THAN TO THE TOTAL AMOUNT ('.$total_sales.')']);
+            return response()->json(['invalidcash' => 'CASH FIELD MUST BE GREATER THAN TO THE TOTAL AMOUNT / PAYMENT FIELD <br> ( ₱ '.number_format($payment , 2, '.', ',').')']);
         }
 
         return response()->json(['print'  => 'PRINT']);
@@ -131,11 +145,18 @@ class SalesInvoiceController extends Controller
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
         $salesinvoice_id = $ordernumber->salesinvoice_id ;
 
-        $total_amount = Order::sum('total');
+        $total_inv_amt = Order::sum('total');
+        $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+
+
+        $total_amount = $total_inv_amt - $totalsalesreturn ;
+
         $subtotal = Order::sum('total_amount_receipt');
         $total_discounted = Order::sum('discounted');
         $total_return = SalesReturn::where('isRemove', 0)->sum('amount');
         $userid = auth()->user()->id;
+
+        $change = $request->get('cash') - $total_amount;
 
         SalesInvoice::create([
             'salesinvoice_id' =>  $salesinvoice_id,
@@ -148,10 +169,11 @@ class SalesInvoiceController extends Controller
             'total_discount' =>   $total_discounted,
             'total_amount' => $total_amount,
 
-            'total_return' => $total_return,
+            'total_return' => $totalsalesreturn,
             'prev_bal' => $request->get('prev_bal'),
-            'total_inv_amt' => $total_amount,
+            'total_inv_amt' => $total_inv_amt,
             'cash' => $request->get('cash'),
+            'change' => $change,
             'new_bal' => $total_amount,
             'user_id' => $userid,
         ]);
@@ -203,8 +225,20 @@ class SalesInvoiceController extends Controller
     public function change(Request $request)
     {
         if($request->ajax()){
-            $total_amount = Order::sum('total');
-            $change = $request->changee - $total_amount;
+            $totalsales = Order::sum('total');
+
+            
+            $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+            $salesinvoice_id = $ordernumber->salesinvoice_id;
+
+            $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+
+
+            $payment = $totalsales - $totalsalesreturn;
+
+            $change = $request->changee - $payment;
+    
+            
             
             return response()->json(['success' =>  number_format($change , 2, '.', ',')]);
             

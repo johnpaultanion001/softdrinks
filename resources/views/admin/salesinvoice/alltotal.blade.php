@@ -21,12 +21,12 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <small class="text-white">Total Amount:</small>
+                        <small class="text-white">Total Inv Amt:</small>
                         <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">₱</div>
-                        </div>
-                        <input type="text" name="total_amount" id="total_amount" class="form-control" value="{{ number_format($orders->sum->total ?? '' , 2, '.', ',') }}" readonly/>
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">₱</div>
+                            </div>
+                            <input type="text" name="total_inv_amt" id="total_inv_amt" class="form-control" value="{{ number_format($orders->sum->total ?? '' , 2, '.', ',') }}" readonly/>
                         </div>
                     </div>
                 </div>
@@ -65,40 +65,41 @@
                 </div>
         </div>
         <div class="col-sm-2">
-                <small class="text-white">Total Inv Amt:</small>
+                <small class="text-white">New Bal:</small>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">₱</div>
                     </div>
-                    <input type="text" name="total_inv_amt" id="total_inv_amt" class="form-control" value="{{ number_format($orders->sum->total ?? '' , 2, '.', ',') }}" readonly/>
+                    <input type="text" name="new_bal" id="new_bal" class="form-control" value="{{ number_format($total_amount ?? '' , 2, '.', ',') }}" readonly/>
+
                 </div>
         </div>
+        
         <div class="col-sm-2">
                 <small class="text-white">Cash:</small> 
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">₱</div>
                     </div>
-                    <input type="number" name="cash" id="cash" class="form-control" />
+                    <input type="number" step="any" name="cash" id="cash" class="form-control" />
                     <span class="invalid-feedback text-dark" role="alert">
                         <strong id="error-cash"></strong>
                     </span>
                 </div>
                 <div id="sukli">
-                   <span class="text-white  font-weight-bold">Change: <span id="change" class="text-success  font-weight-bold"> 0.00</span></span>
+                   <span class="text-white  font-weight-bold">Change:  <span id="change" class="text-success  font-weight-bold"> 0.00</span></span>
                 </div>
         </div>
         <div class="col-sm-2">
-                <small class="text-white">New Bal:</small>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">₱</div>
-                    </div>
-                    <input type="text" name="new_bal" id="new_bal" class="form-control" value="{{ number_format($orders->sum->total ?? '' , 2, '.', ',') }}" readonly/>
-
-                </div>
+            <small class="text-white">Total Amount / Payment:</small>
+            <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">₱</div>
+            </div>
+            <input type="text" name="total_amount" id="total_amount" class="form-control" value="{{ number_format($total_amount ?? '' , 2, '.', ',') }}" readonly/>
+            </div>
         </div>
-        
+     
 
         
         <div class="col-sm-3 mt-4 mb-1">

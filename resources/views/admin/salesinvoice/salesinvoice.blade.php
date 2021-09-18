@@ -327,7 +327,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Unit Price: </label>
-                                <input type="number" name="unit_price" id="unit_price" class="unit_price form-control"/>
+                                <input type="number" name="unit_price" id="unit_price" step="any" class="unit_price form-control"/>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-unit_price"></strong>
                                 </span>
@@ -1122,7 +1122,7 @@ $(document).on('click', '.remove-order', function(){
                                 $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
                                     $("#success-alert").slideUp(500);
                                 });
-                                 return loadSales();
+                                return loadProductList() , loadSales() , loadAllTotal();
                             }
                         }
                     })

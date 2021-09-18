@@ -81,18 +81,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('purchase-order/{purchasenumber}/edit', 'PurchaseOrderController@edit')->name('purchase-order.edit');
     route::put('purchase-order/{purchasenumber}', 'PurchaseOrderController@update')->name('purchase-order.update');
     route::get('loadeditpurchase/{purchasenumber}/load', 'PurchaseOrderController@loadedit')->name('purchase-order.editload');
-    
+    Route::post('purchase-order/reuseproduct', 'PurchaseOrderController@reuseproduct')->name('purchase-order.reuseproduct');
+
     //return Products
-    Route::resource('returned', 'ReturnedController');
-    route::get('returned/{returned}/loadreturnedproduct', 'ReturnedController@loadreturnedproduct')->name('purchase-order.loadreturnedproduct');
-    route::get('loadreturned', 'ReturnedController@loadreturned')->name('purchase-order.loadreturned');
-    route::get('returned/{returned}/viewreturn', 'ReturnedController@viewreturn')->name('returned.viewreturn');
+    // Route::resource('returned', 'ReturnedController');
+    // route::get('loadreturningproduct', 'ReturnedController@loadreturningproduct')->name('loadreturningproduct');
+   
+    // route::get('returned/{returned}/loadreturnedproduct', 'ReturnedController@loadreturnedproduct')->name('purchase-order.loadreturnedproduct');
+    // route::get('loadreturned', 'ReturnedController@loadreturned')->name('purchase-order.loadreturned');
+    // route::get('returned/{returned}/viewreturn', 'ReturnedController@viewreturn')->name('returned.viewreturn');
 
     
-    Route::resource('returned/pendingreturnedproducts', 'PendingReturnedProductController');
-    route::post('returned/pendingreturnedproducts/update', 'PendingReturnedProductController@storeedit')->name('pendingreturnedproducts.storeedit');
-    route::put('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@updateedit')->name('pendingreturnedproducts.updateedit');
-    route::delete('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@destroyedit')->name('pendingreturnedproducts.destroyedit');
+    // Route::resource('returned/pendingreturnedproducts', 'PendingReturnedProductController');
+    // route::post('returned/pendingreturnedproducts/update', 'PendingReturnedProductController@storeedit')->name('pendingreturnedproducts.storeedit');
+    // route::put('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@updateedit')->name('pendingreturnedproducts.updateedit');
+    // route::delete('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@destroyedit')->name('pendingreturnedproducts.destroyedit');
+
+    Route::get('loadreturningproduct', 'PendingReturnedProductController@loadreturningproduct')->name('loadreturningproduct');
+    Route::resource('returningproduct', 'PendingReturnedProductController');
 
     //status returned
     Route::resource('status-return', 'StatusReturnController');
@@ -121,8 +127,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('loadsizes', 'SizeController@load')->name('size.load');
 
      //UCS
-     Route::resource('ucs', 'UCSController');
+     route::get('ucs', 'UCSController@index')->name('ucs.index');
      route::get('loaducs', 'UCSController@load')->name('ucs.load');
+     route::put('ucs/backtozero', 'UCSController@backtozero')->name('ucs.backtozero');
+     route::get('ucs/allucs', 'UCSController@allucs')->name('ucs.allucs');
+
 
     //Categories
     Route::resource('categories', 'CategoryController');

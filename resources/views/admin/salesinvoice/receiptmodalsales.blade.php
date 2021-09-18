@@ -66,22 +66,40 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td>Sub Total:</td>
-                                        <td> ₱ {{ number_format($receipts->sum->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
+                                        <td>
+                                                Sub Total:
+                                            <br>
+                                                Return:
+                                            <br>
+                                                Discounted:
+                                        </td>
+                                        <td> 
+                                                ₱ {{ number_format($ordernumber->subtotal ?? '' , 2, '.', ',') }}
+                                            <br>
+                                                ₱ ( {{ number_format($ordernumber->total_return ?? '' , 2, '.', ',') }} )
+                                            <br>
+                                                ₱ ( {{ number_format($receipts->sum->discounted ?? '' , 2, '.', ',') }} )
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td>Discounted:</td>
-                                        <td> ₱ {{ number_format($receipts->sum->discounted ?? '' , 2, '.', ',') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Total:</td>
-                                        <td> ₱ {{ number_format($receipts->sum->total ?? '' , 2, '.', ',') }}</td>
+                                        <td>
+                                                Total: 
+                                            <br>
+                                                Cash:
+                                            <br>
+                                                Change:
+                                        </td>
+                                        <td>
+                                                ₱ {{ number_format($ordernumber->total_amount ?? '' , 2, '.', ',') }}
+                                            <br>
+                                                ₱ {{ number_format($ordernumber->cash ?? '' , 2, '.', ',') }}
+                                            <br>
+                                                ₱ {{ number_format($ordernumber->change ?? '' , 2, '.', ',') }}
+
+                                        </td>
                                     </tr>
                                     
                                 </tfoot>
